@@ -6,14 +6,9 @@ import MagneticButton from "@/components/MagneticButton";
 import { SITE } from "@/lib/site";
 import { getVehicles } from "@/lib/vehicles";
 
-const HERO_IMAGE =
-  "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=2000&q=70";
-
-const ANKAUF_IMAGE =
-  "https://images.unsplash.com/photo-1485463611174-f302f6a5c1c9?auto=format&fit=crop&w=1400&q=70";
-
-const WERKSTATT_IMAGE =
-  "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=1400&q=70";
+const HERO_IMAGE = "/photos/showroom-hero.jpg";
+const ANKAUF_IMAGE = "/photos/showroom-bright.jpg";
+const WERKSTATT_IMAGE = "/photos/showroom-amg.jpg";
 
 const SERVICES = [
   { title: "Werkstatt", body: "Inspektion, Reparatur, HU-Vorbereitung.", href: "/service" },
@@ -54,7 +49,7 @@ export default async function Home() {
             fill
             priority
             sizes="100vw"
-            style={{ objectFit: "cover", objectPosition: "center 60%" }}
+            style={{ objectFit: "cover", objectPosition: "center 55%" }}
             aria-hidden
           />
         </div>

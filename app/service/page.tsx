@@ -66,8 +66,8 @@ export default function ServicePage() {
             style={{ aspectRatio: "4 / 3" }}
           >
             <Image
-              src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=1600&q=72"
-              alt="Werkstatt in Betrieb"
+              src="/photos/showroom-amg.jpg"
+              alt="Showroom · Neue Welt Automobile"
               fill
               sizes="(min-width: 1024px) 55vw, 90vw"
               className="object-cover"

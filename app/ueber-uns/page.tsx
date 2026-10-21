@@ -113,7 +113,7 @@ export default function UeberUnsPage() {
         <SlideIn direction="up">
           <div className="relative aspect-[21/9] overflow-hidden rounded-[var(--radius)]">
             <Image
-              src="https://images.unsplash.com/photo-1619767886558-efdc259cde1a?auto=format&fit=crop&w=2400&q=70"
+              src="/photos/showroom-hero.jpg"
               alt="Neue Welt Automobile Saarlouis"
               fill
               sizes="100vw"
