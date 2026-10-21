@@ -37,7 +37,7 @@
   --dur-base: 420ms;
   --dur-slow: 820ms;
 
-  --radius: 4.4px;
+  --radius: 12px;
 }
 
 * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
