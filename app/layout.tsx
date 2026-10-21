@@ -3,7 +3,6 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import SmoothScroll from "@/components/SmoothScroll";
 import PageTransition from "@/components/PageTransition";
 
 const manrope = localFont({
@@ -33,7 +32,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="de" className={manrope.variable}>
       <body>
-        <SmoothScroll />
         <Nav />
         <PageTransition>{children}</PageTransition>
         <Footer />
