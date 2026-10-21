@@ -190,20 +190,20 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* BIG WORDMARK */}
-        <div className="pt-10 pb-8 border-t border-white/10">
-          <div
-            className="display select-none"
+        {/* BIG LOGO */}
+        <div className="pt-14 pb-10 border-t border-white/10 flex justify-center">
+          <Image
+            src="/brand/logo.png"
+            alt="Neue Welt Automobile"
+            width={2172}
+            height={724}
             style={{
-              fontSize: "clamp(3rem, 12vw, 14rem)",
-              letterSpacing: "-0.045em",
-              color: "var(--paper)",
-              lineHeight: 0.9,
-              opacity: 0.95,
+              width: "100%",
+              maxWidth: "1200px",
+              height: "auto",
+              filter: "invert(1) brightness(1.4)",
             }}
-          >
-            Neue Welt Automobile<span style={{ color: "var(--signal)" }}>.</span>
-          </div>
+          />
         </div>
 
         {/* BOTTOM: legal */}

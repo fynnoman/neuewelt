@@ -49,15 +49,28 @@ export default async function Home() {
             fill
             priority
             sizes="100vw"
-            style={{ objectFit: "cover", objectPosition: "center 55%" }}
+            style={{
+              objectFit: "cover",
+              objectPosition: "center 55%",
+              transform: "scaleX(-1)",
+            }}
             aria-hidden
           />
         </div>
+        {/* Horizontal fade — dark on the left for text legibility */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(180deg, rgba(10,11,12,0.35) 0%, rgba(10,11,12,0.0) 25%, rgba(10,11,12,0.55) 85%, rgba(10,11,12,0.78) 100%)",
+              "linear-gradient(90deg, rgba(10,11,12,0.92) 0%, rgba(10,11,12,0.78) 20%, rgba(10,11,12,0.45) 48%, rgba(10,11,12,0.0) 72%)",
+          }}
+        />
+        {/* Subtle bottom vignette for the caption line */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(10,11,12,0.0) 70%, rgba(10,11,12,0.5) 100%)",
           }}
         />
 
