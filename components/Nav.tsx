@@ -65,7 +65,7 @@ export default function Nav() {
                 height={176}
                 priority
                 style={{
-                  height: scrolled ? "26px" : "32px",
+                  height: scrolled ? "42px" : "56px",
                   width: "auto",
                   filter: lightMode ? "invert(1) brightness(1.4)" : "none",
                   transition:
