@@ -6,7 +6,7 @@ import MagneticButton from "@/components/MagneticButton";
 import { SITE } from "@/lib/site";
 import { getVehicles } from "@/lib/vehicles";
 
-const HERO_IMAGE = "/photos/showroom-hero.jpg";
+const HERO_IMAGE = "/photos/hero-logo.png";
 const ANKAUF_IMAGE = "/photos/showroom-bright.jpg";
 const WERKSTATT_IMAGE = "/photos/showroom-amg.jpg";
 
@@ -52,7 +52,6 @@ export default async function Home() {
             style={{
               objectFit: "cover",
               objectPosition: "center 55%",
-              transform: "scaleX(-1)",
             }}
             aria-hidden
           />
