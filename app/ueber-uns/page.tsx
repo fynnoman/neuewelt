@@ -6,8 +6,7 @@ import { SITE } from "@/lib/site";
 const FACTS = [
   ["Gründung", "[Jahr]"],
   ["Standort", "Saarlouis"],
-  ["Mitarbeiter", "[Zahl]"],
-  ["Werkstatt", "im Haus"],
+  ["Werkstatt", "Vor Ort"],
 ];
 
 const LEISTUNGEN = [
@@ -16,7 +15,9 @@ const LEISTUNGEN = [
   "Werkstatt und Service",
   "Zulassungsservice",
   "Fahrzeugaufbereitung",
-  "Finanzierung über Partnerbanken",
+  "Fahrzeugüberführung deutschlandweit",
+  "Finanzierung über die Targobank",
+  "Garantie bis zu 96 Monate",
 ];
 
 export default function UeberUnsPage() {
@@ -40,7 +41,7 @@ export default function UeberUnsPage() {
         </SlideIn>
         <SlideIn direction="up" delay={0.2}>
           <p className="lead mt-6 measure" style={{ fontSize: "1.15rem" }}>
-            Inhabergeführter Gebrauchtwagenhandel mit eigener Werkstatt.
+            Familiengeführter Gebrauchtwagenhandel mit eigener Werkstatt.
             Saarlouis und Umkreis. Alle Marken, alle Baujahre.
           </p>
         </SlideIn>
@@ -51,7 +52,7 @@ export default function UeberUnsPage() {
         <SlideIn
           direction="up"
           stagger={0.08}
-          className="grid grid-cols-2 md:grid-cols-4 gap-y-10"
+          className="grid grid-cols-2 md:grid-cols-3 gap-y-10"
         >
           {FACTS.map(([k, v]) => (
             <div key={k} className="flex flex-col">

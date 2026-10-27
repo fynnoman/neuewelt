@@ -18,7 +18,7 @@ function matchesSegment(variant: string, model: string, seg: string) {
   return true;
 }
 
-type SortKey = "neu" | "preis-auf" | "preis-ab" | "km-auf";
+type SortKey = "neu" | "preis-auf" | "preis-ab" | "km-auf" | "marke-az";
 
 export default function VehicleList({ vehicles }: { vehicles: Vehicle[] }) {
   const [segment, setSegment] = useState("alle");
@@ -30,6 +30,10 @@ export default function VehicleList({ vehicles }: { vehicles: Vehicle[] }) {
     if (sort === "preis-auf") sorted.sort((a, b) => a.price - b.price);
     if (sort === "preis-ab") sorted.sort((a, b) => b.price - a.price);
     if (sort === "km-auf") sorted.sort((a, b) => a.mileage - b.mileage);
+    if (sort === "marke-az")
+      sorted.sort((a, b) =>
+        `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`, "de")
+      );
     if (sort === "neu") sorted.sort((a, b) => b.year - a.year);
     return sorted;
   }, [vehicles, segment, sort]);
@@ -75,6 +79,7 @@ export default function VehicleList({ vehicles }: { vehicles: Vehicle[] }) {
             <option value="preis-auf">Preis aufsteigend</option>
             <option value="preis-ab">Preis absteigend</option>
             <option value="km-auf">Kilometer aufsteigend</option>
+            <option value="marke-az">Marke A–Z</option>
           </select>
         </label>
       </nav>
@@ -102,30 +107,27 @@ export default function VehicleList({ vehicles }: { vehicles: Vehicle[] }) {
                     sizes="(min-width: 1280px) 32vw, (min-width: 768px) 48vw, 94vw"
                     className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]"
                   />
-                  <span
-                    className="absolute left-4 top-4 mono"
-                    style={{
-                      background: "var(--paper)",
-                      color: "var(--ink)",
-                      padding: "4px 10px",
-                      fontSize: "0.72rem",
-                    }}
-                  >
+                  <span className="liquid-chip absolute left-4 top-4">
                     {v.fuel.toUpperCase()}
                   </span>
-                </div>
-
-                <div className="mt-5 flex items-baseline justify-between gap-4">
-                  <div>
-                    <div className="display" style={{ fontSize: "1.3rem", letterSpacing: "-0.025em" }}>
-                      {v.brand} {v.model}
+                  <div
+                    className="liquid absolute left-4 right-4 bottom-4 flex items-baseline justify-between gap-4"
+                    style={{
+                      padding: "12px 16px",
+                      borderRadius: "calc(var(--radius) - 2px)",
+                    }}
+                  >
+                    <div>
+                      <div className="display" style={{ fontSize: "1.1rem", letterSpacing: "-0.02em", color: "var(--ink)" }}>
+                        {v.brand} {v.model}
+                      </div>
+                      <div style={{ color: "var(--muted)", fontSize: "0.82rem" }}>
+                        {v.variant}
+                      </div>
                     </div>
-                    <div className="mt-1" style={{ color: "var(--muted)", fontSize: "0.95rem" }}>
-                      {v.variant}
+                    <div className="display" style={{ fontSize: "1.05rem", color: "var(--ink)" }}>
+                      {v.price.toLocaleString("de-DE")} €
                     </div>
-                  </div>
-                  <div className="display" style={{ fontSize: "1.25rem", color: "var(--ink)" }}>
-                    {v.price.toLocaleString("de-DE")} €
                   </div>
                 </div>
 

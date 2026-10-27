@@ -3,6 +3,7 @@ export const SITE = {
   short: "Neue Welt Automobile",
   domain: "neue-welt-automobile.de",
   city: "Saarlouis",
+  slogan: "Machen Sie aus einem Auto, Ihr Auto.",
   address: {
     line1: "[Straße · Hausnummer]",
     line2: "66740 Saarlouis",
@@ -17,7 +18,8 @@ export const SITE = {
     phoneHref: "tel:[Telefonnummer]",
     email: "[E-Mail-Adresse]",
     emailHref: "mailto:[E-Mail-Adresse]",
-    whatsapp: "[WhatsApp-Nummer]",
+    whatsapp: "+49 174 2611090",
+    whatsappHref: "https://wa.me/491742611090",
   },
   social: {
     instagram: "#",
@@ -26,8 +28,10 @@ export const SITE = {
 };
 
 export const NAV = [
-  { label: "Fahrzeuge", href: "/fahrzeuge" },
-  { label: "Ankauf", href: "/ankauf" },
+  { label: "Fahrzeugbestand", href: "/fahrzeuge" },
+  { label: "Mediathek", href: "/mediathek" },
   { label: "Service", href: "/service" },
+  { label: "Fahrzeugankauf", href: "/ankauf" },
   { label: "Über uns", href: "/ueber-uns" },
+  { label: "Kontakt", href: "/kontakt" },
 ];

@@ -7,8 +7,9 @@ const LEISTUNGEN = [
   { label: "Fahrzeugaufbereitung", href: "/service" },
   { label: "Reifen & Räder", href: "/service" },
   { label: "Zulassungsservice", href: "/service" },
-  { label: "Fahrzeugüberführung", href: "/service" },
-  { label: "Finanzierung", href: "/service" },
+  { label: "Fahrzeugüberführung deutschlandweit", href: "/service" },
+  { label: "Finanzierung über die Targobank", href: "/service" },
+  { label: "Garantie bis zu 96 Monate", href: "/service" },
 ];
 
 export default function Footer() {
@@ -47,11 +48,12 @@ export default function Footer() {
                 fontSize: "clamp(2rem, 4vw, 3.6rem)",
                 letterSpacing: "-0.035em",
                 color: "var(--paper)",
-                maxWidth: "20ch",
+                maxWidth: "22ch",
                 lineHeight: 1.02,
               }}
             >
-              Vorbeikommen oder anrufen.
+              Machen Sie aus einem Auto,{" "}
+              <span style={{ color: "var(--signal)" }}>Ihr Auto.</span>
             </h2>
           </div>
 
@@ -191,7 +193,10 @@ export default function Footer() {
         </div>
 
         {/* BIG LOGO */}
-        <div className="pt-14 pb-10 border-t border-white/10 flex justify-center">
+        <div
+          className="py-14 flex justify-center -mx-6 md:-mx-10 lg:-mx-14 px-6 md:px-10 lg:px-14"
+          style={{ background: "var(--paper)" }}
+        >
           <Image
             src="/brand/logo.png"
             alt="Neue Welt Automobile"
@@ -201,7 +206,6 @@ export default function Footer() {
               width: "100%",
               maxWidth: "1200px",
               height: "auto",
-              filter: "invert(1) brightness(1.4)",
             }}
           />
         </div>

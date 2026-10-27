@@ -6,7 +6,7 @@ import MagneticButton from "@/components/MagneticButton";
 import { SITE } from "@/lib/site";
 import { getVehicles } from "@/lib/vehicles";
 
-const HERO_IMAGE = "/photos/hero-logo.png";
+const HERO_IMAGE = "/photos/hero-logo-beton.png";
 const ANKAUF_IMAGE = "/photos/showroom-bright.jpg";
 const WERKSTATT_IMAGE = "/photos/showroom-amg.jpg";
 
@@ -15,23 +15,16 @@ const SERVICES = [
   { title: "Fahrzeugaufbereitung", body: "Innen und außen, Pauschale oder Detail.", href: "/service" },
   { title: "Reifen & Räder", body: "Montage, Wuchten, Saisonwechsel, Einlagerung.", href: "/service" },
   { title: "Zulassungsservice", body: "Zulassung in Saarlouis und Umkreis.", href: "/service" },
-  { title: "Fahrzeugüberführung", body: "Deutschlandweit zu Ihrer Haustür.", href: "/service" },
-  { title: "Finanzierung", body: "Partnerbanken, Angebot in 24 Stunden.", href: "/service" },
+  { title: "Fahrzeugüberführung deutschlandweit", body: "Bis vor Ihre Haustür in ganz Deutschland.", href: "/service" },
+  { title: "Finanzierung über die Targobank", body: "Angebot innerhalb von 24 Stunden.", href: "/service" },
+  { title: "Garantie bis zu 96 Monate", body: "Preis auf Anfrage.", href: "/service" },
 ];
 
 const PROZESS = [
   ["01", "Beratung", "Termin im Haus oder telefonisch. Wir hören zu, bevor wir reden."],
   ["02", "Probefahrt", "Jedes Fahrzeug kann vor dem Kauf gefahren werden."],
-  ["03", "Finanzierung", "Barkauf, Finanzierung, Leasing. Transparente Konditionen."],
+  ["03", "Finanzierung", "Barkauf oder Finanzierung über die Targobank. Transparente Konditionen."],
   ["04", "Übergabe", "Zulassung, Übergabe im Haus oder Lieferung bis vor die Tür."],
-];
-
-const MARKEN = [
-  { name: "BMW", file: "bmw.png", scale: 1 },
-  { name: "Mercedes-Benz", file: "mercedes.png", scale: 1 },
-  { name: "Audi", file: "audi.png", scale: 1.25 },
-  { name: "Ferrari", file: "ferrari.png", scale: 1 },
-  { name: "Lamborghini", file: "lamborghini.png", scale: 1.25 },
 ];
 
 export default async function Home() {
@@ -52,6 +45,7 @@ export default async function Home() {
             style={{
               objectFit: "cover",
               objectPosition: "center 55%",
+              opacity: 0.8,
             }}
             aria-hidden
           />
@@ -110,9 +104,26 @@ export default async function Home() {
                 </h1>
               </SlideIn>
 
-              <SlideIn direction="up" delay={0.35}>
+              <SlideIn direction="up" delay={0.3}>
                 <p
-                  className="lead mt-5"
+                  className="display mt-6"
+                  style={{
+                    fontSize: "clamp(1.6rem, 2.6vw, 2.4rem)",
+                    letterSpacing: "-0.02em",
+                    lineHeight: 1.1,
+                    maxWidth: "22ch",
+                    color: "var(--paper)",
+                  }}
+                >
+                  Machen Sie aus einem Auto,
+                  <br />
+                  <span style={{ color: "var(--signal)" }}>Ihr Auto.</span>
+                </p>
+              </SlideIn>
+
+              <SlideIn direction="up" delay={0.4}>
+                <p
+                  className="lead mt-6"
                   style={{ color: "rgba(251,251,249,0.84)", maxWidth: "40ch" }}
                 >
                   Gepflegte Gebrauchtwagen in Saarlouis. Fahrzeugankauf zum fairen
@@ -148,14 +159,14 @@ export default async function Home() {
       </section>
 
       {/* AKTUELLE FAHRZEUGE */}
-      <section className="mt-20 md:mt-24 lg:mt-32 px-6 md:px-10 lg:px-14">
+      <section className="mt-16 md:mt-20 lg:mt-24 px-6 md:px-10 lg:px-14">
         <SlideIn direction="up">
           <div className="flex items-end justify-between flex-wrap gap-6">
             <div>
               <div className="mono" style={{ color: "var(--muted)" }}>Fahrzeuge</div>
               <h2
-                className="display mt-4"
-                style={{ fontSize: "clamp(2rem, 4vw, 3.4rem)", letterSpacing: "-0.03em" }}
+                className="display mt-3"
+                style={{ fontSize: "clamp(1.7rem, 3.2vw, 2.6rem)", letterSpacing: "-0.03em" }}
               >
                 Aktueller Bestand
               </h2>
@@ -169,10 +180,10 @@ export default async function Home() {
           </div>
         </SlideIn>
 
-        <SlideIn direction="up" stagger={0.08} className="mt-14 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-14">
+        <SlideIn direction="up" stagger={0.08} className="mt-9 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-5 gap-y-9">
           {latest.map((v) => (
             <Link key={v.slug} href={`/fahrzeuge/${v.slug}`} className="group block">
-              <div className="relative aspect-[4/3] overflow-hidden radius" style={{ background: "var(--paper-sunk)" }}>
+              <div className="relative aspect-[16/10] overflow-hidden radius" style={{ background: "var(--paper-sunk)" }}>
                 <Image
                   src={v.image}
                   alt={`${v.brand} ${v.model}`}
@@ -181,33 +192,34 @@ export default async function Home() {
                   className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
                 />
                 <span
-                  className="absolute left-3 top-3 mono"
-                  style={{
-                    background: "var(--paper)",
-                    color: "var(--ink)",
-                    padding: "4px 10px",
-                    fontSize: "0.72rem",
-                  }}
+                  className="liquid-chip absolute left-3 top-3"
+                  style={{ fontSize: "0.66rem" }}
                 >
                   {v.fuel.toUpperCase()}
                 </span>
-              </div>
-              <div className="mt-5 flex items-baseline justify-between gap-4">
-                <div>
-                  <div className="display" style={{ fontSize: "1.2rem", letterSpacing: "-0.02em" }}>
-                    {v.brand} {v.model}
+                <div
+                  className="liquid absolute left-3 right-3 bottom-3 flex items-baseline justify-between gap-3"
+                  style={{
+                    padding: "10px 14px",
+                    borderRadius: "calc(var(--radius) - 2px)",
+                  }}
+                >
+                  <div>
+                    <div className="display" style={{ fontSize: "1rem", letterSpacing: "-0.02em", color: "var(--ink)" }}>
+                      {v.brand} {v.model}
+                    </div>
+                    <div style={{ color: "var(--muted)", fontSize: "0.76rem" }}>
+                      {v.variant}
+                    </div>
                   </div>
-                  <div className="mt-1" style={{ color: "var(--muted)", fontSize: "0.9rem" }}>
-                    {v.variant}
+                  <div className="display" style={{ fontSize: "0.98rem", color: "var(--ink)", letterSpacing: "-0.01em" }}>
+                    {v.price.toLocaleString("de-DE")} €
                   </div>
-                </div>
-                <div className="display" style={{ fontSize: "1.15rem" }}>
-                  {v.price.toLocaleString("de-DE")} €
                 </div>
               </div>
               <div
-                className="mt-3 flex items-center gap-4 mono"
-                style={{ color: "var(--muted)", fontVariantNumeric: "tabular-nums", fontSize: "0.76rem" }}
+                className="mt-3 flex items-center gap-3 mono"
+                style={{ color: "var(--muted)", fontVariantNumeric: "tabular-nums", fontSize: "0.7rem" }}
               >
                 <span>EZ {v.year}</span>
                 <span>·</span>
@@ -411,38 +423,6 @@ export default async function Home() {
             </h2>
           </SlideIn>
 
-          <SlideIn
-            direction="up"
-            delay={0.15}
-            className="mt-16 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-x-6 gap-y-10 items-center"
-          >
-            {MARKEN.map((m) => (
-              <div
-                key={m.name}
-                className="group flex items-center justify-center relative"
-                style={{ height: "140px" }}
-                title={m.name}
-              >
-                <div
-                  className="relative"
-                  style={{
-                    height: `${80 * m.scale}%`,
-                    width: `${80 * m.scale}%`,
-                    transition: "transform 420ms cubic-bezier(0.22,1,0.36,1)",
-                  }}
-                >
-                  <Image
-                    src={`/brands/${m.file}`}
-                    alt={m.name}
-                    fill
-                    sizes="(min-width: 768px) 160px, 40vw"
-                    style={{ objectFit: "contain" }}
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-            ))}
-          </SlideIn>
           <p
             className="mt-10 mono"
             style={{ color: "var(--on-sunk-muted)" }}
@@ -470,8 +450,8 @@ export default async function Home() {
               </SlideIn>
               <SlideIn direction="up" delay={0.2}>
                 <p className="lead mt-6">
-                  Inhabergeführt. Kleiner Bestand, hohe Prüfungstiefe, offene
-                  Beratung. Werkstatt, Zulassung und Finanzierung im Haus.
+                  Familiengeführt. Breiter Bestand, hohe Prüfungstiefe, offene
+                  Beratung. Werkstatt, Zulassung und Finanzierung aus einer Hand.
                 </p>
               </SlideIn>
               <SlideIn direction="up" delay={0.3}>

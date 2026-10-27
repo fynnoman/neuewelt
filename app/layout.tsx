@@ -4,6 +4,7 @@ import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
+import WhatsAppFab from "@/components/WhatsAppFab";
 
 const manrope = localFont({
   src: "../public/fonts/Manrope.ttf",
@@ -33,8 +34,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="de" className={manrope.variable}>
       <body>
         <Nav />
-        <PageTransition>{children}</PageTransition>
-        <Footer />
+        <div className="lg:pl-[300px]">
+          <PageTransition>{children}</PageTransition>
+          <Footer />
+        </div>
+        <WhatsAppFab />
       </body>
     </html>
   );
