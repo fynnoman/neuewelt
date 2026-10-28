@@ -20,6 +20,7 @@ import type { Vehicle, VehicleListOptions, VehiclesSource } from "./types";
  */
 
 const BASE = "https://services.mobile.de/search-api/search";
+const AD_IMAGES = "https://services.mobile.de/search-api/ad";
 const DEFAULT_SELLER_ID = "3318917";
 const PAGE_SIZE = 100; // Max per docs
 const REVALIDATE_SECONDS = 900;
@@ -277,6 +278,7 @@ async function fetchPage(sellerId: string, page: number): Promise<XmlSearchResul
     headers: {
       Authorization: auth,
       Accept: "application/xml, text/xml, */*",
+      "Accept-Language": "de-DE,de;q=0.9,en;q=0.1",
       "User-Agent": "NeueWeltAutomobile-Website/1.0 (+https://neuewelt.vercel.app)",
     },
     // 15-Minuten-Cache. Preis- und Bestandsänderungen schlagen also nach spätestens 15 min auf.
@@ -304,6 +306,50 @@ async function fetchPage(sellerId: string, page: number): Promise<XmlSearchResul
   } catch (err) {
     console.error("[mobile.de] XML parse error:", err);
     return null;
+  }
+}
+
+async function fetchAdImages(adId: string): Promise<string[]> {
+  const auth = buildAuthHeader();
+  if (!auth) return [];
+
+  const url = `${AD_IMAGES}/${encodeURIComponent(adId)}/images`;
+
+  const res = await fetch(url, {
+    headers: {
+      Authorization: auth,
+      Accept: "application/xml, text/xml, */*",
+      "Accept-Language": "de-DE,de;q=0.9,en;q=0.1",
+      "User-Agent": "NeueWeltAutomobile-Website/1.0 (+https://neuewelt.vercel.app)",
+    },
+    next: { revalidate: REVALIDATE_SECONDS, tags: ["mobile-de"] },
+  });
+
+  if (!res.ok) {
+    console.error(`[mobile.de] images HTTP ${res.status} für ad ${adId}`);
+    return [];
+  }
+
+  const xml = await res.text();
+  const parser = new XMLParser({
+    ignoreAttributes: false,
+    attributeNamePrefix: "@_",
+    textNodeName: "#text",
+    parseAttributeValue: false,
+    parseTagValue: false,
+    trimValues: true,
+    processEntities: true,
+  });
+
+  try {
+    const parsed = parser.parse(xml) as {
+      "ad:images"?: XmlImages;
+    };
+    const { all } = pickBestImage(parsed["ad:images"]);
+    return all;
+  } catch (err) {
+    console.error("[mobile.de] images XML parse error:", err);
+    return [];
   }
 }
 
@@ -372,15 +418,26 @@ export const mobileSource: VehiclesSource = {
   async get(slug: string) {
     const sellerId = process.env.MOBILE_DE_SELLER_ID || DEFAULT_SELLER_ID;
     const all = await fetchAllAds(sellerId);
-    // 1) Direkter Slug-Treffer
-    const direct = all.find((v) => v.slug === slug);
-    if (direct) return direct;
-    // 2) Fallback: Slug könnte die mobile.de-ID am Ende enthalten
-    const trailingId = slug.match(/(\d{10,})$/)?.[1];
-    if (trailingId) {
-      const byId = all.find((v) => v.mobileAdId === trailingId);
-      if (byId) return byId;
+    let match = all.find((v) => v.slug === slug);
+    if (!match) {
+      const trailingId = slug.match(/(\d{10,})$/)?.[1];
+      if (trailingId) match = all.find((v) => v.mobileAdId === trailingId);
     }
-    return null;
+    if (!match) return null;
+
+    // Für die Detailseite: komplette Galerie nachladen (die Search-API
+    // liefert in der Liste nur ein Preview-Bild pro Inserat).
+    if (match.mobileAdId) {
+      const allImages = await fetchAdImages(match.mobileAdId);
+      if (allImages.length > 0) {
+        return {
+          ...match,
+          image: allImages[0] || match.image,
+          images: allImages,
+        };
+      }
+    }
+
+    return match;
   },
 };

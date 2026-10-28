@@ -17,37 +17,51 @@ export default async function VehiclePage({ params }: Props) {
   const v = await getVehicle(slug);
   if (!v) return notFound();
 
+  const gallery = v.images && v.images.length > 0 ? v.images : v.image ? [v.image] : [];
+
   return (
     <main className="pt-24">
       <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-3 px-3">
-        {/* Sticky photo */}
-        <div className="order-1">
-          <div className="relative overflow-hidden vehicle-sticky-photo">
-            <Image
-              src={v.image}
-              alt={`${v.brand} ${v.model} ${v.variant}`}
-              fill
-              priority
-              sizes="(min-width:1024px) 55vw, 100vw"
-              className="object-cover"
-            />
-            <div
-              className="absolute inset-x-0 bottom-0 flex items-center justify-between"
-              style={{
-                padding: "18px 22px",
-                background: "rgba(251,251,249,0.92)",
-                color: "var(--ink)",
-                fontSize: "0.92rem",
-              }}
-            >
-              <span>
-                {v.brand} {v.model} · {v.color}
-              </span>
-              <span style={{ color: "var(--muted)", fontSize: "0.8rem" }}>
-                EZ {v.year} · {v.mileage.toLocaleString("de-DE")} km
-              </span>
+        {/* Image gallery (all photos stacked) */}
+        <div className="order-1 flex flex-col gap-3">
+          {gallery.map((src, i) => (
+            <div key={`${src}-${i}`} className="relative aspect-[4/3] overflow-hidden radius" style={{ background: "var(--paper-sunk)" }}>
+              <Image
+                src={src}
+                alt={`${v.brand} ${v.model} ${v.variant} · Bild ${i + 1}`}
+                fill
+                priority={i === 0}
+                sizes="(min-width:1024px) 55vw, 100vw"
+                className="object-cover"
+              />
+              {i === 0 && (
+                <div
+                  className="absolute inset-x-0 bottom-0 flex items-center justify-between"
+                  style={{
+                    padding: "18px 22px",
+                    background: "rgba(251,251,249,0.92)",
+                    color: "var(--ink)",
+                    fontSize: "0.92rem",
+                  }}
+                >
+                  <span>
+                    {v.brand} {v.model} · {v.color}
+                  </span>
+                  <span style={{ color: "var(--muted)", fontSize: "0.8rem" }}>
+                    EZ {v.year} · {v.mileage.toLocaleString("de-DE")} km
+                  </span>
+                </div>
+              )}
             </div>
-          </div>
+          ))}
+          {gallery.length > 1 && (
+            <div
+              className="mono"
+              style={{ color: "var(--muted)", fontSize: "0.78rem", padding: "4px 2px" }}
+            >
+              {gallery.length} Bilder
+            </div>
+          )}
         </div>
 
         {/* Content */}
@@ -75,7 +89,7 @@ export default async function VehiclePage({ params }: Props) {
 
           <dl className="mt-14 grid grid-cols-2 gap-x-10 gap-y-6">
             {[
-              ["Erstzulassung", v.year.toString()],
+              ["Erstzulassung", v.firstRegistration ?? v.year.toString()],
               ["Kilometerstand", `${v.mileage.toLocaleString("de-DE")} km`],
               ["Kraftstoff", v.fuel],
               ["Leistung", `${v.power} kW (${Math.round(v.power * 1.36)} PS)`],
