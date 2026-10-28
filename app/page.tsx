@@ -385,33 +385,25 @@ export default async function Home() {
       </section>
 
       {/* MARKEN */}
-      <section
-        className="mt-24 md:mt-32 lg:mt-44 py-16 md:py-20 lg:py-28"
-        style={{ background: "var(--paper-sunk)" }}
-      >
-        <div className="px-6 md:px-10 lg:px-14">
-          <SlideIn direction="up">
-            <div className="mono" style={{ color: "var(--on-sunk-muted)" }}>Marken</div>
-            <h2
-              className="display mt-4"
-              style={{
-                fontSize: "clamp(2rem, 4vw, 3.4rem)",
-                letterSpacing: "-0.03em",
-                maxWidth: "28ch",
-                color: "var(--on-sunk)",
-              }}
-            >
-              Jede Marke. Jedes Modell.
-            </h2>
-          </SlideIn>
-
-          <p
-            className="mt-10 mono"
-            style={{ color: "var(--on-sunk-muted)" }}
+      <section className="mt-24 md:mt-32 lg:mt-44 py-16 md:py-20 lg:py-28 px-6 md:px-10 lg:px-14">
+        <SlideIn direction="up">
+          <div className="mono" style={{ color: "var(--muted)" }}>Marken</div>
+          <h2
+            className="display mt-4"
+            style={{
+              fontSize: "clamp(2rem, 4vw, 3.4rem)",
+              letterSpacing: "-0.03em",
+              maxWidth: "28ch",
+              color: "var(--ink)",
+            }}
           >
-            Was Sie suchen, beschaffen wir auf Anfrage.
-          </p>
-        </div>
+            Jede Marke. Jedes Modell.
+          </h2>
+        </SlideIn>
+
+        <p className="mt-10 mono" style={{ color: "var(--muted)" }}>
+          Was Sie suchen, beschaffen wir auf Anfrage.
+        </p>
       </section>
 
       {/* ÜBER UNS teaser */}
@@ -460,7 +452,7 @@ export default async function Home() {
       {/* SUCHAUFTRAG */}
       <section
         className="mt-24 md:mt-32 lg:mt-44 px-6 md:px-10 lg:px-14 py-20"
-        style={{ background: "var(--void)" }}
+        style={{ background: "var(--paper)" }}
       >
         <div className="mx-auto" style={{ maxWidth: 1200 }}>
           <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-10 items-end">
@@ -476,7 +468,7 @@ export default async function Home() {
                   style={{
                     fontSize: "clamp(2rem, 4vw, 3.4rem)",
                     letterSpacing: "-0.03em",
-                    color: "var(--paper)",
+                    color: "var(--ink)",
                     maxWidth: "22ch",
                   }}
                 >
@@ -486,7 +478,7 @@ export default async function Home() {
               <SlideIn direction="up" delay={0.2}>
                 <p
                   className="lead mt-5"
-                  style={{ color: "rgba(251,251,249,0.72)", maxWidth: "48ch" }}
+                  style={{ color: "var(--ink-soft)", maxWidth: "48ch" }}
                 >
                   Sagen Sie uns, was Sie suchen. Marke, Budget, Mindestanforderungen.
                   Wir melden uns, sobald ein passender Wagen in den Hof kommt.
@@ -497,7 +489,7 @@ export default async function Home() {
               <Link
                 href={SITE.contact.emailHref}
                 className="btn"
-                style={{ background: "var(--paper)", color: "var(--ink)" }}
+                style={{ background: "var(--ink)", color: "var(--paper)" }}
               >
                 Suchauftrag starten <span style={{ color: "var(--signal)" }}>→</span>
               </Link>
@@ -523,45 +515,59 @@ export default async function Home() {
           stagger={0.08}
           className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-2"
         >
-          <div className="radius" style={{ background: "var(--paper-sunk)", padding: "clamp(24px, 4vw, 36px) clamp(22px, 3.5vw, 32px)" }}>
-            <div className="mono" style={{ color: "var(--on-sunk-muted)" }}>Adresse</div>
-            <div style={{ marginTop: 18, color: "var(--on-sunk)" }}>
+          <div
+            className="radius"
+            style={{
+              background: "var(--paper)",
+              border: "1px solid var(--fog-200)",
+              padding: "clamp(24px, 4vw, 36px) clamp(22px, 3.5vw, 32px)",
+            }}
+          >
+            <div className="mono" style={{ color: "var(--muted)" }}>Adresse</div>
+            <div style={{ marginTop: 18, color: "var(--muted)" }}>
               {SITE.address.line1}
               <br />
               {SITE.address.line2}
             </div>
           </div>
-          <div className="radius" style={{ background: "var(--paper-sunk)", padding: "clamp(24px, 4vw, 36px) clamp(22px, 3.5vw, 32px)" }}>
-            <div className="mono" style={{ color: "var(--on-sunk-muted)" }}>Öffnungszeiten</div>
-            <div style={{ marginTop: 18, color: "var(--on-sunk)" }}>
+          <div
+            className="radius"
+            style={{
+              background: "var(--paper)",
+              border: "1px solid var(--fog-200)",
+              padding: "clamp(24px, 4vw, 36px) clamp(22px, 3.5vw, 32px)",
+            }}
+          >
+            <div className="mono" style={{ color: "var(--muted)" }}>Öffnungszeiten</div>
+            <div style={{ marginTop: 18, color: "var(--muted)" }}>
               {SITE.hours.weekday}
               <br />
               {SITE.hours.saturday}
               <br />
-              <span style={{ color: "var(--on-sunk-muted)" }}>{SITE.hours.note}</span>
+              {SITE.hours.note}
             </div>
           </div>
-          <div className="radius" style={{ background: "var(--ink)", color: "var(--paper)", padding: "clamp(24px, 4vw, 36px) clamp(22px, 3.5vw, 32px)" }}>
-            <div className="mono" style={{ color: "var(--muted-fade)" }}>Direkt sprechen</div>
+          <div
+            className="radius"
+            style={{
+              background: "var(--paper)",
+              border: "1px solid var(--fog-200)",
+              padding: "clamp(24px, 4vw, 36px) clamp(22px, 3.5vw, 32px)",
+              color: "var(--muted)",
+            }}
+          >
+            <div className="mono" style={{ color: "var(--muted)" }}>Direkt sprechen</div>
             <a
               href={SITE.contact.phoneLandlineHref}
-              className="display block mt-4"
-              style={{ fontSize: "1.4rem", color: "var(--paper)", letterSpacing: "-0.02em" }}
+              className="block"
+              style={{ marginTop: 18, color: "var(--muted)" }}
             >
               {SITE.contact.phoneLandline}
             </a>
-            <a
-              href={SITE.contact.phoneHref}
-              className="block mt-1"
-              style={{ color: "rgba(251,251,249,0.72)", fontSize: "0.9rem" }}
-            >
+            <a href={SITE.contact.phoneHref} className="block" style={{ color: "var(--muted)" }}>
               {SITE.contact.phone}
             </a>
-            <a
-              href={SITE.contact.emailHref}
-              className="block mt-4"
-              style={{ color: "var(--paper)", fontSize: "0.92rem" }}
-            >
+            <a href={SITE.contact.emailHref} className="block" style={{ color: "var(--muted)" }}>
               {SITE.contact.email}
             </a>
           </div>
