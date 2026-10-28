@@ -13,7 +13,7 @@ const LEISTUNGEN = [
   {
     id: "finanzierung",
     title: "Finanzierung über die Targobank",
-    body: "Individuelle Finanzierung über unseren Bankpartner. Unverbindliche Anfrage und Angebot innerhalb von 24 Stunden.",
+    body: "Laufzeiten von 6 bis 96 Monaten, mit oder ohne Schlussrate, auf Wunsch auch ohne Anzahlung. Unverbindliches Angebot innerhalb von 24 Stunden.",
   },
   {
     id: "aufbereitung",
