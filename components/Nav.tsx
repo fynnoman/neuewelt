@@ -22,6 +22,27 @@ function WhatsAppIcon({ size = 18, color = "currentColor" }: { size?: number; co
   );
 }
 
+function InstagramIcon({ size = 18, color = "currentColor" }: { size?: number; color?: string }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      style={{ display: "block" }}
+    >
+      <rect x="2" y="2" width="20" height="20" rx="5" />
+      <circle cx="12" cy="12" r="4.2" />
+      <circle cx="17.6" cy="6.4" r="1.1" fill={color} stroke="none" />
+    </svg>
+  );
+}
+
 const SIDE_W = 300;
 const SIDE_PX = `${SIDE_W}px`;
 
@@ -138,6 +159,34 @@ export default function Nav() {
               </span>
               <span style={{ color: "var(--muted)", fontSize: "0.78rem" }}>
                 {SITE.contact.whatsapp}
+              </span>
+            </a>
+            <a
+              href={SITE.social.instagram}
+              target="_blank"
+              rel="noopener"
+              aria-label="Instagram @neueweltautomobile"
+              className="inline-flex items-center justify-between gap-3"
+              style={{
+                padding: "0.75rem 1rem",
+                background: "rgba(255,255,255,0.55)",
+                backdropFilter: "saturate(180%) blur(16px)",
+                WebkitBackdropFilter: "saturate(180%) blur(16px)",
+                border: "1px solid rgba(255,255,255,0.65)",
+                borderRadius: "var(--radius)",
+                color: "var(--ink)",
+                fontSize: "0.92rem",
+                fontWeight: 500,
+                boxShadow:
+                  "inset 0 1px 0 rgba(255,255,255,0.95), 0 10px 22px -14px rgba(10,11,12,0.3)",
+              }}
+            >
+              <span className="inline-flex items-center gap-2">
+                <InstagramIcon size={18} color="#0A0B0C" />
+                Instagram
+              </span>
+              <span style={{ color: "var(--muted)", fontSize: "0.78rem" }}>
+                @neueweltautomobile
               </span>
             </a>
           </div>
@@ -311,6 +360,35 @@ export default function Nav() {
                   </span>
                   <span style={{ color: "var(--muted)", fontSize: "0.82rem" }}>
                     {SITE.contact.whatsapp}
+                  </span>
+                </a>
+                <a
+                  href={SITE.social.instagram}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="Instagram @neueweltautomobile"
+                  onClick={() => setOpen(false)}
+                  className="inline-flex items-center justify-between gap-3"
+                  style={{
+                    padding: "0.8rem 1rem",
+                    background: "rgba(255,255,255,0.6)",
+                    backdropFilter: "saturate(180%) blur(16px)",
+                    WebkitBackdropFilter: "saturate(180%) blur(16px)",
+                    border: "1px solid rgba(255,255,255,0.6)",
+                    borderRadius: "var(--radius)",
+                    color: "var(--ink)",
+                    fontSize: "0.96rem",
+                    fontWeight: 500,
+                    boxShadow:
+                      "inset 0 1px 0 rgba(255,255,255,0.95), 0 10px 22px -14px rgba(10,11,12,0.3)",
+                  }}
+                >
+                  <span className="inline-flex items-center gap-2">
+                    <InstagramIcon size={18} color="#0A0B0C" />
+                    Instagram
+                  </span>
+                  <span style={{ color: "var(--muted)", fontSize: "0.82rem" }}>
+                    @neueweltautomobile
                   </span>
                 </a>
 

@@ -2,6 +2,27 @@ import Link from "next/link";
 import Image from "next/image";
 import { NAV, SITE } from "@/lib/site";
 
+function InstagramIcon({ size = 18, color = "currentColor" }: { size?: number; color?: string }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      style={{ display: "block" }}
+    >
+      <rect x="2" y="2" width="20" height="20" rx="5" />
+      <circle cx="12" cy="12" r="4.2" />
+      <circle cx="17.6" cy="6.4" r="1.1" fill={color} stroke="none" />
+    </svg>
+  );
+}
+
 const LEISTUNGEN = [
   { label: "Werkstatt", href: "/service" },
   { label: "Fahrzeugaufbereitung", href: "/service" },
@@ -74,6 +95,26 @@ export default function Footer() {
               style={{ color: "rgba(251,251,249,0.72)", fontSize: "1rem" }}
             >
               {SITE.contact.email}
+            </a>
+            <a
+              href={SITE.social.instagram}
+              target="_blank"
+              rel="noopener"
+              aria-label="Instagram @neueweltautomobile"
+              className="inline-flex items-center gap-3"
+              style={{
+                alignSelf: "flex-start",
+                padding: "0.55rem 0.95rem",
+                background: "var(--paper)",
+                color: "var(--ink)",
+                borderRadius: 999,
+                fontSize: "0.9rem",
+                fontWeight: 500,
+                marginTop: "0.25rem",
+              }}
+            >
+              <InstagramIcon size={18} color="#0A0B0C" />
+              @neueweltautomobile
             </a>
             <Link
               href="/ankauf"

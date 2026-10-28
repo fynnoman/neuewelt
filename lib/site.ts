@@ -5,8 +5,8 @@ export const SITE = {
   city: "Saarlouis",
   slogan: "Machen Sie aus einem Auto, Ihr Auto.",
   address: {
-    line1: "[Straße · Hausnummer]",
-    line2: "66740 Saarlouis",
+    line1: "Provinzialstraße 144",
+    line2: "66740 Saarlouis-Lisdorf",
   },
   hours: {
     weekday: "Mo bis Fr · 09 bis 18 Uhr",
@@ -22,7 +22,7 @@ export const SITE = {
     whatsappHref: "https://wa.me/491742611090",
   },
   social: {
-    instagram: "#",
+    instagram: "https://www.instagram.com/neueweltautomobile/?hl=de",
     facebook: "#",
   },
 };
