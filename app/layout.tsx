@@ -5,6 +5,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
 import WhatsAppFab from "@/components/WhatsAppFab";
+import NewsletterModal from "@/components/NewsletterModal";
 
 const manrope = localFont({
   src: "../public/fonts/Manrope.ttf",
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <PageTransition>{children}</PageTransition>
         <Footer />
         <WhatsAppFab />
+        <NewsletterModal />
       </body>
     </html>
   );
