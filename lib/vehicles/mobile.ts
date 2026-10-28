@@ -212,6 +212,9 @@ function mapAdToVehicle(ad: XmlAd): Vehicle | null {
   const modelDesc = modelDescRaw != null ? String(modelDescRaw) : undefined;
   const model = String(modelDescLocal ?? modelKey ?? modelDesc ?? "");
 
+  const vehicleClass = readLocalDesc(vehicle["ad:class"]?.["resource:local-description"]);
+  const category = readLocalDesc(vehicle["ad:category"]?.["resource:local-description"]);
+
   const spec = vehicle["ad:specifics"];
   const fuel = mapFuel(spec?.["ad:fuel"]?.["@_key"]);
   const gearbox = mapGearbox(spec?.["ad:gearbox"]?.["@_key"]);
@@ -277,6 +280,8 @@ function mapAdToVehicle(ad: XmlAd): Vehicle | null {
     description,
     vatable,
     vatRate,
+    category: category ? String(category) : undefined,
+    vehicleClass: vehicleClass ? String(vehicleClass) : undefined,
   };
 }
 
@@ -424,11 +429,15 @@ function sortVehicles(list: Vehicle[], sort?: VehicleListOptions["sort"]): Vehic
 
 function matchesSegment(v: Vehicle, seg: string): boolean {
   if (!seg || seg === "alle") return true;
-  const s = `${v.variant} ${v.model}`.toLowerCase();
-  if (seg === "suv") return /x[13-7]\b|glc|macan|q[357]|suv|touareg|tiguan|xc40|xc60|xc90|q5|q7/.test(s);
-  if (seg === "kombi") return /touring|avant|t-?modell|kombi|variant|estate|st\b/.test(s);
-  if (seg === "coupe") return /coup|coupé/.test(s);
-  if (seg === "limousine") return !/touring|avant|t-?modell|kombi|coup|x[13-7]|glc|macan|q[357]|suv|tiguan|touareg|xc\d/.test(s);
+  const cat = (v.category ?? "").toLowerCase();
+  const klass = (v.vehicleClass ?? "").toLowerCase();
+  if (seg === "limousine") return cat.startsWith("limousine");
+  if (seg === "kombi") return cat.includes("kombi");
+  if (seg === "suv") return cat.includes("suv") || cat.includes("gelände") || cat.includes("gelaende") || cat.includes("pickup");
+  if (seg === "coupe") return cat.includes("coup") || cat.includes("sportwagen");
+  if (seg === "cabrio") return cat.includes("cabrio") || cat.includes("roadster");
+  if (seg === "van") return cat.startsWith("van") || cat.includes("minibus");
+  if (seg === "transporter") return klass.includes("transporter") || klass.includes("lkw") || cat.includes("kastenwagen");
   return true;
 }
 

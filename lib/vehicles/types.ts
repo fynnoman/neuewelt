@@ -13,6 +13,8 @@ export type Vehicle = {
   image: string;
   images?: string[];
   highlights: string[];
+  category?: string; // mobile.de Kategorie-Label, z. B. Limousine, Kombi, SUV/Geländewagen/Pickup
+  vehicleClass?: string; // Pkw, Transporter oder Lkw bis 7,5 t
   description?: string; // Fließtext-Beschreibung aus mobile.de
   // MwSt.
   vatable?: boolean; // true = MwSt. ausweisbar
@@ -44,7 +46,10 @@ export interface VehiclesSource {
 export const SEGMENTS: Segment[] = [
   { key: "alle", label: "Alle" },
   { key: "limousine", label: "Limousine" },
-  { key: "suv", label: "SUV" },
   { key: "kombi", label: "Kombi" },
+  { key: "suv", label: "SUV" },
   { key: "coupe", label: "Coupé" },
+  { key: "cabrio", label: "Cabrio" },
+  { key: "van", label: "Van" },
+  { key: "transporter", label: "Transporter" },
 ];
