@@ -6,7 +6,7 @@ import MagneticButton from "@/components/MagneticButton";
 import { SITE } from "@/lib/site";
 import { getVehicles } from "@/lib/vehicles";
 
-const HERO_IMAGE = "/photos/hero-logo-beton.png";
+const HERO_IMAGE = "/images/neue-welt-automobile.webp";
 const ANKAUF_IMAGE = "/photos/showroom-bright.jpg";
 const TEASER_IMAGE = "/photos/showroom-amg.jpg";
 
@@ -37,14 +37,14 @@ export default async function Home() {
         <div className="absolute inset-0">
           <Image
             src={HERO_IMAGE}
-            alt=""
+            alt="Neue Welt Automobile"
             fill
             priority
+            quality={95}
             sizes="100vw"
             style={{
               objectFit: "cover",
               objectPosition: "center 55%",
-              opacity: 0.8,
             }}
             aria-hidden
           />
