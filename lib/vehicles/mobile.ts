@@ -276,7 +276,8 @@ async function fetchPage(sellerId: string, page: number): Promise<XmlSearchResul
   const res = await fetch(url, {
     headers: {
       Authorization: auth,
-      Accept: "application/xml",
+      Accept: "application/xml, text/xml, */*",
+      "User-Agent": "NeueWeltAutomobile-Website/1.0 (+https://neuewelt.vercel.app)",
     },
     // 15-Minuten-Cache. Preis- und Bestandsänderungen schlagen also nach spätestens 15 min auf.
     next: { revalidate: REVALIDATE_SECONDS, tags: ["mobile-de"] },
