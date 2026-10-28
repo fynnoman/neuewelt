@@ -10,7 +10,6 @@ export default function Marquee({
     "SAARLOUIS",
     "GEBRAUCHTWAGEN",
     "FAHRZEUGANKAUF",
-    "WERKSTATT",
     "ZULASSUNGSSERVICE",
     "FINANZIERUNG",
   ],

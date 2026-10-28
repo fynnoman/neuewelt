@@ -26,11 +26,6 @@ const LEISTUNGEN = [
     body: "Professionelle Innen- und Außenpflege mit hochwertigen Mitteln. Pauschale Pakete oder individuelles Angebot nach Wunsch.",
   },
   {
-    id: "werkstatt",
-    title: "Werkstatt",
-    body: "Inspektion, Reparatur, Diagnose, Klimaservice und HU-Vorbereitung. Alles aus einer Hand bei uns vor Ort.",
-  },
-  {
     id: "check",
     title: "Gebrauchtwagen-Check",
     body: "Zertifizierter Check durch eine unabhängige Prüforganisation. Zustandsbericht und Prüfzertifikat gegen Aufpreis.",
@@ -66,12 +61,12 @@ export default function ServicePage() {
   return (
     <main className="pt-28 lg:pt-36">
       <header className="px-6 md:px-10 lg:px-14">
-        <div className="mono" style={{ color: "var(--muted)" }}>Service</div>
+        <div className="mono" style={{ color: "var(--muted)" }}>Leistungen</div>
         <h1
           className="display mt-6"
           style={{ fontSize: "clamp(2.6rem, 6.4vw, 5.2rem)", maxWidth: "22ch", letterSpacing: "-0.03em" }}
         >
-          Werkstatt und Service.
+          Alles aus einer Hand.
         </h1>
       </header>
 
@@ -82,8 +77,8 @@ export default function ServicePage() {
         >
           <div className="order-2 lg:order-1">
             <p className="lead" style={{ fontSize: "1.15rem", maxWidth: "40ch" }}>
-              Inspektion, Reparatur, Aufbereitung, Räderwechsel, HU-Vorbereitung
-              und Zulassung. Alles aus einer Hand. Festpreis wird vor Beginn
+              Fahrzeugankauf, Neuwagenbeschaffung, Aufbereitung, Folierung und
+              Zulassung. Alles aus einer Hand. Festpreis wird vor Beginn
               schriftlich bestätigt.
             </p>
           </div>
@@ -145,23 +140,8 @@ export default function ServicePage() {
       </section>
 
       <section className="mt-24 lg:mt-28 px-6 md:px-10 lg:px-14">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Reveal>
-            <article className="radius" style={{ background: "var(--paper-sunk)", padding: 36 }}>
-              <div className="mono" style={{ color: "var(--on-sunk-muted)" }}>Werkstatt-Termine</div>
-              <p
-                className="display mt-4"
-                style={{ fontSize: "1.6rem", lineHeight: 1.15, color: "var(--on-sunk)", letterSpacing: "-0.02em" }}
-              >
-                Meist innerhalb von drei Werktagen.
-              </p>
-              <p className="mt-4" style={{ color: "var(--on-sunk-muted)", fontSize: "0.95rem" }}>
-                Terminvereinbarung telefonisch oder per Mail.
-              </p>
-            </article>
-          </Reveal>
-
-          <Reveal delay={0.1}>
             <article className="radius" style={{ background: "var(--paper-sunk)", padding: 36 }}>
               <div className="mono" style={{ color: "var(--on-sunk-muted)" }}>Hol- und Bringdienst</div>
               <p
@@ -176,10 +156,10 @@ export default function ServicePage() {
             </article>
           </Reveal>
 
-          <Reveal delay={0.2}>
+          <Reveal delay={0.1}>
             <article className="radius" style={{ background: "var(--ink)", color: "var(--paper)", padding: 36 }}>
               <div className="mono" style={{ color: "var(--muted-fade)" }}>
-                Werkstatt direkt
+                Direkt sprechen
               </div>
               <a
                 href={SITE.contact.phoneLandlineHref}
@@ -196,11 +176,11 @@ export default function ServicePage() {
                 {SITE.contact.phone}
               </a>
               <Link
-                href="/ankauf"
+                href="/kontakt"
                 className="mt-6 inline-flex items-center gap-2"
                 style={{ color: "var(--paper)", fontSize: "0.95rem" }}
               >
-                Termin anfragen <span style={{ color: "var(--signal-deep)" }}>→</span>
+                Nachricht senden <span style={{ color: "var(--signal-deep)" }}>→</span>
               </Link>
             </article>
           </Reveal>

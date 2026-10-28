@@ -17,12 +17,12 @@ const manrope = localFont({
 export const metadata: Metadata = {
   title: "Neue Welt Automobile · Saarlouis",
   description:
-    "Neu- und Gebrauchtwagenhandel, Fahrzeugankauf und Werkstatt in Saarlouis. Ruhige Beratung, saubere Abwicklung, der ganze Weg aus einer Hand.",
+    "Neu- und Gebrauchtwagenhandel und Fahrzeugankauf in Saarlouis. Ruhige Beratung, saubere Abwicklung, der ganze Weg aus einer Hand.",
   metadataBase: new URL("https://neue-welt-automobile.de"),
   openGraph: {
     title: "Neue Welt Automobile · Saarlouis",
     description:
-      "Neu- und Gebrauchtwagenhandel, Fahrzeugankauf, Werkstatt. Saarlouis.",
+      "Neu- und Gebrauchtwagenhandel und Fahrzeugankauf. Saarlouis.",
     locale: "de_DE",
     type: "website",
     url: "https://neue-welt-automobile.de",

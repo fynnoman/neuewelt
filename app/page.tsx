@@ -8,17 +8,15 @@ import { getVehicles } from "@/lib/vehicles";
 
 const HERO_IMAGE = "/photos/hero-logo-beton.png";
 const ANKAUF_IMAGE = "/photos/showroom-bright.jpg";
-const WERKSTATT_IMAGE = "/photos/showroom-amg.jpg";
+const TEASER_IMAGE = "/photos/showroom-amg.jpg";
 
 const SERVICES = [
-  { title: "Werkstatt", body: "Inspektion, Reparatur, HU-Vorbereitung.", href: "/service" },
   { title: "Neuwagenbeschaffung", body: "Ihr Wunschfahrzeug direkt vom Hersteller.", href: "/service" },
   { title: "Fahrzeugaufbereitung", body: "Innen und außen, Pauschale oder Detail.", href: "/service" },
   { title: "Fahrzeugfolierungen & Scheibentönung", body: "Vollfolierung, Teilfolierung, Scheibentönung.", href: "/service" },
   { title: "Zulassungsservice", body: "Bundesweite Zulassung inklusive Wunschkennzeichen.", href: "/service" },
   { title: "Fahrzeugüberführung deutschlandweit", body: "Bis vor Ihre Haustür in ganz Deutschland.", href: "/service" },
-  { title: "Finanzierung über die Targobank", body: "Angebot innerhalb von 24 Stunden.", href: "/service" },
-  { title: "Garantie bis zu 36 Monate", body: "Preis auf Anfrage.", href: "/service" },
+  { title: "Fahrzeugankauf", body: "Angebot innerhalb von Minuten.", href: "/ankauf" },
 ];
 
 const PROZESS = [
@@ -87,7 +85,7 @@ export default async function Home() {
                   className="mono"
                   style={{ color: "var(--paper)", opacity: 0.72 }}
                 >
-                  Neuwagen · Gebrauchtwagen · Fahrzeugankauf · Werkstatt
+                  Neuwagen · Gebrauchtwagen · Fahrzeugankauf
                 </div>
               </SlideIn>
 
@@ -114,8 +112,7 @@ export default async function Home() {
                   style={{ color: "rgba(251,251,249,0.84)", maxWidth: "40ch" }}
                 >
                   Gepflegte Neu- und Gebrauchtwagen in Saarlouis. Fahrzeugankauf
-                  zum fairen Marktpreis. Eigene Werkstatt mit allem Service aus
-                  einer Hand.
+                  zum fairen Marktpreis. Alle Leistungen aus einer Hand.
                 </p>
               </SlideIn>
 
@@ -425,7 +422,7 @@ export default async function Home() {
               <SlideIn direction="up" delay={0.2}>
                 <p className="lead mt-6">
                   Familiengeführt. Breiter Bestand, hohe Prüfungstiefe, offene
-                  Beratung. Werkstatt, Zulassung und Finanzierung aus einer Hand.
+                  Beratung. Zulassung und Finanzierung aus einer Hand.
                 </p>
               </SlideIn>
               <SlideIn direction="up" delay={0.3}>
@@ -439,8 +436,8 @@ export default async function Home() {
           </div>
           <div className="relative overflow-hidden rounded-[var(--radius)]" style={{ aspectRatio: "5 / 4", minHeight: "50svh" }}>
             <Image
-              src={WERKSTATT_IMAGE}
-              alt="Werkstatt"
+              src={TEASER_IMAGE}
+              alt="Neue Welt Automobile Saarlouis"
               fill
               sizes="(min-width: 1024px) 48vw, 94vw"
               className="object-cover"
@@ -518,8 +515,7 @@ export default async function Home() {
           <div
             className="radius"
             style={{
-              background: "var(--paper)",
-              border: "1px solid var(--fog-200)",
+              background: "var(--fog-100)",
               padding: "clamp(24px, 4vw, 36px) clamp(22px, 3.5vw, 32px)",
             }}
           >
@@ -533,8 +529,7 @@ export default async function Home() {
           <div
             className="radius"
             style={{
-              background: "var(--paper)",
-              border: "1px solid var(--fog-200)",
+              background: "var(--fog-100)",
               padding: "clamp(24px, 4vw, 36px) clamp(22px, 3.5vw, 32px)",
             }}
           >
@@ -550,8 +545,7 @@ export default async function Home() {
           <div
             className="radius"
             style={{
-              background: "var(--paper)",
-              border: "1px solid var(--fog-200)",
+              background: "var(--fog-100)",
               padding: "clamp(24px, 4vw, 36px) clamp(22px, 3.5vw, 32px)",
               color: "var(--muted)",
             }}

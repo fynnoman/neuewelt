@@ -92,7 +92,6 @@ export default function KontaktPage() {
                 <select name="interesse" style={{ ...INPUT_STYLE, appearance: "none" }}>
                   <option>Fahrzeug kaufen</option>
                   <option>Fahrzeug verkaufen</option>
-                  <option>Werkstatt und Service</option>
                   <option>Finanzierung</option>
                   <option>Garantie</option>
                   <option>Sonstiges</option>

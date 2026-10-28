@@ -3,16 +3,15 @@ import SlideIn from "@/components/SlideIn";
 const FACTS = [
   ["Gründung", "2001"],
   ["Standort", "Saarlouis"],
-  ["Werkstatt", "Vor Ort"],
 ];
 
 const LEISTUNGEN = [
   "Neu- und Gebrauchtwagenhandel",
   "Neuwagenbeschaffung",
   "Fahrzeugankauf",
-  "Werkstatt und Service",
   "Zulassungsservice",
   "Fahrzeugaufbereitung",
+  "Fahrzeugfolierungen und Scheibentönung",
   "Fahrzeugüberführung deutschlandweit",
   "Finanzierung über die Targobank",
   "Garantie bis zu 36 Monate",
@@ -44,7 +43,7 @@ export default function UeberUnsPage() {
         <SlideIn
           direction="up"
           stagger={0.08}
-          className="grid grid-cols-2 md:grid-cols-3 gap-y-10"
+          className="grid grid-cols-2 gap-y-10"
         >
           {FACTS.map(([k, v]) => (
             <div key={k} className="flex flex-col">

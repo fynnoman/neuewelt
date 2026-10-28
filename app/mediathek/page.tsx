@@ -7,7 +7,7 @@ import { SITE } from "@/lib/site";
 export const metadata = {
   title: "Mediathek · Neue Welt Automobile",
   description:
-    "Eindrücke aus Showroom, Werkstatt und Fahrzeugbestand. Fotografien von Neue Welt Automobile in Saarlouis.",
+    "Eindrücke aus Showroom und Fahrzeugbestand. Fotografien von Neue Welt Automobile in Saarlouis.",
 };
 
 export default function MediathekPage() {
@@ -33,7 +33,7 @@ export default function MediathekPage() {
         </SlideIn>
         <SlideIn direction="up" delay={0.2}>
           <p className="lead mt-6" style={{ maxWidth: "50ch" }}>
-            Fahrzeuge, Werkstatt, Showroom. Alles in Saarlouis.
+            Fahrzeuge und Showroom. Alles in Saarlouis.
           </p>
         </SlideIn>
       </header>

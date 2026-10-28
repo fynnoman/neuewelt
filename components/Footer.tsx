@@ -23,7 +23,6 @@ function InstagramIcon({ size = 18, color = "currentColor" }: { size?: number; c
 }
 
 const LEISTUNGEN = [
-  { label: "Werkstatt", href: "/service" },
   { label: "Neuwagenbeschaffung", href: "/service" },
   { label: "Fahrzeugaufbereitung", href: "/service" },
   { label: "Fahrzeugfolierungen & Scheibentönung", href: "/service" },
@@ -139,7 +138,7 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-14 py-16">
           {/* Navigation */}
           <div>
-            <div className="mono" style={{ color: "var(--muted)" }}>
+            <div className="mono" style={{ color: "var(--muted)", fontWeight: 700 }}>
               Seite
             </div>
             <ul className="mt-6 flex flex-col gap-3">
@@ -148,7 +147,7 @@ export default function Footer() {
                   <Link
                     href={n.href}
                     className="footer-link"
-                    style={{ color: "var(--ink)", fontSize: "0.98rem" }}
+                    style={{ color: "var(--ink)", fontSize: "0.98rem", fontWeight: 600 }}
                   >
                     {n.label}
                   </Link>
@@ -159,7 +158,7 @@ export default function Footer() {
 
           {/* Leistungen */}
           <div>
-            <div className="mono" style={{ color: "var(--muted)" }}>
+            <div className="mono" style={{ color: "var(--muted)", fontWeight: 700 }}>
               Leistungen
             </div>
             <ul className="mt-6 flex flex-col gap-3">
@@ -168,7 +167,7 @@ export default function Footer() {
                   <Link
                     href={l.href}
                     className="footer-link"
-                    style={{ color: "var(--ink-soft)", fontSize: "0.98rem" }}
+                    style={{ color: "var(--ink)", fontSize: "0.98rem", fontWeight: 600 }}
                   >
                     {l.label}
                   </Link>
@@ -179,32 +178,32 @@ export default function Footer() {
 
           {/* Kontakt */}
           <div>
-            <div className="mono" style={{ color: "var(--muted)" }}>
+            <div className="mono" style={{ color: "var(--muted)", fontWeight: 700 }}>
               Kontakt
             </div>
             <ul className="mt-6 flex flex-col gap-3" style={{ fontSize: "0.98rem" }}>
               <li>
-                <a href={SITE.contact.phoneLandlineHref} style={{ color: "var(--ink)" }}>
+                <a href={SITE.contact.phoneLandlineHref} style={{ color: "var(--ink)", fontWeight: 600 }}>
                   {SITE.contact.phoneLandline}
                 </a>
               </li>
               <li>
-                <a href={SITE.contact.phoneHref} style={{ color: "var(--ink-soft)" }}>
+                <a href={SITE.contact.phoneHref} style={{ color: "var(--ink)", fontWeight: 600 }}>
                   {SITE.contact.phone}
                 </a>
               </li>
               <li>
-                <a href={SITE.contact.emailHref} style={{ color: "var(--ink-soft)" }}>
+                <a href={SITE.contact.emailHref} style={{ color: "var(--ink)", fontWeight: 600 }}>
                   {SITE.contact.email}
                 </a>
               </li>
             </ul>
-            <div className="mt-6 mono" style={{ color: "var(--muted)" }}>
+            <div className="mt-6 mono" style={{ color: "var(--muted)", fontWeight: 700 }}>
               Öffnungszeiten
             </div>
             <ul
               className="mt-4 flex flex-col gap-1.5"
-              style={{ fontSize: "0.95rem", color: "var(--ink-soft)" }}
+              style={{ fontSize: "0.95rem", color: "var(--ink)", fontWeight: 600 }}
             >
               <li>{SITE.hours.weekday}</li>
               <li>{SITE.hours.saturday}</li>
@@ -213,16 +212,16 @@ export default function Footer() {
 
           {/* Adresse */}
           <div>
-            <div className="mono" style={{ color: "var(--muted)" }}>
+            <div className="mono" style={{ color: "var(--muted)", fontWeight: 700 }}>
               Adresse
             </div>
             <div
               className="mt-6"
-              style={{ color: "var(--ink)", fontSize: "0.98rem", lineHeight: 1.6 }}
+              style={{ color: "var(--ink)", fontSize: "0.98rem", lineHeight: 1.6, fontWeight: 600 }}
             >
               {SITE.name}
               <br />
-              <span style={{ color: "var(--ink-soft)" }}>
+              <span style={{ color: "var(--ink)", fontWeight: 600 }}>
                 {SITE.address.line1}
                 <br />
                 {SITE.address.line2}
@@ -235,7 +234,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener"
               className="mono mt-6 inline-flex items-center gap-2"
-              style={{ color: "var(--ink)" }}
+              style={{ color: "var(--ink)", fontWeight: 700 }}
             >
               Route planen <span style={{ color: "var(--signal)" }}>→</span>
             </a>
