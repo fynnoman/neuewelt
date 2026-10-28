@@ -31,7 +31,7 @@ const PROZESS = [
 export const revalidate = 900;
 
 export default async function Home() {
-  const latest = await getVehicles({ limit: 6 });
+  const latest = await getVehicles({ limit: 6, sort: "preis-ab" });
   const totalCount = (await getVehicles()).length;
 
   return (
