@@ -94,21 +94,7 @@ export default async function Home() {
                 <h1
                   className="display mt-6"
                   style={{
-                    fontSize: "var(--step-hero)",
-                    color: "var(--paper)",
-                    letterSpacing: "-0.035em",
-                    maxWidth: "16ch",
-                  }}
-                >
-                  Neue Welt Automobile.
-                </h1>
-              </SlideIn>
-
-              <SlideIn direction="up" delay={0.3}>
-                <p
-                  className="display mt-6"
-                  style={{
-                    fontSize: "clamp(1.6rem, 2.6vw, 2.4rem)",
+                    fontSize: "clamp(1.8rem, 3vw, 2.6rem)",
                     letterSpacing: "-0.02em",
                     lineHeight: 1.1,
                     maxWidth: "22ch",
@@ -118,7 +104,7 @@ export default async function Home() {
                   Machen Sie aus einem Auto,
                   <br />
                   <span style={{ color: "var(--signal)" }}>Ihr Auto.</span>
-                </p>
+                </h1>
               </SlideIn>
 
               <SlideIn direction="up" delay={0.4}>
