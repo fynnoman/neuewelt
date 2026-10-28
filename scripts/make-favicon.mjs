@@ -68,12 +68,12 @@ async function build() {
     push(x, y - 1);
   }
 
-  // Alles, was nicht "outside" ist, wird rot gefüllt (Logo + eingeschlossene Löcher)
+  // Alles, was nicht "outside" ist, wird schwarz gefüllt (Logo + eingeschlossene Löcher)
   for (let p = 0, i = 0; p < mask.length; p++, i += channels) {
     if (!outside[p]) {
-      data[i] = 0xd0;
-      data[i + 1] = 0x1a;
-      data[i + 2] = 0x20;
+      data[i] = 0x0a;
+      data[i + 1] = 0x0b;
+      data[i + 2] = 0x0c;
       data[i + 3] = 255;
     } else {
       data[i] = 255;
