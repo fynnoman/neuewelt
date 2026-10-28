@@ -45,6 +45,21 @@ function InstagramIcon({ size = 18, color = "currentColor" }: { size?: number; c
 
 const SIDE_W = 300;
 
+const ITEM_VARIANTS = {
+  hidden: { opacity: 0, x: 18, filter: "blur(6px)" },
+  show: {
+    opacity: 1,
+    x: 0,
+    filter: "blur(0px)",
+    transition: {
+      type: "spring" as const,
+      stiffness: 340,
+      damping: 32,
+      mass: 0.8,
+    },
+  },
+};
+
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -110,7 +125,7 @@ export default function Nav() {
         />
 
         {/* Menü-Trigger (immer sichtbar) */}
-        <button
+        <motion.button
           type="button"
           onMouseEnter={openPanel}
           onFocus={openPanel}
@@ -118,6 +133,10 @@ export default function Nav() {
           aria-label={open ? "Menü schließen" : "Menü öffnen"}
           aria-expanded={open}
           className="liquid liquid-hover"
+          whileHover={{ scale: 1.06 }}
+          whileTap={{ scale: 0.94 }}
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={{ type: "spring", stiffness: 320, damping: 22 }}
           style={{
             position: "absolute",
             top: 20,
@@ -179,17 +198,30 @@ export default function Nav() {
               }}
             />
           </span>
-        </button>
+        </motion.button>
 
         {/* Side-Panel (sliding) */}
         <AnimatePresence>
           {open && (
             <motion.aside
               key="side-panel"
-              initial={{ x: SIDE_W + 20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: SIDE_W + 20, opacity: 0 }}
-              transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ x: SIDE_W + 24, opacity: 0, scale: 0.985 }}
+              animate={{
+                x: 0,
+                opacity: 1,
+                scale: 1,
+                transition: {
+                  x: { type: "spring", stiffness: 320, damping: 30, mass: 0.9 },
+                  scale: { type: "spring", stiffness: 320, damping: 32, mass: 0.9 },
+                  opacity: { duration: 0.22, ease: [0.22, 1, 0.36, 1] },
+                },
+              }}
+              exit={{
+                x: SIDE_W + 24,
+                opacity: 0,
+                scale: 0.985,
+                transition: { duration: 0.28, ease: [0.4, 0, 1, 1] },
+              }}
               onMouseEnter={openPanel}
               onMouseLeave={schedulClose}
               style={{
@@ -200,10 +232,12 @@ export default function Nav() {
                 width: SIDE_W,
                 padding: "18px 18px 18px 18px",
                 pointerEvents: "auto",
+                transformOrigin: "top right",
+                willChange: "transform, opacity",
               }}
               aria-label="Hauptnavigation"
             >
-              <div
+              <motion.div
                 className="liquid flex flex-col"
                 style={{
                   height: "100%",
@@ -211,24 +245,39 @@ export default function Nav() {
                   overflowY: "auto",
                   overscrollBehavior: "contain",
                 }}
+                initial="hidden"
+                animate="show"
+                exit="hidden"
+                variants={{
+                  hidden: {},
+                  show: {
+                    transition: {
+                      delayChildren: 0.14,
+                      staggerChildren: 0.045,
+                    },
+                  },
+                }}
               >
-                <Link
-                  href="/"
-                  aria-label={SITE.name}
-                  className="inline-flex items-center"
-                  onClick={() => setOpen(false)}
-                >
-                  <Image
-                    src="/brand/logo.png"
-                    alt={SITE.name}
-                    width={520}
-                    height={176}
-                    priority
-                    style={{ height: "38px", width: "auto" }}
-                  />
-                </Link>
+                <motion.div variants={ITEM_VARIANTS}>
+                  <Link
+                    href="/"
+                    aria-label={SITE.name}
+                    className="inline-flex items-center"
+                    onClick={() => setOpen(false)}
+                  >
+                    <Image
+                      src="/brand/logo.png"
+                      alt={SITE.name}
+                      width={520}
+                      height={176}
+                      priority
+                      style={{ height: "38px", width: "auto" }}
+                    />
+                  </Link>
+                </motion.div>
 
-                <div
+                <motion.div
+                  variants={ITEM_VARIANTS}
                   className="mt-4"
                   style={{
                     fontSize: "0.92rem",
@@ -240,12 +289,23 @@ export default function Nav() {
                   Machen Sie aus einem Auto,
                   <br />
                   <span style={{ color: "var(--signal)" }}>Ihr Auto.</span>
-                </div>
+                </motion.div>
 
-                <nav className="mt-6">
+                <motion.nav
+                  className="mt-6"
+                  variants={{
+                    hidden: {},
+                    show: {
+                      transition: {
+                        delayChildren: 0.05,
+                        staggerChildren: 0.055,
+                      },
+                    },
+                  }}
+                >
                   <ul className="flex flex-col">
                     {NAV.map((n) => (
-                      <li key={n.href}>
+                      <motion.li key={n.href} variants={ITEM_VARIANTS}>
                         <Link
                           href={n.href}
                           className="side-link"
@@ -255,12 +315,12 @@ export default function Nav() {
                         >
                           {n.label}
                         </Link>
-                      </li>
+                      </motion.li>
                     ))}
                   </ul>
-                </nav>
+                </motion.nav>
 
-                <div className="mt-5 flex flex-col gap-2">
+                <motion.div variants={ITEM_VARIANTS} className="mt-5 flex flex-col gap-2">
                   <Link
                     href="/fahrzeuge"
                     className="btn"
@@ -319,18 +379,19 @@ export default function Nav() {
                       Instagram
                     </span>
                   </a>
-                </div>
+                </motion.div>
 
-                <div className="mt-5 flex flex-col gap-0.5" style={{ fontSize: "0.82rem" }}>
+                <motion.div variants={ITEM_VARIANTS} className="mt-5 flex flex-col gap-0.5" style={{ fontSize: "0.82rem" }}>
                   <a href={SITE.contact.phoneHref} style={{ color: "var(--ink)" }}>
                     {SITE.contact.phone}
                   </a>
                   <a href={SITE.contact.emailHref} style={{ color: "var(--muted)", fontSize: "0.78rem" }}>
                     {SITE.contact.email}
                   </a>
-                </div>
+                </motion.div>
 
-                <div
+                <motion.div
+                  variants={ITEM_VARIANTS}
                   className="mt-5 pt-4 flex items-center justify-between"
                   style={{
                     borderTop: "1px solid rgba(10,11,12,0.08)",
@@ -344,8 +405,8 @@ export default function Nav() {
                   <Link href="/datenschutz" style={{ color: "inherit" }}>
                     Datenschutz
                   </Link>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             </motion.aside>
           )}
         </AnimatePresence>
