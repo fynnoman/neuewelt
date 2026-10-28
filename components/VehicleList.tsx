@@ -110,24 +110,19 @@ export default function VehicleList({ vehicles }: { vehicles: Vehicle[] }) {
                   <span className="liquid-chip absolute left-4 top-4">
                     {v.fuel.toUpperCase()}
                   </span>
-                  <div
-                    className="liquid absolute left-4 right-4 bottom-4 flex items-baseline justify-between gap-4"
-                    style={{
-                      padding: "12px 16px",
-                      borderRadius: "calc(var(--radius) - 2px)",
-                    }}
-                  >
-                    <div>
-                      <div className="display" style={{ fontSize: "1.1rem", letterSpacing: "-0.02em", color: "var(--ink)" }}>
-                        {v.brand} {v.model}
-                      </div>
-                      <div style={{ color: "var(--muted)", fontSize: "0.82rem" }}>
-                        {v.variant}
-                      </div>
+                </div>
+
+                <div className="mt-5 flex items-baseline justify-between gap-4">
+                  <div>
+                    <div className="display" style={{ fontSize: "1.3rem", letterSpacing: "-0.025em" }}>
+                      {v.brand} {v.model}
                     </div>
-                    <div className="display" style={{ fontSize: "1.05rem", color: "var(--ink)" }}>
-                      {v.price.toLocaleString("de-DE")} €
+                    <div className="mt-1" style={{ color: "var(--muted)", fontSize: "0.95rem" }}>
+                      {v.variant}
                     </div>
+                  </div>
+                  <div className="display" style={{ fontSize: "1.25rem", color: "var(--ink)" }}>
+                    {v.price.toLocaleString("de-DE")} €
                   </div>
                 </div>
 

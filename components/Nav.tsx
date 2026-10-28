@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { NAV, SITE } from "@/lib/site";
 
@@ -44,24 +44,44 @@ function InstagramIcon({ size = 18, color = "currentColor" }: { size?: number; c
 }
 
 const SIDE_W = 300;
-const SIDE_PX = `${SIDE_W}px`;
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+  const closeTimer = useRef<number | null>(null);
+
+  const openPanel = () => {
+    if (closeTimer.current) {
+      window.clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+    setOpen(true);
+  };
+  const schedulClose = () => {
+    if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    closeTimer.current = window.setTimeout(() => setOpen(false), 220);
+  };
 
   useEffect(() => {
-    if (open) {
+    return () => {
+      if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (mobileOpen) {
       const prev = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       return () => {
         document.body.style.overflow = prev;
       };
     }
-  }, [open]);
+  }, [mobileOpen]);
 
   useEffect(() => {
     setOpen(false);
+    setMobileOpen(false);
   }, [pathname]);
 
   const isActive = (href: string) =>
@@ -69,154 +89,270 @@ export default function Nav() {
 
   return (
     <>
-      {/* Desktop side-nav */}
-      <aside
-        className="hidden lg:block fixed top-0 left-0 bottom-0 z-40"
-        style={{ width: SIDE_PX, padding: "18px 18px 18px 18px" }}
-        aria-label="Hauptnavigation"
+      {/* Desktop: fester Menü-Trigger links, nur sichtbar, Panel öffnet bei Hover */}
+      <div
+        className="hidden lg:block fixed top-0 left-0 bottom-0 z-50"
+        style={{ pointerEvents: "none" }}
       >
+        {/* Hover-Zone: schmaler, immer da, triggert Panel */}
         <div
-          className="liquid flex flex-col"
-          style={{ height: "100%", padding: "28px 26px" }}
+          onMouseEnter={openPanel}
+          onMouseLeave={schedulClose}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            bottom: 0,
+            width: 20,
+            pointerEvents: "auto",
+          }}
+          aria-hidden
+        />
+
+        {/* Menü-Trigger (immer sichtbar) */}
+        <button
+          type="button"
+          onMouseEnter={openPanel}
+          onFocus={openPanel}
+          onClick={() => setOpen((v) => !v)}
+          aria-label={open ? "Menü schließen" : "Menü öffnen"}
+          aria-expanded={open}
+          className="liquid liquid-hover"
+          style={{
+            position: "absolute",
+            top: 20,
+            left: 20,
+            width: 52,
+            height: 52,
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: 999,
+            pointerEvents: "auto",
+            color: "var(--ink)",
+          }}
         >
-          <Link
-            href="/"
-            aria-label={SITE.name}
-            className="inline-flex items-center"
+          <span
+            aria-hidden
+            style={{
+              position: "relative",
+              width: 20,
+              height: 14,
+              display: "inline-block",
+            }}
           >
-            <Image
-              src="/brand/logo.png"
-              alt={SITE.name}
-              width={520}
-              height={176}
-              priority
-              style={{ height: "44px", width: "auto" }}
+            <span
+              style={{
+                position: "absolute",
+                left: 0,
+                right: 0,
+                top: 0,
+                height: 1.6,
+                background: "var(--ink)",
+                transform: open ? "translateY(6px) rotate(45deg)" : "none",
+                transition: "transform 320ms cubic-bezier(0.22,1,0.36,1)",
+              }}
             />
-          </Link>
+            <span
+              style={{
+                position: "absolute",
+                left: 0,
+                right: 0,
+                top: "50%",
+                height: 1.6,
+                background: "var(--ink)",
+                opacity: open ? 0 : 1,
+                transition: "opacity 240ms ease",
+                transform: "translateY(-50%)",
+              }}
+            />
+            <span
+              style={{
+                position: "absolute",
+                left: 0,
+                right: 0,
+                bottom: 0,
+                height: 1.6,
+                background: "var(--ink)",
+                transform: open ? "translateY(-6px) rotate(-45deg)" : "none",
+                transition: "transform 320ms cubic-bezier(0.22,1,0.36,1)",
+              }}
+            />
+          </span>
+        </button>
 
-          <div
-            className="mt-6"
-            style={{
-              fontSize: "0.98rem",
-              letterSpacing: "-0.01em",
-              color: "var(--ink)",
-              lineHeight: 1.3,
-            }}
-          >
-            Machen Sie aus einem Auto,
-            <br />
-            <span style={{ color: "var(--signal)" }}>Ihr Auto.</span>
-          </div>
+        {/* Side-Panel (sliding) */}
+        <AnimatePresence>
+          {open && (
+            <motion.aside
+              key="side-panel"
+              initial={{ x: -SIDE_W - 20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: -SIDE_W - 20, opacity: 0 }}
+              transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
+              onMouseEnter={openPanel}
+              onMouseLeave={schedulClose}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                bottom: 0,
+                width: SIDE_W,
+                padding: "18px 18px 18px 18px",
+                pointerEvents: "auto",
+              }}
+              aria-label="Hauptnavigation"
+            >
+              <div
+                className="liquid flex flex-col"
+                style={{
+                  height: "100%",
+                  padding: "22px 22px",
+                  overflowY: "auto",
+                  overscrollBehavior: "contain",
+                }}
+              >
+                <Link
+                  href="/"
+                  aria-label={SITE.name}
+                  className="inline-flex items-center"
+                  onClick={() => setOpen(false)}
+                >
+                  <Image
+                    src="/brand/logo.png"
+                    alt={SITE.name}
+                    width={520}
+                    height={176}
+                    priority
+                    style={{ height: "38px", width: "auto" }}
+                  />
+                </Link>
 
-          <nav className="mt-10 flex-1">
-            <ul className="flex flex-col gap-1">
-              {NAV.map((n) => (
-                <li key={n.href}>
+                <div
+                  className="mt-4"
+                  style={{
+                    fontSize: "0.92rem",
+                    letterSpacing: "-0.01em",
+                    color: "var(--ink)",
+                    lineHeight: 1.3,
+                  }}
+                >
+                  Machen Sie aus einem Auto,
+                  <br />
+                  <span style={{ color: "var(--signal)" }}>Ihr Auto.</span>
+                </div>
+
+                <nav className="mt-6">
+                  <ul className="flex flex-col">
+                    {NAV.map((n) => (
+                      <li key={n.href}>
+                        <Link
+                          href={n.href}
+                          className="side-link"
+                          data-active={isActive(n.href)}
+                          style={{ fontSize: "0.96rem", padding: "7px 0" }}
+                          onClick={() => setOpen(false)}
+                        >
+                          {n.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+
+                <div className="mt-5 flex flex-col gap-2">
                   <Link
-                    href={n.href}
-                    className="side-link"
-                    data-active={isActive(n.href)}
-                    style={{ fontSize: "1.02rem" }}
+                    href="/fahrzeuge"
+                    className="btn"
+                    style={{ justifyContent: "space-between", width: "100%", padding: "0.7rem 1rem", fontSize: "0.9rem" }}
+                    onClick={() => setOpen(false)}
                   >
-                    {n.label}
+                    Fahrzeuge ansehen
+                    <span style={{ color: "var(--signal)" }}>→</span>
                   </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+                  <a
+                    href={SITE.contact.whatsappHref}
+                    target="_blank"
+                    rel="noopener"
+                    className="inline-flex items-center justify-between gap-3"
+                    style={{
+                      padding: "0.6rem 0.9rem",
+                      background: "rgba(255,255,255,0.55)",
+                      backdropFilter: "saturate(180%) blur(16px)",
+                      WebkitBackdropFilter: "saturate(180%) blur(16px)",
+                      border: "1px solid rgba(255,255,255,0.65)",
+                      borderRadius: "var(--radius)",
+                      color: "var(--ink)",
+                      fontSize: "0.86rem",
+                      fontWeight: 500,
+                      boxShadow:
+                        "inset 0 1px 0 rgba(255,255,255,0.95), 0 10px 22px -14px rgba(10,11,12,0.3)",
+                    }}
+                  >
+                    <span className="inline-flex items-center gap-2">
+                      <WhatsAppIcon size={16} color="#0A0B0C" />
+                      WhatsApp
+                    </span>
+                  </a>
+                  <a
+                    href={SITE.social.instagram}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Instagram @neueweltautomobile"
+                    className="inline-flex items-center justify-between gap-3"
+                    style={{
+                      padding: "0.6rem 0.9rem",
+                      background: "rgba(255,255,255,0.55)",
+                      backdropFilter: "saturate(180%) blur(16px)",
+                      WebkitBackdropFilter: "saturate(180%) blur(16px)",
+                      border: "1px solid rgba(255,255,255,0.65)",
+                      borderRadius: "var(--radius)",
+                      color: "var(--ink)",
+                      fontSize: "0.86rem",
+                      fontWeight: 500,
+                      boxShadow:
+                        "inset 0 1px 0 rgba(255,255,255,0.95), 0 10px 22px -14px rgba(10,11,12,0.3)",
+                    }}
+                  >
+                    <span className="inline-flex items-center gap-2">
+                      <InstagramIcon size={16} color="#0A0B0C" />
+                      Instagram
+                    </span>
+                    <span style={{ color: "var(--muted)", fontSize: "0.72rem" }}>
+                      @neueweltautomobile
+                    </span>
+                  </a>
+                </div>
 
-          <div className="mt-6 flex flex-col gap-3">
-            <Link
-              href="/fahrzeuge"
-              className="btn"
-              style={{ justifyContent: "space-between", width: "100%" }}
-            >
-              Fahrzeuge ansehen
-              <span style={{ color: "var(--signal)" }}>→</span>
-            </Link>
-            <a
-              href={SITE.contact.whatsappHref}
-              target="_blank"
-              rel="noopener"
-              className="inline-flex items-center justify-between gap-3"
-              style={{
-                padding: "0.75rem 1rem",
-                background: "rgba(255,255,255,0.55)",
-                backdropFilter: "saturate(180%) blur(16px)",
-                WebkitBackdropFilter: "saturate(180%) blur(16px)",
-                border: "1px solid rgba(255,255,255,0.65)",
-                borderRadius: "var(--radius)",
-                color: "var(--ink)",
-                fontSize: "0.92rem",
-                fontWeight: 500,
-                boxShadow:
-                  "inset 0 1px 0 rgba(255,255,255,0.95), 0 10px 22px -14px rgba(10,11,12,0.3)",
-              }}
-            >
-              <span className="inline-flex items-center gap-2">
-                <WhatsAppIcon size={18} color="#0A0B0C" />
-                WhatsApp
-              </span>
-              <span style={{ color: "var(--muted)", fontSize: "0.78rem" }}>
-                {SITE.contact.whatsapp}
-              </span>
-            </a>
-            <a
-              href={SITE.social.instagram}
-              target="_blank"
-              rel="noopener"
-              aria-label="Instagram @neueweltautomobile"
-              className="inline-flex items-center justify-between gap-3"
-              style={{
-                padding: "0.75rem 1rem",
-                background: "rgba(255,255,255,0.55)",
-                backdropFilter: "saturate(180%) blur(16px)",
-                WebkitBackdropFilter: "saturate(180%) blur(16px)",
-                border: "1px solid rgba(255,255,255,0.65)",
-                borderRadius: "var(--radius)",
-                color: "var(--ink)",
-                fontSize: "0.92rem",
-                fontWeight: 500,
-                boxShadow:
-                  "inset 0 1px 0 rgba(255,255,255,0.95), 0 10px 22px -14px rgba(10,11,12,0.3)",
-              }}
-            >
-              <span className="inline-flex items-center gap-2">
-                <InstagramIcon size={18} color="#0A0B0C" />
-                Instagram
-              </span>
-              <span style={{ color: "var(--muted)", fontSize: "0.78rem" }}>
-                @neueweltautomobile
-              </span>
-            </a>
-          </div>
+                <div className="mt-5 flex flex-col gap-0.5" style={{ fontSize: "0.82rem" }}>
+                  <a href={SITE.contact.phoneHref} style={{ color: "var(--ink)" }}>
+                    {SITE.contact.phone}
+                  </a>
+                  <a href={SITE.contact.emailHref} style={{ color: "var(--muted)", fontSize: "0.78rem" }}>
+                    {SITE.contact.email}
+                  </a>
+                </div>
 
-          <div className="mt-6 flex flex-col gap-1" style={{ fontSize: "0.86rem" }}>
-            <a href={SITE.contact.phoneHref} style={{ color: "var(--ink)" }}>
-              {SITE.contact.phone}
-            </a>
-            <a href={SITE.contact.emailHref} style={{ color: "var(--muted)" }}>
-              {SITE.contact.email}
-            </a>
-          </div>
-
-          <div
-            className="mt-6 pt-5 flex items-center justify-between"
-            style={{
-              borderTop: "1px solid rgba(10,11,12,0.08)",
-              fontSize: "0.72rem",
-              color: "var(--muted)",
-            }}
-          >
-            <Link href="/impressum" style={{ color: "inherit" }}>
-              Impressum
-            </Link>
-            <Link href="/datenschutz" style={{ color: "inherit" }}>
-              Datenschutz
-            </Link>
-          </div>
-        </div>
-      </aside>
+                <div
+                  className="mt-5 pt-4 flex items-center justify-between"
+                  style={{
+                    borderTop: "1px solid rgba(10,11,12,0.08)",
+                    fontSize: "0.7rem",
+                    color: "var(--muted)",
+                  }}
+                >
+                  <Link href="/impressum" style={{ color: "inherit" }}>
+                    Impressum
+                  </Link>
+                  <Link href="/datenschutz" style={{ color: "inherit" }}>
+                    Datenschutz
+                  </Link>
+                </div>
+              </div>
+            </motion.aside>
+          )}
+        </AnimatePresence>
+      </div>
 
       {/* Mobile top-bar */}
       <header className="lg:hidden fixed inset-x-0 top-0 z-50" style={{ padding: "10px 12px" }}>
@@ -224,7 +360,7 @@ export default function Nav() {
           className="liquid flex items-center justify-between"
           style={{ padding: "10px 14px" }}
         >
-          <Link href="/" aria-label={SITE.name} onClick={() => setOpen(false)}>
+          <Link href="/" aria-label={SITE.name} onClick={() => setMobileOpen(false)}>
             <Image
               src="/brand/logo.png"
               alt={SITE.name}
@@ -236,9 +372,9 @@ export default function Nav() {
           </Link>
           <button
             type="button"
-            aria-label={open ? "Menü schließen" : "Menü öffnen"}
-            aria-expanded={open}
-            onClick={() => setOpen((v) => !v)}
+            aria-label={mobileOpen ? "Menü schließen" : "Menü öffnen"}
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((v) => !v)}
             className="inline-flex flex-col justify-center items-end relative"
             style={{ width: 32, height: 32, gap: 6 }}
           >
@@ -247,16 +383,16 @@ export default function Nav() {
                 width: 22,
                 height: 1.5,
                 background: "var(--ink)",
-                transform: open ? "translateY(4px) rotate(45deg)" : "none",
+                transform: mobileOpen ? "translateY(4px) rotate(45deg)" : "none",
                 transition: "transform 320ms cubic-bezier(0.22,1,0.36,1)",
               }}
             />
             <span
               style={{
-                width: open ? 22 : 16,
+                width: mobileOpen ? 22 : 16,
                 height: 1.5,
                 background: "var(--ink)",
-                transform: open ? "translateY(-4px) rotate(-45deg)" : "none",
+                transform: mobileOpen ? "translateY(-4px) rotate(-45deg)" : "none",
                 transition: "transform 320ms cubic-bezier(0.22,1,0.36,1), width 240ms ease",
               }}
             />
@@ -266,7 +402,7 @@ export default function Nav() {
 
       {/* Mobile drawer */}
       <AnimatePresence>
-        {open && (
+        {mobileOpen && (
           <motion.div
             key="drawer"
             initial={{ opacity: 0 }}
@@ -309,7 +445,7 @@ export default function Nav() {
                   >
                     <Link
                       href={n.href}
-                      onClick={() => setOpen(false)}
+                      onClick={() => setMobileOpen(false)}
                       className="display block"
                       style={{
                         fontSize: "clamp(1.9rem, 7vw, 2.6rem)",
@@ -328,7 +464,7 @@ export default function Nav() {
               <div className="mt-auto flex flex-col gap-3">
                 <Link
                   href="/fahrzeuge"
-                  onClick={() => setOpen(false)}
+                  onClick={() => setMobileOpen(false)}
                   className="btn"
                   style={{ justifyContent: "space-between" }}
                 >
@@ -367,7 +503,7 @@ export default function Nav() {
                   target="_blank"
                   rel="noopener"
                   aria-label="Instagram @neueweltautomobile"
-                  onClick={() => setOpen(false)}
+                  onClick={() => setMobileOpen(false)}
                   className="inline-flex items-center justify-between gap-3"
                   style={{
                     padding: "0.8rem 1rem",

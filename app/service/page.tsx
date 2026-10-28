@@ -1,80 +1,64 @@
 import Image from "next/image";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
+import SlideIn from "@/components/SlideIn";
 import { SITE } from "@/lib/site";
 
 const LEISTUNGEN = [
   {
-    id: "werkstatt",
-    title: "Werkstatt",
-    short: "Inspektion, Reparatur, HU-Vorbereitung.",
-    points: [
-      "Inspektion nach Herstellervorgabe",
-      "Bremsen · Service, Wechsel, Prüfung",
-      "Klima-Service",
-      "Diagnose · Fehlerspeicher auslesen",
-      "HU-Vorbereitung und TÜV-Begleitung",
-    ],
-  },
-  {
-    id: "aufbereitung",
-    title: "Fahrzeugaufbereitung",
-    short: "Innen und außen, Pauschale oder Detail.",
-    points: [
-      "Aufbereitung außen · Lackpflege",
-      "Aufbereitung innen · Deep Clean",
-      "Keramikversiegelung auf Anfrage",
-    ],
-  },
-  {
-    id: "reifen",
-    title: "Reifen & Räder",
-    short: "Montage, Wuchten, Saisonwechsel, Einlagerung.",
-    points: [
-      "Reifenmontage und Auswuchten",
-      "Räderwechsel saisonal",
-      "Einlagerung über die Saison",
-    ],
-  },
-  {
-    id: "zulassung",
-    title: "Zulassungsservice",
-    short: "Zulassung in Saarlouis und Umkreis.",
-    points: [
-      "An- und Abmeldung",
-      "Umschreibung",
-      "Kennzeichen und Papiere auf Anfrage",
-    ],
-  },
-  {
-    id: "ueberfuehrung",
-    title: "Fahrzeugüberführung deutschlandweit",
-    short: "Bis vor Ihre Haustür in ganz Deutschland.",
-    points: [
-      "Lieferung bundesweit",
-      "Transport nach Entfernung kalkuliert",
-      "Terminabsprache vor Übergabe",
-    ],
+    id: "ankauf",
+    title: "Fahrzeugankauf",
+    body: "Wir kaufen Ihr Fahrzeug zum fairen Marktpreis an oder nehmen es in Zahlung. Angebot innerhalb eines Werktages.",
   },
   {
     id: "finanzierung",
     title: "Finanzierung über die Targobank",
-    short: "Angebot innerhalb von 24 Stunden.",
-    points: [
-      "Finanzierung über die Targobank",
-      "Transparente Konditionen",
-      "Barkauf ebenfalls möglich",
-    ],
+    body: "Individuelle Finanzierung über unseren Bankpartner. Unverbindliche Anfrage und Angebot innerhalb von 24 Stunden.",
+  },
+  {
+    id: "aufbereitung",
+    title: "Fahrzeugaufbereitung",
+    body: "Professionelle Innen- und Außenpflege mit hochwertigen Mitteln. Pauschale Pakete oder individuelles Angebot nach Wunsch.",
+  },
+  {
+    id: "werkstatt",
+    title: "Werkstatt",
+    body: "Inspektion, Reparatur, Diagnose, Klimaservice und HU-Vorbereitung. Alles aus einer Hand bei uns vor Ort.",
+  },
+  {
+    id: "frontscheibe",
+    title: "Frontscheibe wechseln",
+    body: "Austausch in OEM-Qualität mit Kalibrierung der Fahrerassistenzsysteme. Leihwagen auf Wunsch.",
+  },
+  {
+    id: "check",
+    title: "Gebrauchtwagen-Check",
+    body: "Zertifizierter Check durch eine unabhängige Prüforganisation. Zustandsbericht und Prüfzertifikat gegen Aufpreis.",
+  },
+  {
+    id: "zulassung",
+    title: "Zulassungsservice",
+    body: "Wir übernehmen die Anmeldung inklusive Wunschkennzeichen. Auch Kurzzeitzulassung für die Überführung möglich.",
+  },
+  {
+    id: "ueberfuehrung",
+    title: "Fahrzeugüberführung deutschlandweit",
+    body: "Bundesweite Lieferung bis vor Ihre Haustür. Auf Wunsch im geschlossenen Fahrzeuganhänger.",
+  },
+  {
+    id: "export",
+    title: "Kfz-Export",
+    body: "Erfahrene Abwicklung des Fahrzeugexports in Ihr Heimatland. Beratung zu Ausfuhr, Zoll und Versteuerung inklusive.",
+  },
+  {
+    id: "reifen",
+    title: "Reifen und Räder",
+    body: "Montage, Wuchten, Saisonwechsel und Einlagerung bei uns vor Ort. Felgen und Kompletträder auf Anfrage.",
   },
   {
     id: "garantie",
     title: "Garantie bis zu 96 Monate",
-    short: "Preis auf Anfrage.",
-    points: [
-      "Laufzeit bis zu 96 Monate",
-      "Preis auf Anfrage",
-      "Umfang nach Fahrzeug und Laufzeit",
-    ],
+    body: "Erweiterte Fahrzeuggarantie mit Laufzeit bis zu 96 Monaten. Umfang und Preis auf Anfrage.",
   },
 ];
 
@@ -119,51 +103,7 @@ export default function ServicePage() {
       </section>
 
       <section className="mt-24 lg:mt-28 px-6 md:px-10 lg:px-14">
-        <div
-          className="grid grid-cols-1 md:grid-cols-3 gap-2 radius overflow-hidden"
-          style={{ background: "var(--paper-sunk)" }}
-        >
-          {[
-            {
-              k: "Fahrzeugüberführung",
-              v: "Deutschlandweit — bis vor Ihre Haustür.",
-            },
-            {
-              k: "Finanzierung",
-              v: "Über die Targobank. Angebot innerhalb von 24 Stunden.",
-            },
-            {
-              k: "Garantie",
-              v: "Preis auf Anfrage. Laufzeit bis zu 96 Monate.",
-            },
-          ].map((it) => (
-            <div
-              key={it.k}
-              style={{
-                padding: "clamp(28px, 4vw, 40px) clamp(24px, 3.5vw, 36px)",
-                background: "var(--paper-sunk)",
-              }}
-            >
-              <div className="mono" style={{ color: "var(--on-sunk-muted)" }}>
-                {it.k}
-              </div>
-              <p
-                className="mt-4"
-                style={{
-                  color: "var(--on-sunk)",
-                  fontSize: "1.05rem",
-                  lineHeight: 1.4,
-                }}
-              >
-                {it.v}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mt-24 lg:mt-28 px-6 md:px-10 lg:px-14">
-        <div className="mx-auto" style={{ maxWidth: 920 }}>
+        <div className="mx-auto" style={{ maxWidth: 1200 }}>
           <Reveal>
             <div className="mono" style={{ color: "var(--muted)" }}>Leistungen</div>
             <h2
@@ -174,56 +114,33 @@ export default function ServicePage() {
             </h2>
           </Reveal>
 
-          <ul className="mt-10 flex flex-col" style={{ borderTop: "1px solid var(--fog-200)" }}>
+          <SlideIn
+            direction="up"
+            stagger={0.05}
+            className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4"
+          >
             {LEISTUNGEN.map((l) => (
-              <li key={l.id} id={l.id} style={{ borderBottom: "1px solid var(--fog-200)" }}>
-                <details className="group">
-                  <summary
-                    className="flex items-center justify-between gap-6 cursor-pointer py-6 list-none"
-                    style={{ outline: "none" }}
-                  >
-                    <div>
-                      <div
-                        className="display"
-                        style={{ fontSize: "1.2rem", letterSpacing: "-0.02em" }}
-                      >
-                        {l.title}
-                      </div>
-                      <div
-                        className="mt-1"
-                        style={{ color: "var(--muted)", fontSize: "0.95rem" }}
-                      >
-                        {l.short}
-                      </div>
-                    </div>
-                    <span
-                      aria-hidden
-                      className="shrink-0 transition-transform duration-300 ease-out group-open:rotate-45"
-                      style={{
-                        color: "var(--signal)",
-                        fontSize: "1.6rem",
-                        lineHeight: 1,
-                      }}
-                    >
-                      +
-                    </span>
-                  </summary>
-                  <ul className="pb-7 pr-10 flex flex-col gap-2.5" style={{ color: "var(--ink)" }}>
-                    {l.points.map((p) => (
-                      <li
-                        key={p}
-                        className="flex items-baseline gap-3"
-                        style={{ fontSize: "0.98rem" }}
-                      >
-                        <span style={{ color: "var(--signal)" }}>·</span>
-                        <span>{p}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </details>
-              </li>
+              <article
+                key={l.id}
+                id={l.id}
+                className="liquid liquid-hover"
+                style={{ padding: "clamp(22px, 2.6vw, 30px) clamp(22px, 2.6vw, 32px)" }}
+              >
+                <h3
+                  className="display"
+                  style={{ fontSize: "1.15rem", letterSpacing: "-0.02em", color: "var(--ink)" }}
+                >
+                  {l.title}
+                </h3>
+                <p
+                  className="mt-3"
+                  style={{ color: "var(--ink-soft)", fontSize: "0.96rem", lineHeight: 1.5 }}
+                >
+                  {l.body}
+                </p>
+              </article>
             ))}
-          </ul>
+          </SlideIn>
         </div>
       </section>
 

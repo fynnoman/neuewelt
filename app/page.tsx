@@ -197,28 +197,22 @@ export default async function Home() {
                 >
                   {v.fuel.toUpperCase()}
                 </span>
-                <div
-                  className="liquid absolute left-3 right-3 bottom-3 flex items-baseline justify-between gap-3"
-                  style={{
-                    padding: "10px 14px",
-                    borderRadius: "calc(var(--radius) - 2px)",
-                  }}
-                >
-                  <div>
-                    <div className="display" style={{ fontSize: "1rem", letterSpacing: "-0.02em", color: "var(--ink)" }}>
-                      {v.brand} {v.model}
-                    </div>
-                    <div style={{ color: "var(--muted)", fontSize: "0.76rem" }}>
-                      {v.variant}
-                    </div>
+              </div>
+              <div className="mt-4 flex items-baseline justify-between gap-3">
+                <div>
+                  <div className="display" style={{ fontSize: "1.05rem", letterSpacing: "-0.02em", color: "var(--ink)" }}>
+                    {v.brand} {v.model}
                   </div>
-                  <div className="display" style={{ fontSize: "0.98rem", color: "var(--ink)", letterSpacing: "-0.01em" }}>
-                    {v.price.toLocaleString("de-DE")} €
+                  <div className="mt-1" style={{ color: "var(--muted)", fontSize: "0.82rem" }}>
+                    {v.variant}
                   </div>
+                </div>
+                <div className="display" style={{ fontSize: "1.05rem", color: "var(--ink)", letterSpacing: "-0.01em" }}>
+                  {v.price.toLocaleString("de-DE")} €
                 </div>
               </div>
               <div
-                className="mt-3 flex items-center gap-3 mono"
+                className="mt-2 flex items-center gap-3 mono"
                 style={{ color: "var(--muted)", fontVariantNumeric: "tabular-nums", fontSize: "0.7rem" }}
               >
                 <span>EZ {v.year}</span>
@@ -427,7 +421,7 @@ export default async function Home() {
             className="mt-10 mono"
             style={{ color: "var(--on-sunk-muted)" }}
           >
-            Und viele mehr. Jede Marke, jedes Modell auf Anfrage.
+            Was Sie suchen, beschaffen wir auf Anfrage.
           </p>
         </div>
       </section>

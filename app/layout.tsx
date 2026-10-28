@@ -34,10 +34,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="de" className={manrope.variable}>
       <body>
         <Nav />
-        <div className="lg:pl-[300px]">
-          <PageTransition>{children}</PageTransition>
-          <Footer />
-        </div>
+        <PageTransition>{children}</PageTransition>
+        <Footer />
         <WhatsAppFab />
       </body>
     </html>
