@@ -8,16 +8,21 @@ export type Vehicle = {
   fuel: "Benzin" | "Diesel" | "Hybrid" | "Elektro";
   power: number; // kW
   gearbox: "Automatik" | "Schaltgetriebe";
-  price: number;
+  price: number; // Konsumentenpreis (bei vatable=true inkl. MwSt., sonst Verkaufspreis gesamt)
   color: string;
   image: string;
   images?: string[];
   highlights: string[];
+  description?: string; // Fließtext-Beschreibung aus mobile.de
+  // MwSt.
+  vatable?: boolean; // true = MwSt. ausweisbar
+  vatRate?: number; // z. B. 0.19
   // Mobile.de specific — optional
   mobileAdId?: string;
   mobileAdUrl?: string;
   firstRegistration?: string; // MM/YYYY
-  updatedAt?: string; // ISO
+  createdAt?: string; // ISO, Zeitpunkt der mobile.de-Einstellung
+  updatedAt?: string; // ISO, letzte Änderung
 };
 
 export type Segment = {

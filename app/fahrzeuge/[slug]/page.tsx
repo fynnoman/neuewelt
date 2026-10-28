@@ -22,46 +22,53 @@ export default async function VehiclePage({ params }: Props) {
   return (
     <main className="pt-24">
       <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-3 px-3">
-        {/* Image gallery (all photos stacked) */}
-        <div className="order-1 flex flex-col gap-3">
-          {gallery.map((src, i) => (
-            <div key={`${src}-${i}`} className="relative aspect-[4/3] overflow-hidden radius" style={{ background: "var(--paper-sunk)" }}>
-              <Image
-                src={src}
-                alt={`${v.brand} ${v.model} ${v.variant} · Bild ${i + 1}`}
-                fill
-                priority={i === 0}
-                sizes="(min-width:1024px) 55vw, 100vw"
-                className="object-cover"
-              />
-              {i === 0 && (
-                <div
-                  className="absolute inset-x-0 bottom-0 flex items-center justify-between"
-                  style={{
-                    padding: "18px 22px",
-                    background: "rgba(251,251,249,0.92)",
-                    color: "var(--ink)",
-                    fontSize: "0.92rem",
-                  }}
-                >
-                  <span>
-                    {v.brand} {v.model} · {v.color}
-                  </span>
-                  <span style={{ color: "var(--muted)", fontSize: "0.8rem" }}>
-                    EZ {v.year} · {v.mileage.toLocaleString("de-DE")} km
-                  </span>
-                </div>
-              )}
-            </div>
-          ))}
-          {gallery.length > 1 && (
+        {/* Image gallery (horizontal swipe) */}
+        <div className="order-1 vehicle-gallery-wrap">
+          <div className="vehicle-gallery radius" style={{ background: "var(--paper-sunk)" }}>
             <div
-              className="mono"
-              style={{ color: "var(--muted)", fontSize: "0.78rem", padding: "4px 2px" }}
+              className="gallery-scroll"
+              role="region"
+              aria-label={`${v.brand} ${v.model} Fahrzeugbilder, horizontal swipen`}
             >
-              {gallery.length} Bilder
+              {gallery.map((src, i) => (
+                <div key={`${src}-${i}`} className="gallery-slide">
+                  <Image
+                    src={src}
+                    alt={`${v.brand} ${v.model} ${v.variant} · Bild ${i + 1} von ${gallery.length}`}
+                    fill
+                    priority={i === 0}
+                    sizes="(min-width:1024px) 55vw, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+              ))}
             </div>
-          )}
+
+            {/* Bild-Zähler-Badge */}
+            {gallery.length > 1 && (
+              <div className="gallery-count-badge mono">
+                {gallery.length} Bilder · wischen
+              </div>
+            )}
+
+            {/* Caption-Streifen am unteren Rand */}
+            <div
+              className="absolute inset-x-0 bottom-0 flex items-center justify-between pointer-events-none"
+              style={{
+                padding: "18px 22px",
+                background: "linear-gradient(180deg, transparent, rgba(10,11,12,0.72))",
+                color: "var(--paper)",
+                fontSize: "0.92rem",
+              }}
+            >
+              <span>
+                {v.brand} {v.model} · {v.color}
+              </span>
+              <span style={{ color: "rgba(251,251,249,0.72)", fontSize: "0.8rem" }}>
+                EZ {v.year} · {v.mileage.toLocaleString("de-DE")} km
+              </span>
+            </div>
+          </div>
         </div>
 
         {/* Content */}
@@ -83,9 +90,19 @@ export default async function VehiclePage({ params }: Props) {
           >
             {v.price.toLocaleString("de-DE")} €
           </div>
-          <div style={{ fontSize: "0.9rem", color: "var(--muted)" }}>
-            inkl. Mehrwertsteuer · Finanzierung möglich
-          </div>
+          {v.vatable ? (
+            <div style={{ fontSize: "0.9rem", color: "var(--muted)" }}>
+              Brutto · inkl. {v.vatRate ? Math.round(v.vatRate * 100) : 19}% MwSt. ausweisbar
+              <br />
+              Netto {Math.round(v.price / (1 + (v.vatRate ?? 0.19))).toLocaleString("de-DE")} €
+              {" · "}
+              Finanzierung möglich
+            </div>
+          ) : (
+            <div style={{ fontSize: "0.9rem", color: "var(--muted)" }}>
+              Differenzbesteuert nach §25a UStG · MwSt. nicht ausweisbar · Finanzierung möglich
+            </div>
+          )}
 
           <dl className="mt-14 grid grid-cols-2 gap-x-10 gap-y-6">
             {[
@@ -105,7 +122,44 @@ export default async function VehiclePage({ params }: Props) {
             ))}
           </dl>
 
-          <h2 className="display mt-16" style={{ fontSize: "1.4rem" }}>
+          {v.description && (
+            <details
+              className="mt-14 group"
+              style={{
+                borderTop: "1px solid var(--fog-200)",
+                borderBottom: "1px solid var(--fog-200)",
+              }}
+            >
+              <summary
+                className="flex items-center justify-between cursor-pointer list-none"
+                style={{ padding: "18px 0" }}
+              >
+                <span className="display" style={{ fontSize: "1.2rem", letterSpacing: "-0.02em" }}>
+                  Beschreibung
+                </span>
+                <span
+                  aria-hidden
+                  className="transition-transform duration-300 ease-out group-open:rotate-45"
+                  style={{ color: "var(--signal)", fontSize: "1.4rem", lineHeight: 1 }}
+                >
+                  +
+                </span>
+              </summary>
+              <div
+                className="pb-6"
+                style={{
+                  color: "var(--ink-soft)",
+                  fontSize: "0.98rem",
+                  lineHeight: 1.6,
+                  whiteSpace: "pre-wrap",
+                }}
+              >
+                {v.description}
+              </div>
+            </details>
+          )}
+
+          <h2 className="display mt-14" style={{ fontSize: "1.4rem" }}>
             Ausstattung · Auszug
           </h2>
           <ul className="mt-6 flex flex-col">
@@ -124,7 +178,7 @@ export default async function VehiclePage({ params }: Props) {
             Vollständige Ausstattungs- und Historienliste senden wir auf Anfrage.
           </p>
 
-          <div className="mt-16 flex flex-wrap gap-6">
+          <div className="mt-16 flex flex-wrap gap-4">
             <a
               href={`${SITE.contact.emailHref}?subject=${encodeURIComponent(
                 `Interesse an ${v.brand} ${v.model}`
@@ -134,14 +188,24 @@ export default async function VehiclePage({ params }: Props) {
               Probefahrt anfragen
               <span>→</span>
             </a>
-            <div className="flex flex-col gap-1">
-              <a href={SITE.contact.phoneLandlineHref} className="btn-ghost rule-arrow">
-                {SITE.contact.phoneLandline}
-              </a>
-              <a href={SITE.contact.phoneHref} style={{ color: "var(--muted)", fontSize: "0.86rem" }}>
-                {SITE.contact.phone}
-              </a>
-            </div>
+            <a
+              href={`/fahrzeuge/${v.slug}/expose`}
+              target="_blank"
+              rel="noopener"
+              className="btn"
+              style={{ background: "var(--paper)", color: "var(--ink)", border: "1px solid var(--ink)" }}
+            >
+              Exposé
+              <span style={{ color: "var(--signal)" }}>↓</span>
+            </a>
+          </div>
+          <div className="mt-6 flex flex-col gap-1">
+            <a href={SITE.contact.phoneLandlineHref} className="btn-ghost rule-arrow">
+              {SITE.contact.phoneLandline}
+            </a>
+            <a href={SITE.contact.phoneHref} style={{ color: "var(--muted)", fontSize: "0.86rem" }}>
+              {SITE.contact.phone}
+            </a>
           </div>
         </div>
       </div>

@@ -53,6 +53,7 @@ type XmlPrice = {
   "@_type"?: string;
   "ad:consumer-price-amount"?: XmlAttr;
   "ad:vatable"?: XmlAttr;
+  "ad:vat-rate"?: XmlAttr;
 };
 
 type XmlSpecifics = {
@@ -89,6 +90,7 @@ type XmlAd = {
   "ad:vehicle"?: XmlVehicle;
   "ad:images"?: XmlImages;
   "ad:price"?: XmlPrice;
+  "ad:description"?: string | { "#text"?: string };
 };
 
 type XmlSearchResult = {
@@ -222,6 +224,19 @@ function mapAdToVehicle(ad: XmlAd): Vehicle | null {
 
   const priceStr = readAttr(ad["ad:price"]?.["ad:consumer-price-amount"]);
   const price = priceStr ? Math.round(Number(priceStr)) : 0;
+  const vatableStr = readAttr(ad["ad:price"]?.["ad:vatable"]);
+  const vatable = vatableStr === "true";
+  const vatRateStr = readAttr(ad["ad:price"]?.["ad:vat-rate"]);
+  const vatRate = vatRateStr ? Number(vatRateStr) : undefined;
+
+  const rawDescription = ad["ad:description"];
+  let description: string | undefined;
+  if (typeof rawDescription === "string") {
+    description = rawDescription.trim();
+  } else if (rawDescription && typeof rawDescription === "object") {
+    description = rawDescription["#text"]?.trim();
+  }
+  if (!description) description = undefined;
 
   const { main, all } = pickBestImage(ad["ad:images"]);
 
@@ -236,6 +251,7 @@ function mapAdToVehicle(ad: XmlAd): Vehicle | null {
   const slug = `${slugify(brand)}-${slugify(model || "fahrzeug")}-${id}`;
 
   const detailUrl = ad["ad:detail-page"]?.["@_url"];
+  const creationDate = readAttr(ad["ad:creation-date"]);
   const modificationDate = readAttr(ad["ad:modification-date"]);
 
   return {
@@ -256,7 +272,11 @@ function mapAdToVehicle(ad: XmlAd): Vehicle | null {
     mobileAdId: id,
     mobileAdUrl: detailUrl,
     firstRegistration: formatRegistration(firstReg),
+    createdAt: creationDate,
     updatedAt: modificationDate,
+    description,
+    vatable,
+    vatRate,
   };
 }
 
@@ -390,7 +410,15 @@ function sortVehicles(list: Vehicle[], sort?: VehicleListOptions["sort"]): Vehic
   if (sort === "preis-auf") out.sort((a, b) => a.price - b.price);
   else if (sort === "preis-ab") out.sort((a, b) => b.price - a.price);
   else if (sort === "km-auf") out.sort((a, b) => a.mileage - b.mileage);
-  else out.sort((a, b) => b.year - a.year);
+  else {
+    // Default: nach mobile.de-Einstellzeit (neueste zuerst), Fallback Baujahr
+    out.sort((a, b) => {
+      const aT = a.createdAt ? Date.parse(a.createdAt) : 0;
+      const bT = b.createdAt ? Date.parse(b.createdAt) : 0;
+      if (aT || bT) return bT - aT;
+      return b.year - a.year;
+    });
+  }
   return out;
 }
 

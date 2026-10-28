@@ -112,16 +112,26 @@ export default function VehicleList({ vehicles }: { vehicles: Vehicle[] }) {
                   </span>
                 </div>
 
-                <div className="mt-5 flex items-baseline justify-between gap-4">
-                  <div>
-                    <div className="display" style={{ fontSize: "1.3rem", letterSpacing: "-0.025em" }}>
-                      {v.brand} {v.model}
-                    </div>
-                    <div className="mt-1" style={{ color: "var(--muted)", fontSize: "0.95rem" }}>
-                      {v.variant}
-                    </div>
+                <div className="mt-5">
+                  <div className="display" style={{ fontSize: "1.3rem", letterSpacing: "-0.025em" }}>
+                    {v.brand} {v.model}
                   </div>
-                  <div className="display" style={{ fontSize: "1.25rem", color: "var(--ink)" }}>
+                  <div
+                    className="mt-1"
+                    style={{
+                      color: "var(--muted)",
+                      fontSize: "0.95rem",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {v.variant}
+                  </div>
+                  <div
+                    className="display mt-2"
+                    style={{ fontSize: "1.25rem", color: "var(--ink)", letterSpacing: "-0.01em" }}
+                  >
                     {v.price.toLocaleString("de-DE")} €
                   </div>
                 </div>

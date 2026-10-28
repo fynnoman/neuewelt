@@ -93,6 +93,58 @@ input, select, textarea {
   }
 }
 
+/* Vehicle-Detail Bildergalerie als horizontaler Swipe-Carousel */
+.vehicle-gallery-wrap { position: relative; width: 100%; aspect-ratio: 4 / 3; }
+@media (min-width: 1024px) {
+  .vehicle-gallery-wrap {
+    position: sticky;
+    top: 12px;
+    height: calc(100svh - 24px);
+    aspect-ratio: auto;
+  }
+}
+.vehicle-gallery {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.gallery-scroll {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.gallery-scroll::-webkit-scrollbar { display: none; width: 0; height: 0; }
+.gallery-slide {
+  position: relative;
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+.gallery-count-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  padding: 6px 12px;
+  background: rgba(10,11,12,0.6);
+  color: var(--paper);
+  border-radius: 999px;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  pointer-events: none;
+}
+
 ::selection { background: var(--signal); color: var(--paper); }
 
 /* Typography primitives */
