@@ -1,8 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getVehicle } from "@/lib/vehicles";
 import { SITE } from "@/lib/site";
+import VehicleGallery from "@/components/VehicleGallery";
 
 // ISR: Seite spätestens alle 15 Minuten neu generieren. Daten aus mobile.de
 // werden auf Fetch-Ebene identisch gecacht; neue und geänderte Inserate
@@ -22,53 +22,17 @@ export default async function VehiclePage({ params }: Props) {
   return (
     <main className="pt-24">
       <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-3 px-3">
-        {/* Image gallery (horizontal swipe) */}
+        {/* Image gallery (horizontal swipe + lightbox) */}
         <div className="order-1 vehicle-gallery-wrap">
-          <div className="vehicle-gallery radius" style={{ background: "var(--paper-sunk)" }}>
-            <div
-              className="gallery-scroll"
-              role="region"
-              aria-label={`${v.brand} ${v.model} Fahrzeugbilder, horizontal swipen`}
-            >
-              {gallery.map((src, i) => (
-                <div key={`${src}-${i}`} className="gallery-slide">
-                  <Image
-                    src={src}
-                    alt={`${v.brand} ${v.model} ${v.variant} · Bild ${i + 1} von ${gallery.length}`}
-                    fill
-                    priority={i === 0}
-                    sizes="(min-width:1024px) 55vw, 100vw"
-                    className="object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-
-            {/* Bild-Zähler-Badge */}
-            {gallery.length > 1 && (
-              <div className="gallery-count-badge mono">
-                {gallery.length} Bilder · wischen
-              </div>
-            )}
-
-            {/* Caption-Streifen am unteren Rand */}
-            <div
-              className="absolute inset-x-0 bottom-0 flex items-center justify-between pointer-events-none"
-              style={{
-                padding: "18px 22px",
-                background: "linear-gradient(180deg, transparent, rgba(10,11,12,0.72))",
-                color: "var(--paper)",
-                fontSize: "0.92rem",
-              }}
-            >
-              <span>
-                {v.brand} {v.model} · {v.color}
-              </span>
-              <span style={{ color: "rgba(251,251,249,0.72)", fontSize: "0.8rem" }}>
-                EZ {v.year} · {v.mileage.toLocaleString("de-DE")} km
-              </span>
-            </div>
-          </div>
+          <VehicleGallery
+            images={gallery}
+            brand={v.brand}
+            model={v.model}
+            variant={v.variant}
+            color={v.color}
+            year={v.year}
+            mileage={v.mileage}
+          />
         </div>
 
         {/* Content */}
