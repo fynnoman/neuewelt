@@ -1,13 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getVehicle, getVehicles } from "@/lib/vehicles";
+import { getVehicle } from "@/lib/vehicles";
 import { SITE } from "@/lib/site";
 
-export async function generateStaticParams() {
-  const vehicles = await getVehicles();
-  return vehicles.map((v) => ({ slug: v.slug }));
-}
+// ISR: Seite spätestens alle 15 Minuten neu generieren. Daten aus mobile.de
+// werden auf Fetch-Ebene identisch gecacht; neue und geänderte Inserate
+// erscheinen also ohne Rebuild.
+export const revalidate = 900;
+export const dynamicParams = true;
 
 type Props = { params: Promise<{ slug: string }> };
 

@@ -34,6 +34,8 @@ export default function NewsletterModal() {
   const [visible, setVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
     const stored = readStored();
@@ -58,12 +60,40 @@ export default function NewsletterModal() {
     setVisible(false);
   };
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim()) return;
-    writeStored({ status: "subscribed", at: Date.now() });
-    setSubscribed(true);
-    window.setTimeout(() => setVisible(false), 2200);
+    const trimmed = email.trim();
+    if (!trimmed || submitting) return;
+    setSubmitting(true);
+    setErrorMsg(null);
+
+    try {
+      const res = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: trimmed }),
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+      };
+      if (!res.ok || !data.ok) {
+        if (data.error === "invalid_email") {
+          setErrorMsg("Bitte prüfen Sie Ihre E-Mail-Adresse.");
+        } else {
+          setErrorMsg("Das hat gerade nicht geklappt. Bitte später erneut versuchen.");
+        }
+        setSubmitting(false);
+        return;
+      }
+      writeStored({ status: "subscribed", at: Date.now() });
+      setSubscribed(true);
+      setSubmitting(false);
+      window.setTimeout(() => setVisible(false), 2600);
+    } catch {
+      setErrorMsg("Verbindung unterbrochen. Bitte später erneut versuchen.");
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -213,16 +243,24 @@ export default function NewsletterModal() {
                       <button
                         type="submit"
                         className="btn justify-center"
+                        disabled={submitting}
                         style={{
                           width: "100%",
                           padding: "0.8rem 1rem",
                           fontSize: "0.95rem",
+                          opacity: submitting ? 0.65 : 1,
+                          cursor: submitting ? "wait" : "pointer",
                         }}
                       >
-                        Abonnieren
-                        <span style={{ color: "var(--signal)" }}>→</span>
+                        {submitting ? "Wird gesendet…" : "Abonnieren"}
+                        {!submitting && <span style={{ color: "var(--signal)" }}>→</span>}
                       </button>
                     </div>
+                    {errorMsg && (
+                      <p className="mt-3" style={{ color: "var(--signal-deep)", fontSize: "0.85rem" }}>
+                        {errorMsg}
+                      </p>
+                    )}
 
                     <p
                       className="mt-4"
@@ -298,12 +336,12 @@ export default function NewsletterModal() {
                     style={{
                       color: "var(--ink-soft)",
                       fontSize: "0.98rem",
-                      maxWidth: "28ch",
+                      maxWidth: "32ch",
                       marginInline: "auto",
                       lineHeight: 1.5,
                     }}
                   >
-                    Wir melden uns, sobald passende Fahrzeuge in unseren Bestand kommen.
+                    Eine Bestätigung ist in Ihrem Postfach. Wir melden uns, sobald neue Fahrzeuge in unseren Bestand kommen.
                   </p>
                 </motion.div>
               )}

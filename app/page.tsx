@@ -26,6 +26,10 @@ const PROZESS = [
   ["04", "Übergabe", "Zulassung, Übergabe im Haus oder Lieferung bis vor die Tür."],
 ];
 
+// ISR: Startseite spätestens alle 15 Minuten neu rendern, damit neue Fahrzeuge
+// aus mobile.de dort erscheinen.
+export const revalidate = 900;
+
 export default async function Home() {
   const latest = await getVehicles({ limit: 6 });
   const totalCount = (await getVehicles()).length;

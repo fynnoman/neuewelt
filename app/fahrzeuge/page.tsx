@@ -3,7 +3,7 @@ import { getVehicles } from "@/lib/vehicles";
 import { SITE } from "@/lib/site";
 import VehicleList from "@/components/VehicleList";
 
-export const revalidate = 600;
+export const revalidate = 900;
 
 export default async function FahrzeugePage() {
   const vehicles = await getVehicles();
