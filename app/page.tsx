@@ -32,7 +32,6 @@ export const revalidate = 900;
 
 export default async function Home() {
   const latest = await getVehicles({ limit: 6, sort: "preis-ab" });
-  const totalCount = (await getVehicles()).length;
 
   return (
     <main>
@@ -164,7 +163,7 @@ export default async function Home() {
               href="/fahrzeuge"
               className="btn-ghost rule-arrow"
             >
-              Alle {totalCount} Fahrzeuge
+              Alle Fahrzeuge
             </Link>
           </div>
         </SlideIn>

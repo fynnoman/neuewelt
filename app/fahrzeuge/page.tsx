@@ -12,7 +12,7 @@ export default async function FahrzeugePage() {
     <main className="pt-28 lg:pt-36">
       <header className="px-5 md:px-10 lg:px-14">
         <div className="mono" style={{ color: "var(--muted)" }}>
-          Fahrzeuge · {vehicles.length} aktuell im Hof
+          Fahrzeuge
         </div>
         <h1
           className="display mt-6"

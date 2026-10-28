@@ -118,9 +118,6 @@ export default function VehicleList({ vehicles }: { vehicles: Vehicle[] }) {
             </select>
           </label>
 
-          <span className="mono ml-auto" style={{ color: "var(--muted)" }}>
-            {list.length} {list.length === 1 ? "Fahrzeug" : "Fahrzeuge"}
-          </span>
         </div>
       </nav>
 
