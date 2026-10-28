@@ -52,7 +52,7 @@ export default function KontaktPage() {
         <SlideIn direction="up" delay={0.2}>
           <p className="lead mt-6" style={{ maxWidth: "50ch" }}>
             Persönlich im Haus, telefonisch, per E-Mail oder WhatsApp. Nutzen Sie
-            das Formular — wir melden uns innerhalb eines Werktages zurück.
+            das Formular. Wir melden uns innerhalb von Minuten zurück.
           </p>
         </SlideIn>
       </header>
@@ -137,15 +137,22 @@ export default function KontaktPage() {
             <div className="liquid" style={{ padding: "clamp(24px, 3vw, 32px)" }}>
               <div className="mono" style={{ color: "var(--muted)" }}>Direkt sprechen</div>
               <a
-                href={SITE.contact.phoneHref}
+                href={SITE.contact.phoneLandlineHref}
                 className="display block mt-4"
                 style={{ fontSize: "1.4rem", color: "var(--ink)", letterSpacing: "-0.02em" }}
+              >
+                {SITE.contact.phoneLandline}
+              </a>
+              <a
+                href={SITE.contact.phoneHref}
+                className="block mt-1"
+                style={{ color: "var(--ink-soft)", fontSize: "0.95rem" }}
               >
                 {SITE.contact.phone}
               </a>
               <a
                 href={SITE.contact.emailHref}
-                className="block mt-2"
+                className="block mt-3"
                 style={{ color: "var(--muted)", fontSize: "0.95rem" }}
               >
                 {SITE.contact.email}

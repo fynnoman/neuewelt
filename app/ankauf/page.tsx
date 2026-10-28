@@ -53,7 +53,7 @@ export default function AnkaufPage() {
               ["Formular", "Angaben und Fotos. Vier Minuten."],
               ["Bewertung", "Schätzung am gleichen Werktag."],
               ["Termin vor Ort", "Besichtigung in Saarlouis."],
-              ["Übergabe", "Zahlung bei Abgabe. Abmeldung auf Wunsch."],
+              ["Übergabe", "Zahlung bei Übergabe. Abmeldung auf Wunsch."],
             ].map(([t, d], i) => (
               <li key={i} className="grid grid-cols-[auto_1fr] items-baseline gap-5">
                 <span
@@ -159,9 +159,14 @@ export default function AnkaufPage() {
             className="mt-10 flex flex-wrap items-center justify-center gap-8"
             style={{ fontSize: "1rem" }}
           >
-            <a href={SITE.contact.phoneHref} className="rule-arrow" style={{ color: "var(--on-sunk)", borderBottom: "1px solid var(--on-sunk)", paddingBottom: 4 }}>
-              {SITE.contact.phone}
-            </a>
+            <div className="flex flex-col items-center">
+              <a href={SITE.contact.phoneLandlineHref} className="rule-arrow" style={{ color: "var(--on-sunk)", borderBottom: "1px solid var(--on-sunk)", paddingBottom: 4 }}>
+                {SITE.contact.phoneLandline}
+              </a>
+              <a href={SITE.contact.phoneHref} style={{ color: "var(--on-sunk-muted)", fontSize: "0.84rem", marginTop: 4 }}>
+                {SITE.contact.phone}
+              </a>
+            </div>
             <span style={{ color: "var(--on-sunk-muted)" }}>oder</span>
             <a href={SITE.contact.emailHref} className="rule-arrow" style={{ color: "var(--on-sunk)", borderBottom: "1px solid var(--on-sunk)", paddingBottom: 4 }}>
               {SITE.contact.email}

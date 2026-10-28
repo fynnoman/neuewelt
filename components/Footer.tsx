@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { NAV, SITE } from "@/lib/site";
 
 function InstagramIcon({ size = 18, color = "currentColor" }: { size?: number; color?: string }) {
@@ -25,50 +24,43 @@ function InstagramIcon({ size = 18, color = "currentColor" }: { size?: number; c
 
 const LEISTUNGEN = [
   { label: "Werkstatt", href: "/service" },
+  { label: "Neuwagenbeschaffung", href: "/service" },
   { label: "Fahrzeugaufbereitung", href: "/service" },
-  { label: "Reifen & Räder", href: "/service" },
+  { label: "Fahrzeugfolierungen & Scheibentönung", href: "/service" },
   { label: "Zulassungsservice", href: "/service" },
   { label: "Fahrzeugüberführung deutschlandweit", href: "/service" },
   { label: "Finanzierung über die Targobank", href: "/service" },
-  { label: "Garantie bis zu 96 Monate", href: "/service" },
+  { label: "Garantie bis zu 36 Monate", href: "/service" },
 ];
 
 export default function Footer() {
   return (
     <footer
       className="mt-32 relative overflow-hidden"
-      style={{ background: "var(--void)", color: "var(--paper)" }}
+      style={{ background: "var(--paper)", color: "var(--ink)" }}
     >
       {/* Top edge accent */}
       <div
         className="absolute inset-x-0 top-0 h-px"
         style={{
           background:
-            "linear-gradient(90deg, transparent, rgba(208,26,32,0.55), transparent)",
+            "linear-gradient(90deg, transparent, rgba(208,26,32,0.4), transparent)",
         }}
       />
 
       <div className="px-6 md:px-10 lg:px-14 pt-20 lg:pt-28 pb-10">
         {/* TOP: Brand + CTA line */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-10 lg:gap-16 items-end pb-16 border-b border-white/10">
+        <div
+          className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-10 lg:gap-16 items-end pb-16"
+          style={{ borderBottom: "1px solid var(--fog-200)" }}
+        >
           <div>
-            <Image
-              src="/brand/logo.png"
-              alt="Neue Welt Automobile"
-              width={520}
-              height={176}
-              style={{
-                height: "44px",
-                width: "auto",
-                filter: "invert(1) brightness(1.4)",
-              }}
-            />
             <h2
-              className="display mt-10"
+              className="display"
               style={{
                 fontSize: "clamp(2rem, 4vw, 3.6rem)",
                 letterSpacing: "-0.035em",
-                color: "var(--paper)",
+                color: "var(--ink)",
                 maxWidth: "22ch",
                 lineHeight: 1.02,
               }}
@@ -80,19 +72,30 @@ export default function Footer() {
 
           <div className="flex flex-col gap-4 lg:items-end">
             <a
-              href={SITE.contact.phoneHref}
+              href={SITE.contact.phoneLandlineHref}
               className="display"
               style={{
                 fontSize: "clamp(1.6rem, 2.6vw, 2.2rem)",
-                color: "var(--paper)",
+                color: "var(--ink)",
                 letterSpacing: "-0.03em",
+              }}
+            >
+              {SITE.contact.phoneLandline}
+            </a>
+            <a
+              href={SITE.contact.phoneHref}
+              style={{
+                fontSize: "1rem",
+                color: "var(--ink-soft)",
+                letterSpacing: "-0.02em",
+                marginTop: "-0.5rem",
               }}
             >
               {SITE.contact.phone}
             </a>
             <a
               href={SITE.contact.emailHref}
-              style={{ color: "rgba(251,251,249,0.72)", fontSize: "1rem" }}
+              style={{ color: "var(--muted)", fontSize: "1rem" }}
             >
               {SITE.contact.email}
             </a>
@@ -105,8 +108,9 @@ export default function Footer() {
               style={{
                 alignSelf: "flex-start",
                 padding: "0.55rem 0.95rem",
-                background: "var(--paper)",
+                background: "transparent",
                 color: "var(--ink)",
+                border: "1px solid var(--fog-200)",
                 borderRadius: 999,
                 fontSize: "0.9rem",
                 fontWeight: 500,
@@ -120,8 +124,8 @@ export default function Footer() {
               href="/ankauf"
               className="btn mt-3"
               style={{
-                background: "var(--paper)",
-                color: "var(--ink)",
+                background: "var(--ink)",
+                color: "var(--paper)",
                 alignSelf: "flex-start",
               }}
             >
@@ -135,10 +139,7 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-14 py-16">
           {/* Navigation */}
           <div>
-            <div
-              className="mono"
-              style={{ color: "rgba(251,251,249,0.5)" }}
-            >
+            <div className="mono" style={{ color: "var(--muted)" }}>
               Seite
             </div>
             <ul className="mt-6 flex flex-col gap-3">
@@ -147,7 +148,7 @@ export default function Footer() {
                   <Link
                     href={n.href}
                     className="footer-link"
-                    style={{ color: "var(--paper)", fontSize: "0.98rem" }}
+                    style={{ color: "var(--ink)", fontSize: "0.98rem" }}
                   >
                     {n.label}
                   </Link>
@@ -158,7 +159,7 @@ export default function Footer() {
 
           {/* Leistungen */}
           <div>
-            <div className="mono" style={{ color: "rgba(251,251,249,0.5)" }}>
+            <div className="mono" style={{ color: "var(--muted)" }}>
               Leistungen
             </div>
             <ul className="mt-6 flex flex-col gap-3">
@@ -167,7 +168,7 @@ export default function Footer() {
                   <Link
                     href={l.href}
                     className="footer-link"
-                    style={{ color: "rgba(251,251,249,0.82)", fontSize: "0.98rem" }}
+                    style={{ color: "var(--ink-soft)", fontSize: "0.98rem" }}
                   >
                     {l.label}
                   </Link>
@@ -178,25 +179,33 @@ export default function Footer() {
 
           {/* Kontakt */}
           <div>
-            <div className="mono" style={{ color: "rgba(251,251,249,0.5)" }}>
+            <div className="mono" style={{ color: "var(--muted)" }}>
               Kontakt
             </div>
             <ul className="mt-6 flex flex-col gap-3" style={{ fontSize: "0.98rem" }}>
               <li>
-                <a href={SITE.contact.phoneHref} style={{ color: "var(--paper)" }}>
+                <a href={SITE.contact.phoneLandlineHref} style={{ color: "var(--ink)" }}>
+                  {SITE.contact.phoneLandline}
+                </a>
+              </li>
+              <li>
+                <a href={SITE.contact.phoneHref} style={{ color: "var(--ink-soft)" }}>
                   {SITE.contact.phone}
                 </a>
               </li>
               <li>
-                <a href={SITE.contact.emailHref} style={{ color: "rgba(251,251,249,0.82)" }}>
+                <a href={SITE.contact.emailHref} style={{ color: "var(--ink-soft)" }}>
                   {SITE.contact.email}
                 </a>
               </li>
             </ul>
-            <div className="mt-6 mono" style={{ color: "rgba(251,251,249,0.5)" }}>
+            <div className="mt-6 mono" style={{ color: "var(--muted)" }}>
               Öffnungszeiten
             </div>
-            <ul className="mt-4 flex flex-col gap-1.5" style={{ fontSize: "0.95rem", color: "rgba(251,251,249,0.82)" }}>
+            <ul
+              className="mt-4 flex flex-col gap-1.5"
+              style={{ fontSize: "0.95rem", color: "var(--ink-soft)" }}
+            >
               <li>{SITE.hours.weekday}</li>
               <li>{SITE.hours.saturday}</li>
             </ul>
@@ -204,16 +213,16 @@ export default function Footer() {
 
           {/* Adresse */}
           <div>
-            <div className="mono" style={{ color: "rgba(251,251,249,0.5)" }}>
+            <div className="mono" style={{ color: "var(--muted)" }}>
               Adresse
             </div>
             <div
               className="mt-6"
-              style={{ color: "var(--paper)", fontSize: "0.98rem", lineHeight: 1.6 }}
+              style={{ color: "var(--ink)", fontSize: "0.98rem", lineHeight: 1.6 }}
             >
               {SITE.name}
               <br />
-              <span style={{ color: "rgba(251,251,249,0.82)" }}>
+              <span style={{ color: "var(--ink-soft)" }}>
                 {SITE.address.line1}
                 <br />
                 {SITE.address.line2}
@@ -226,42 +235,30 @@ export default function Footer() {
               target="_blank"
               rel="noopener"
               className="mono mt-6 inline-flex items-center gap-2"
-              style={{ color: "var(--paper)" }}
+              style={{ color: "var(--ink)" }}
             >
               Route planen <span style={{ color: "var(--signal)" }}>→</span>
             </a>
           </div>
         </div>
 
-        {/* BIG LOGO */}
-        <div
-          className="py-14 flex justify-center -mx-6 md:-mx-10 lg:-mx-14 px-6 md:px-10 lg:px-14"
-          style={{ background: "var(--paper)" }}
-        >
-          <Image
-            src="/brand/logo.png"
-            alt="Neue Welt Automobile"
-            width={2172}
-            height={724}
-            style={{
-              width: "100%",
-              maxWidth: "1200px",
-              height: "auto",
-            }}
-          />
-        </div>
-
         {/* BOTTOM: legal */}
         <div
-          className="pt-8 flex flex-wrap items-center justify-between gap-4 border-t border-white/10"
-          style={{ fontSize: "0.82rem", color: "rgba(251,251,249,0.55)" }}
+          className="pt-8 flex flex-wrap items-center justify-between gap-4"
+          style={{
+            fontSize: "0.82rem",
+            color: "var(--muted)",
+            borderTop: "1px solid var(--fog-200)",
+          }}
         >
-          <span>© {new Date().getFullYear()} {SITE.name}. Alle Rechte vorbehalten.</span>
+          <span>
+            © {new Date().getFullYear()} {SITE.name}. Alle Rechte vorbehalten.
+          </span>
           <div className="flex items-center gap-6">
-            <Link href="/impressum" className="hover:text-white transition-colors">
+            <Link href="/impressum" style={{ color: "var(--ink-soft)" }}>
               Impressum
             </Link>
-            <Link href="/datenschutz" className="hover:text-white transition-colors">
+            <Link href="/datenschutz" style={{ color: "var(--ink-soft)" }}>
               Datenschutz
             </Link>
             <span style={{ opacity: 0.6 }}>{SITE.domain}</span>

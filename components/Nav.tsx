@@ -382,7 +382,10 @@ export default function Nav() {
                 </motion.div>
 
                 <motion.div variants={ITEM_VARIANTS} className="mt-5 flex flex-col gap-0.5" style={{ fontSize: "0.82rem" }}>
-                  <a href={SITE.contact.phoneHref} style={{ color: "var(--ink)" }}>
+                  <a href={SITE.contact.phoneLandlineHref} style={{ color: "var(--ink)" }}>
+                    {SITE.contact.phoneLandline}
+                  </a>
+                  <a href={SITE.contact.phoneHref} style={{ color: "var(--ink-soft)", fontSize: "0.78rem" }}>
                     {SITE.contact.phone}
                   </a>
                   <a href={SITE.contact.emailHref} style={{ color: "var(--muted)", fontSize: "0.78rem" }}>
@@ -586,11 +589,14 @@ export default function Nav() {
                   </span>
                 </a>
 
-                <div className="flex items-center justify-between pt-3" style={{ borderTop: "1px solid rgba(10,11,12,0.08)", fontSize: "0.82rem" }}>
-                  <a href={SITE.contact.phoneHref} style={{ color: "var(--ink)" }}>
+                <div className="pt-3 flex flex-col gap-1" style={{ borderTop: "1px solid rgba(10,11,12,0.08)", fontSize: "0.82rem" }}>
+                  <a href={SITE.contact.phoneLandlineHref} style={{ color: "var(--ink)" }}>
+                    {SITE.contact.phoneLandline}
+                  </a>
+                  <a href={SITE.contact.phoneHref} style={{ color: "var(--ink-soft)", fontSize: "0.78rem" }}>
                     {SITE.contact.phone}
                   </a>
-                  <a href={SITE.contact.emailHref} style={{ color: "var(--muted)" }}>
+                  <a href={SITE.contact.emailHref} style={{ color: "var(--muted)", fontSize: "0.78rem" }}>
                     {SITE.contact.email}
                   </a>
                 </div>

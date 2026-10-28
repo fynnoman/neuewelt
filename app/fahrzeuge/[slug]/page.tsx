@@ -122,9 +122,14 @@ export default async function VehiclePage({ params }: Props) {
               Probefahrt anfragen
               <span>→</span>
             </a>
-            <a href={SITE.contact.phoneHref} className="btn-ghost rule-arrow">
-              {SITE.contact.phone}
-            </a>
+            <div className="flex flex-col gap-1">
+              <a href={SITE.contact.phoneLandlineHref} className="btn-ghost rule-arrow">
+                {SITE.contact.phoneLandline}
+              </a>
+              <a href={SITE.contact.phoneHref} style={{ color: "var(--muted)", fontSize: "0.86rem" }}>
+                {SITE.contact.phone}
+              </a>
+            </div>
           </div>
         </div>
       </div>

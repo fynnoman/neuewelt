@@ -1,23 +1,21 @@
-import Image from "next/image";
-import Link from "next/link";
 import SlideIn from "@/components/SlideIn";
-import { SITE } from "@/lib/site";
 
 const FACTS = [
-  ["Gründung", "[Jahr]"],
+  ["Gründung", "2001"],
   ["Standort", "Saarlouis"],
   ["Werkstatt", "Vor Ort"],
 ];
 
 const LEISTUNGEN = [
-  "Gebrauchtwagenhandel",
+  "Neu- und Gebrauchtwagenhandel",
+  "Neuwagenbeschaffung",
   "Fahrzeugankauf",
   "Werkstatt und Service",
   "Zulassungsservice",
   "Fahrzeugaufbereitung",
   "Fahrzeugüberführung deutschlandweit",
   "Finanzierung über die Targobank",
-  "Garantie bis zu 96 Monate",
+  "Garantie bis zu 36 Monate",
 ];
 
 export default function UeberUnsPage() {
@@ -38,12 +36,6 @@ export default function UeberUnsPage() {
           >
             Autohaus in Saarlouis.
           </h1>
-        </SlideIn>
-        <SlideIn direction="up" delay={0.2}>
-          <p className="lead mt-6 measure" style={{ fontSize: "1.15rem" }}>
-            Familiengeführter Gebrauchtwagenhandel mit eigener Werkstatt.
-            Saarlouis und Umkreis. Alle Marken, alle Baujahre.
-          </p>
         </SlideIn>
       </section>
 
@@ -109,42 +101,6 @@ export default function UeberUnsPage() {
         </div>
       </section>
 
-      {/* BIG IMAGE */}
-      <section className="mt-36 px-3">
-        <SlideIn direction="up">
-          <div className="relative aspect-[21/9] overflow-hidden rounded-[var(--radius)]">
-            <Image
-              src="/photos/showroom-hero.jpg"
-              alt="Neue Welt Automobile Saarlouis"
-              fill
-              sizes="100vw"
-              className="object-cover"
-            />
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(180deg, transparent 55%, rgba(10,11,12,0.55))",
-              }}
-            />
-            <div className="absolute inset-x-0 bottom-0 p-10 lg:p-16 flex items-end justify-between" style={{ color: "var(--paper)" }}>
-              <div
-                className="display"
-                style={{ fontSize: "clamp(1.8rem, 3.4vw, 3rem)", letterSpacing: "-0.03em", lineHeight: 1.1 }}
-              >
-                Saarlouis.
-              </div>
-              <Link
-                href={SITE.contact.phoneHref}
-                className="btn-ghost rule-arrow"
-                style={{ color: "var(--paper)", borderColor: "var(--paper)" }}
-              >
-                Termin
-              </Link>
-            </div>
-          </div>
-        </SlideIn>
-      </section>
     </main>
   );
 }

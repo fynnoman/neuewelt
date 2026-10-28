@@ -8,7 +8,12 @@ const LEISTUNGEN = [
   {
     id: "ankauf",
     title: "Fahrzeugankauf",
-    body: "Wir kaufen Ihr Fahrzeug zum fairen Marktpreis an oder nehmen es in Zahlung. Angebot innerhalb eines Werktages.",
+    body: "Wir kaufen Ihr Fahrzeug zum fairen Marktpreis an oder nehmen es in Zahlung. Angebot innerhalb von Minuten.",
+  },
+  {
+    id: "neuwagen",
+    title: "Neuwagenbeschaffung",
+    body: "Beschaffung Ihres Wunschfahrzeugs direkt vom Hersteller. Konfiguration, Lieferung und Zulassung auf Wunsch.",
   },
   {
     id: "finanzierung",
@@ -26,11 +31,6 @@ const LEISTUNGEN = [
     body: "Inspektion, Reparatur, Diagnose, Klimaservice und HU-Vorbereitung. Alles aus einer Hand bei uns vor Ort.",
   },
   {
-    id: "frontscheibe",
-    title: "Frontscheibe wechseln",
-    body: "Austausch in OEM-Qualität mit Kalibrierung der Fahrerassistenzsysteme. Leihwagen auf Wunsch.",
-  },
-  {
     id: "check",
     title: "Gebrauchtwagen-Check",
     body: "Zertifizierter Check durch eine unabhängige Prüforganisation. Zustandsbericht und Prüfzertifikat gegen Aufpreis.",
@@ -38,7 +38,7 @@ const LEISTUNGEN = [
   {
     id: "zulassung",
     title: "Zulassungsservice",
-    body: "Wir übernehmen die Anmeldung inklusive Wunschkennzeichen. Auch Kurzzeitzulassung für die Überführung möglich.",
+    body: "Wir übernehmen die bundesweite Anmeldung inklusive Wunschkennzeichen. Auch Kurzzeitkennzeichen für die Überführung möglich.",
   },
   {
     id: "ueberfuehrung",
@@ -48,17 +48,17 @@ const LEISTUNGEN = [
   {
     id: "export",
     title: "Kfz-Export",
-    body: "Erfahrene Abwicklung des Fahrzeugexports in Ihr Heimatland. Beratung zu Ausfuhr, Zoll und Versteuerung inklusive.",
+    body: "Erfahrene Abwicklung des Fahrzeugexports in Ihr Heimatland inklusive Ausstellung des Ausfuhrbegleitdokuments.",
   },
   {
-    id: "reifen",
-    title: "Reifen und Räder",
-    body: "Montage, Wuchten, Saisonwechsel und Einlagerung bei uns vor Ort. Felgen und Kompletträder auf Anfrage.",
+    id: "folierung",
+    title: "Fahrzeugfolierungen und Scheibentönung",
+    body: "Vollfolierung, Teilfolierung und Scheibentönung in Studio-Qualität. Farbe, Finish und Umfang nach Absprache.",
   },
   {
     id: "garantie",
-    title: "Garantie bis zu 96 Monate",
-    body: "Erweiterte Fahrzeuggarantie mit Laufzeit bis zu 96 Monaten. Umfang und Preis auf Anfrage.",
+    title: "Garantie bis zu 36 Monate",
+    body: "Erweiterte Fahrzeuggarantie mit Laufzeit bis zu 36 Monaten. Umfang und Preis auf Anfrage.",
   },
 ];
 
@@ -182,9 +182,16 @@ export default function ServicePage() {
                 Werkstatt direkt
               </div>
               <a
-                href={SITE.contact.phoneHref}
+                href={SITE.contact.phoneLandlineHref}
                 className="display block mt-4"
                 style={{ fontSize: "1.6rem", color: "var(--paper)" }}
+              >
+                {SITE.contact.phoneLandline}
+              </a>
+              <a
+                href={SITE.contact.phoneHref}
+                className="block mt-1"
+                style={{ fontSize: "0.9rem", color: "rgba(251,251,249,0.72)" }}
               >
                 {SITE.contact.phone}
               </a>

@@ -27,7 +27,9 @@ export default function ImpressumPage() {
             Kontakt
           </h2>
           <p className="mt-3">
-            Telefon: {SITE.contact.phone}
+            Festnetz: {SITE.contact.phoneLandline}
+            <br />
+            Mobil: {SITE.contact.phone}
             <br />
             E-Mail: {SITE.contact.email}
           </p>

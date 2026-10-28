@@ -12,12 +12,13 @@ const WERKSTATT_IMAGE = "/photos/showroom-amg.jpg";
 
 const SERVICES = [
   { title: "Werkstatt", body: "Inspektion, Reparatur, HU-Vorbereitung.", href: "/service" },
+  { title: "Neuwagenbeschaffung", body: "Ihr Wunschfahrzeug direkt vom Hersteller.", href: "/service" },
   { title: "Fahrzeugaufbereitung", body: "Innen und außen, Pauschale oder Detail.", href: "/service" },
-  { title: "Reifen & Räder", body: "Montage, Wuchten, Saisonwechsel, Einlagerung.", href: "/service" },
-  { title: "Zulassungsservice", body: "Zulassung in Saarlouis und Umkreis.", href: "/service" },
+  { title: "Fahrzeugfolierungen & Scheibentönung", body: "Vollfolierung, Teilfolierung, Scheibentönung.", href: "/service" },
+  { title: "Zulassungsservice", body: "Bundesweite Zulassung inklusive Wunschkennzeichen.", href: "/service" },
   { title: "Fahrzeugüberführung deutschlandweit", body: "Bis vor Ihre Haustür in ganz Deutschland.", href: "/service" },
   { title: "Finanzierung über die Targobank", body: "Angebot innerhalb von 24 Stunden.", href: "/service" },
-  { title: "Garantie bis zu 96 Monate", body: "Preis auf Anfrage.", href: "/service" },
+  { title: "Garantie bis zu 36 Monate", body: "Preis auf Anfrage.", href: "/service" },
 ];
 
 const PROZESS = [
@@ -75,7 +76,7 @@ export default async function Home() {
             <div className="mono" style={{ color: "var(--paper)", opacity: 0.72 }}>
               Saarlouis — Saarland · DE
             </div>
-            <div className="mono hidden md:block" style={{ color: "var(--paper)", opacity: 0.72 }}>
+            <div className="mono hidden md:block" style={{ color: "var(--signal)" }}>
               {SITE.hours.weekday}
             </div>
           </div>
@@ -86,7 +87,7 @@ export default async function Home() {
                   className="mono"
                   style={{ color: "var(--paper)", opacity: 0.72 }}
                 >
-                  Gebrauchtwagen · Fahrzeugankauf · Werkstatt
+                  Neuwagen · Gebrauchtwagen · Fahrzeugankauf · Werkstatt
                 </div>
               </SlideIn>
 
@@ -112,8 +113,9 @@ export default async function Home() {
                   className="lead mt-6"
                   style={{ color: "rgba(251,251,249,0.84)", maxWidth: "40ch" }}
                 >
-                  Gepflegte Gebrauchtwagen in Saarlouis. Fahrzeugankauf zum fairen
-                  Marktpreis. Eigene Werkstatt mit allem Service aus einer Hand.
+                  Gepflegte Neu- und Gebrauchtwagen in Saarlouis. Fahrzeugankauf
+                  zum fairen Marktpreis. Eigene Werkstatt mit allem Service aus
+                  einer Hand.
                 </p>
               </SlideIn>
 
@@ -252,7 +254,7 @@ export default async function Home() {
               <SlideIn direction="right" delay={0.2}>
                 <p className="lead mt-6">
                   Faire Bewertung zum aktuellen Marktpreis. Barkauf oder Überweisung,
-                  Abmeldung und Transport auf Wunsch. Angebot innerhalb eines Werktages.
+                  Abmeldung und Transport auf Wunsch. Angebot innerhalb von Minuten.
                 </p>
               </SlideIn>
               <SlideIn direction="right" delay={0.3} stagger={0.08}>
@@ -261,7 +263,7 @@ export default async function Home() {
                     "Alle Marken und Baujahre",
                     "Keine versteckten Kosten",
                     "Abholung bundesweit möglich",
-                    "Barzahlung bei Abgabe",
+                    "Barzahlung bei Übergabe",
                   ].map((t) => (
                     <li
                       key={t}
@@ -542,9 +544,16 @@ export default async function Home() {
           <div className="radius" style={{ background: "var(--ink)", color: "var(--paper)", padding: "clamp(24px, 4vw, 36px) clamp(22px, 3.5vw, 32px)" }}>
             <div className="mono" style={{ color: "var(--muted-fade)" }}>Direkt sprechen</div>
             <a
-              href={SITE.contact.phoneHref}
+              href={SITE.contact.phoneLandlineHref}
               className="display block mt-4"
               style={{ fontSize: "1.4rem", color: "var(--paper)", letterSpacing: "-0.02em" }}
+            >
+              {SITE.contact.phoneLandline}
+            </a>
+            <a
+              href={SITE.contact.phoneHref}
+              className="block mt-1"
+              style={{ color: "rgba(251,251,249,0.72)", fontSize: "0.9rem" }}
             >
               {SITE.contact.phone}
             </a>

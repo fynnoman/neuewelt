@@ -10,12 +10,14 @@ export const SITE = {
   },
   hours: {
     weekday: "Mo bis Fr · 09 bis 18 Uhr",
-    saturday: "Samstag · 10 bis 14 Uhr",
+    saturday: "Samstag · 09 bis 15 Uhr",
     note: "Außerhalb nach Vereinbarung",
   },
   contact: {
     phone: "+49 174 2611090",
     phoneHref: "tel:+491742611090",
+    phoneLandline: "+49 6831 1658597",
+    phoneLandlineHref: "tel:+4968311658597",
     email: "info@neue-welt-automobile.de",
     emailHref: "mailto:info@neue-welt-automobile.de",
     whatsapp: "+49 174 2611090",
