@@ -10,7 +10,7 @@ export default function WhatsAppFab() {
       className="liquid liquid-hover"
       style={{
         position: "fixed",
-        right: 20,
+        left: 20,
         bottom: 20,
         zIndex: 60,
         width: 60,

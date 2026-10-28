@@ -89,9 +89,9 @@ export default function Nav() {
 
   return (
     <>
-      {/* Desktop: fester Menü-Trigger links, nur sichtbar, Panel öffnet bei Hover */}
+      {/* Desktop: fester Menü-Trigger rechts, nur sichtbar, Panel öffnet bei Hover */}
       <div
-        className="hidden lg:block fixed top-0 left-0 bottom-0 z-50"
+        className="hidden lg:block fixed top-0 right-0 bottom-0 z-50"
         style={{ pointerEvents: "none" }}
       >
         {/* Hover-Zone: schmaler, immer da, triggert Panel */}
@@ -101,7 +101,7 @@ export default function Nav() {
           style={{
             position: "absolute",
             top: 0,
-            left: 0,
+            right: 0,
             bottom: 0,
             width: 20,
             pointerEvents: "auto",
@@ -121,7 +121,7 @@ export default function Nav() {
           style={{
             position: "absolute",
             top: 20,
-            left: 20,
+            right: 20,
             width: 52,
             height: 52,
             display: "inline-flex",
@@ -186,16 +186,16 @@ export default function Nav() {
           {open && (
             <motion.aside
               key="side-panel"
-              initial={{ x: -SIDE_W - 20, opacity: 0 }}
+              initial={{ x: SIDE_W + 20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -SIDE_W - 20, opacity: 0 }}
+              exit={{ x: SIDE_W + 20, opacity: 0 }}
               transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
               onMouseEnter={openPanel}
               onMouseLeave={schedulClose}
               style={{
                 position: "absolute",
                 top: 0,
-                left: 0,
+                right: 0,
                 bottom: 0,
                 width: SIDE_W,
                 padding: "18px 18px 18px 18px",
@@ -317,9 +317,6 @@ export default function Nav() {
                     <span className="inline-flex items-center gap-2">
                       <InstagramIcon size={16} color="#0A0B0C" />
                       Instagram
-                    </span>
-                    <span style={{ color: "var(--muted)", fontSize: "0.72rem" }}>
-                      @neueweltautomobile
                     </span>
                   </a>
                 </div>
