@@ -25,6 +25,16 @@ export default function VehicleGallery({
 }: VehicleGalleryProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const lightboxTrackRef = useRef<HTMLDivElement | null>(null);
+  const inlineTrackRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollInlineBy = useCallback((dir: 1 | -1) => {
+    const track = inlineTrackRef.current;
+    if (!track) return;
+    const w = track.clientWidth;
+    const current = Math.round(track.scrollLeft / w);
+    const target = Math.max(0, Math.min(images.length - 1, current + dir));
+    track.scrollTo({ left: target * w, behavior: "smooth" });
+  }, [images.length]);
 
   const open = useCallback((i: number) => setOpenIndex(i), []);
   const close = useCallback(() => setOpenIndex(null), []);
@@ -78,9 +88,10 @@ export default function VehicleGallery({
       {/* Inline-Carousel */}
       <div className="vehicle-gallery radius" style={{ background: "var(--paper-sunk)" }}>
         <div
+          ref={inlineTrackRef}
           className="gallery-scroll"
           role="region"
-          aria-label={`${brand} ${model} Fahrzeugbilder, horizontal wischen oder klicken für Vollansicht`}
+          aria-label={`${brand} ${model} Fahrzeugbilder, horizontal wischen oder Pfeile verwenden`}
         >
           {images.map((src, i) => (
             <button
@@ -102,9 +113,41 @@ export default function VehicleGallery({
           ))}
         </div>
 
+        {/* Prev / Next Buttons (inline carousel) */}
+        {images.length > 1 && (
+          <>
+            <button
+              type="button"
+              aria-label="Vorheriges Bild"
+              onClick={(e) => {
+                e.stopPropagation();
+                scrollInlineBy(-1);
+              }}
+              className="gallery-arrow gallery-arrow-left"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              aria-label="Nächstes Bild"
+              onClick={(e) => {
+                e.stopPropagation();
+                scrollInlineBy(1);
+              }}
+              className="gallery-arrow gallery-arrow-right"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </>
+        )}
+
         {images.length > 1 && (
           <div className="gallery-count-badge mono">
-            {images.length} Bilder · wischen oder klicken
+            {images.length} Bilder
           </div>
         )}
 

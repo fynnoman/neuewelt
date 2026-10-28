@@ -155,6 +155,37 @@ input, select, textarea {
   overflow: hidden;
 }
 
+/* Prev / Next Pfeil-Buttons auf dem Inline-Carousel */
+.gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(251,251,249,0.9);
+  color: var(--ink);
+  border: 1px solid rgba(10,11,12,0.08);
+  cursor: pointer;
+  box-shadow: 0 4px 12px -4px rgba(10,11,12,0.3);
+  transition: background 180ms ease, transform 180ms ease;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.gallery-arrow:hover { background: rgba(255,255,255,1); transform: translateY(-50%) scale(1.06); }
+.gallery-arrow:active { transform: translateY(-50%) scale(0.95); }
+.gallery-arrow-left { left: 12px; }
+.gallery-arrow-right { right: 12px; }
+@media (min-width: 768px) {
+  .gallery-arrow { width: 48px; height: 48px; }
+  .gallery-arrow-left { left: 16px; }
+  .gallery-arrow-right { right: 16px; }
+}
+
 /* Lightbox-Carousel (horizontaler Swipe-Viewer in Vollansicht) */
 .lightbox-scroll {
   position: absolute;
