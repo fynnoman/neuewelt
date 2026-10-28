@@ -271,7 +271,7 @@ async function fetchPage(sellerId: string, page: number): Promise<XmlSearchResul
   const auth = buildAuthHeader();
   if (!auth) return null;
 
-  const url = `${BASE}?customerNumber=${encodeURIComponent(sellerId)}&page.size=${PAGE_SIZE}&page.number=${page}`;
+  const url = `${BASE}?seller.id=${encodeURIComponent(sellerId)}&page.size=${PAGE_SIZE}&page.number=${page}`;
 
   const res = await fetch(url, {
     headers: {
