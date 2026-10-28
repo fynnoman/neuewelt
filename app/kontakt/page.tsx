@@ -36,7 +36,7 @@ export default function KontaktPage() {
   };
 
   return (
-    <main className="pt-28 lg:pt-20 px-6 md:px-10 lg:px-14 pb-24">
+    <main className="pt-28 lg:pt-20 px-5 md:px-10 lg:px-14 pb-24">
       <header>
         <SlideIn direction="up">
           <div className="mono" style={{ color: "var(--muted)" }}>Kontakt</div>

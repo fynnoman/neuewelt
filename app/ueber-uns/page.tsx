@@ -20,7 +20,7 @@ const LEISTUNGEN = [
 export default function UeberUnsPage() {
   return (
     <main className="pt-28 lg:pt-36">
-      <section className="px-6 md:px-10 lg:px-14">
+      <section className="px-5 md:px-10 lg:px-14">
         <SlideIn direction="up">
           <div className="mono" style={{ color: "var(--muted)" }}>Über uns</div>
         </SlideIn>
@@ -39,7 +39,7 @@ export default function UeberUnsPage() {
       </section>
 
       {/* FACTS */}
-      <section className="mt-24 px-6 md:px-10 lg:px-14">
+      <section className="mt-24 px-5 md:px-10 lg:px-14">
         <SlideIn
           direction="up"
           stagger={0.08}
@@ -60,7 +60,7 @@ export default function UeberUnsPage() {
       </section>
 
       {/* LEISTUNGEN LIST */}
-      <section className="mt-32 lg:mt-44 px-6 md:px-10 lg:px-14">
+      <section className="mt-32 lg:mt-44 px-5 md:px-10 lg:px-14">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-14 items-start">
           <SlideIn direction="up">
             <div className="mono" style={{ color: "var(--muted)" }}>Leistungen</div>

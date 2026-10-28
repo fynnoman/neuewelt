@@ -437,7 +437,7 @@ export default function Nav() {
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((v) => !v)}
             className="inline-flex flex-col justify-center items-end relative"
-            style={{ width: 32, height: 32, gap: 6 }}
+            style={{ width: 44, height: 44, gap: 6, padding: "6px 0" }}
           >
             <span
               style={{

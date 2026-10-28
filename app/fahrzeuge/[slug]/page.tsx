@@ -21,10 +21,7 @@ export default async function VehiclePage({ params }: Props) {
       <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-3 px-3">
         {/* Sticky photo */}
         <div className="order-1">
-          <div
-            className="relative overflow-hidden"
-            style={{ position: "sticky", top: 12, height: "calc(100svh - 24px)" }}
-          >
+          <div className="relative overflow-hidden vehicle-sticky-photo">
             <Image
               src={v.image}
               alt={`${v.brand} ${v.model} ${v.variant}`}
@@ -53,7 +50,7 @@ export default async function VehiclePage({ params }: Props) {
         </div>
 
         {/* Content */}
-        <div className="order-2 px-6 lg:px-10 py-20">
+        <div className="order-2 px-5 lg:px-10 py-12 md:py-16 lg:py-20">
           <Link href="/fahrzeuge" className="small-caps rule-arrow inline-block">
             Zurück zum Bestand
           </Link>

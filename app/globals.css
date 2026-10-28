@@ -49,6 +49,48 @@ html, body {
   font-size: var(--step-body);
   line-height: 1.5;
   font-feature-settings: "ss01", "cv11";
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+html { scroll-behavior: smooth; }
+
+body { -webkit-tap-highlight-color: transparent; }
+
+img, svg, video { max-width: 100%; height: auto; }
+
+/* Prevent iOS Safari zoom on input focus: ensure base inputs ≥16px */
+input, select, textarea {
+  font-size: 16px;
+}
+@media (min-width: 768px) {
+  input, select, textarea { font-size: inherit; }
+}
+
+/* Safe-area aware paddings for notched iPhones (nutzbar als Utility) */
+.safe-x { padding-left: max(env(safe-area-inset-left), 0px); padding-right: max(env(safe-area-inset-right), 0px); }
+.safe-b { padding-bottom: max(env(safe-area-inset-bottom), 0px); }
+
+/* Fahrzeugankauf-Split: Sticky-Image ab lg, auf Mobile einfach aspect-based */
+.ankauf-image-wrap { aspect-ratio: 4 / 5; min-height: 40svh; }
+@media (min-width: 768px) {
+  .ankauf-image-wrap { min-height: 60svh; }
+}
+.ankauf-image-inner { position: relative; width: 100%; height: 100%; }
+@media (min-width: 1024px) {
+  .ankauf-image-inner { position: sticky; top: 90px; height: 90vh; }
+}
+
+/* Vehicle-Detail Sticky-Image: auf Mobile normale aspect-ratio, ab lg sticky volle Höhe */
+.vehicle-sticky-photo { aspect-ratio: 4 / 3; height: auto; width: 100%; }
+@media (min-width: 1024px) {
+  .vehicle-sticky-photo {
+    position: sticky;
+    top: 12px;
+    height: calc(100svh - 24px);
+    aspect-ratio: auto;
+  }
 }
 
 ::selection { background: var(--signal); color: var(--paper); }

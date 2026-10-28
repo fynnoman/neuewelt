@@ -40,8 +40,8 @@ export default function VehicleList({ vehicles }: { vehicles: Vehicle[] }) {
 
   return (
     <>
-      <nav className="mt-16 px-6 md:px-10 lg:px-14 flex flex-wrap items-center justify-between gap-6">
-        <ul className="flex flex-wrap gap-x-8 gap-y-3" style={{ fontSize: "1.05rem" }}>
+      <nav className="mt-12 md:mt-16 px-5 md:px-10 lg:px-14 flex flex-wrap items-center justify-between gap-4 md:gap-6">
+        <ul className="flex flex-wrap gap-x-5 md:gap-x-8 gap-y-3" style={{ fontSize: "0.98rem" }}>
           {SEGMENTS.map((s) => {
             const active = segment === s.key;
             return (
@@ -84,8 +84,8 @@ export default function VehicleList({ vehicles }: { vehicles: Vehicle[] }) {
         </label>
       </nav>
 
-      <section className="mt-16 px-3 md:px-6 lg:px-10">
-        <ul className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-16">
+      <section className="mt-12 md:mt-16 px-5 md:px-6 lg:px-10">
+        <ul className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-10 md:gap-y-16">
           {list.map((v, i) => (
             <motion.li
               key={v.slug}

@@ -10,7 +10,7 @@ export default async function FahrzeugePage() {
 
   return (
     <main className="pt-28 lg:pt-36">
-      <header className="px-6 md:px-10 lg:px-14">
+      <header className="px-5 md:px-10 lg:px-14">
         <div className="mono" style={{ color: "var(--muted)" }}>
           Fahrzeuge · {vehicles.length} aktuell im Hof
         </div>
@@ -33,7 +33,7 @@ export default async function FahrzeugePage() {
       <VehicleList vehicles={vehicles} />
 
       <section
-        className="mt-32 px-6 md:px-10"
+        className="mt-32 px-5 md:px-10"
         style={{ background: "var(--paper-sunk)", padding: "80px 48px" }}
       >
         <div className="mx-auto max-w-[1200px] grid grid-cols-1 md:grid-cols-[1fr_auto] items-end gap-8">

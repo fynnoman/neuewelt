@@ -70,16 +70,16 @@ export default async function Home() {
           className="relative h-full flex flex-col justify-between"
           style={{ minHeight: "100svh" }}
         >
-          <div className="flex items-center justify-between px-7 md:px-11 pt-28 lg:pt-32">
-            <div className="mono" style={{ color: "var(--paper)", opacity: 0.72 }}>
-              Saarlouis — Saarland · DE
+          <div className="flex items-center justify-between px-5 md:px-11 pt-24 md:pt-28 lg:pt-32">
+            <div className="mono" style={{ color: "var(--paper)", opacity: 0.72, fontSize: "0.72rem" }}>
+              Saarlouis · DE
             </div>
             <div className="mono hidden md:block" style={{ color: "var(--signal)" }}>
               {SITE.hours.weekday}
             </div>
           </div>
 
-          <div className="px-7 md:px-14 pb-16 lg:pb-24">
+          <div className="px-5 md:px-14 pb-14 md:pb-16 lg:pb-24">
               <SlideIn direction="up" delay={0.1}>
                 <div
                   className="mono"
@@ -117,13 +117,13 @@ export default async function Home() {
               </SlideIn>
 
               <SlideIn direction="up" delay={0.5}>
-                <div className="mt-10 flex flex-wrap gap-5">
+                <div className="mt-8 md:mt-10 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-5">
                   <MagneticButton href="/fahrzeuge" variant="solid">
                     Fahrzeuge ansehen <span>→</span>
                   </MagneticButton>
                   <Link
                     href="/ankauf"
-                    className="btn"
+                    className="btn justify-center sm:justify-start"
                     style={{
                       background: "transparent",
                       color: "var(--paper)",
@@ -144,7 +144,7 @@ export default async function Home() {
       </section>
 
       {/* AKTUELLE FAHRZEUGE */}
-      <section className="mt-16 md:mt-20 lg:mt-24 px-6 md:px-10 lg:px-14">
+      <section className="mt-16 md:mt-20 lg:mt-24 px-5 md:px-10 lg:px-14">
         <SlideIn direction="up">
           <div className="flex items-end justify-between flex-wrap gap-6">
             <div>
@@ -214,15 +214,8 @@ export default async function Home() {
       {/* FAHRZEUGANKAUF — split image/text, sticky image */}
       <section className="mt-24 md:mt-32 lg:mt-44 px-3">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-          <div className="relative overflow-hidden rounded-[var(--radius)]" style={{ aspectRatio: "4 / 5", minHeight: "60svh" }}>
-            <div
-              style={{
-                position: "sticky",
-                top: "90px",
-                height: "90vh",
-                width: "100%",
-              }}
-            >
+          <div className="relative overflow-hidden rounded-[var(--radius)] ankauf-image-wrap">
+            <div className="ankauf-image-inner">
               <div className="relative w-full h-full overflow-hidden rounded-[var(--radius)]">
                 <Image
                   src={ANKAUF_IMAGE}
@@ -286,7 +279,7 @@ export default async function Home() {
       </section>
 
       {/* SERVICE GRID */}
-      <section className="mt-24 md:mt-32 lg:mt-44 px-6 md:px-10 lg:px-14">
+      <section className="mt-24 md:mt-32 lg:mt-44 px-5 md:px-10 lg:px-14">
         <SlideIn direction="up">
           <div className="flex items-end justify-between flex-wrap gap-6">
             <div>
@@ -338,7 +331,7 @@ export default async function Home() {
       </section>
 
       {/* KAUFPROZESS — 4 steps */}
-      <section className="mt-24 md:mt-32 lg:mt-44 px-6 md:px-10 lg:px-14">
+      <section className="mt-24 md:mt-32 lg:mt-44 px-5 md:px-10 lg:px-14">
         <SlideIn direction="up">
           <div className="mono" style={{ color: "var(--muted)" }}>Ablauf</div>
           <h2
@@ -382,7 +375,7 @@ export default async function Home() {
       </section>
 
       {/* MARKEN */}
-      <section className="mt-24 md:mt-32 lg:mt-44 py-16 md:py-20 lg:py-28 px-6 md:px-10 lg:px-14">
+      <section className="mt-24 md:mt-32 lg:mt-44 py-16 md:py-20 lg:py-28 px-5 md:px-10 lg:px-14">
         <SlideIn direction="up">
           <div className="mono" style={{ color: "var(--muted)" }}>Marken</div>
           <h2
@@ -448,7 +441,7 @@ export default async function Home() {
 
       {/* SUCHAUFTRAG */}
       <section
-        className="mt-24 md:mt-32 lg:mt-44 px-6 md:px-10 lg:px-14 py-20"
+        className="mt-24 md:mt-32 lg:mt-44 px-5 md:px-10 lg:px-14 py-20"
         style={{ background: "var(--paper)" }}
       >
         <div className="mx-auto" style={{ maxWidth: 1200 }}>
@@ -496,7 +489,7 @@ export default async function Home() {
       </section>
 
       {/* KONTAKT */}
-      <section className="mt-24 md:mt-32 lg:mt-44 px-6 md:px-10 lg:px-14">
+      <section className="mt-24 md:mt-32 lg:mt-44 px-5 md:px-10 lg:px-14">
         <SlideIn direction="up">
           <div className="mono" style={{ color: "var(--muted)" }}>Kontakt</div>
           <h2
@@ -515,12 +508,12 @@ export default async function Home() {
           <div
             className="radius"
             style={{
-              background: "var(--fog-100)",
+              background: "var(--paper-sunk)",
               padding: "clamp(24px, 4vw, 36px) clamp(22px, 3.5vw, 32px)",
             }}
           >
-            <div className="mono" style={{ color: "var(--muted)" }}>Adresse</div>
-            <div style={{ marginTop: 18, color: "var(--muted)" }}>
+            <div className="mono" style={{ color: "var(--on-sunk-muted)" }}>Adresse</div>
+            <div style={{ marginTop: 18, color: "var(--on-sunk)" }}>
               {SITE.address.line1}
               <br />
               {SITE.address.line2}
@@ -529,12 +522,12 @@ export default async function Home() {
           <div
             className="radius"
             style={{
-              background: "var(--fog-100)",
+              background: "var(--paper-sunk)",
               padding: "clamp(24px, 4vw, 36px) clamp(22px, 3.5vw, 32px)",
             }}
           >
-            <div className="mono" style={{ color: "var(--muted)" }}>Öffnungszeiten</div>
-            <div style={{ marginTop: 18, color: "var(--muted)" }}>
+            <div className="mono" style={{ color: "var(--on-sunk-muted)" }}>Öffnungszeiten</div>
+            <div style={{ marginTop: 18, color: "var(--on-sunk)" }}>
               {SITE.hours.weekday}
               <br />
               {SITE.hours.saturday}
@@ -545,23 +538,22 @@ export default async function Home() {
           <div
             className="radius"
             style={{
-              background: "var(--fog-100)",
+              background: "var(--paper-sunk)",
               padding: "clamp(24px, 4vw, 36px) clamp(22px, 3.5vw, 32px)",
-              color: "var(--muted)",
             }}
           >
-            <div className="mono" style={{ color: "var(--muted)" }}>Direkt sprechen</div>
+            <div className="mono" style={{ color: "var(--on-sunk-muted)" }}>Direkt sprechen</div>
             <a
               href={SITE.contact.phoneLandlineHref}
               className="block"
-              style={{ marginTop: 18, color: "var(--muted)" }}
+              style={{ marginTop: 18, color: "var(--on-sunk)" }}
             >
               {SITE.contact.phoneLandline}
             </a>
-            <a href={SITE.contact.phoneHref} className="block" style={{ color: "var(--muted)" }}>
+            <a href={SITE.contact.phoneHref} className="block" style={{ color: "var(--on-sunk)" }}>
               {SITE.contact.phone}
             </a>
-            <a href={SITE.contact.emailHref} className="block" style={{ color: "var(--muted)" }}>
+            <a href={SITE.contact.emailHref} className="block" style={{ color: "var(--on-sunk)" }}>
               {SITE.contact.email}
             </a>
           </div>

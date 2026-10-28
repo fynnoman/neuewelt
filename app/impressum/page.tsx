@@ -2,7 +2,7 @@ import { SITE } from "@/lib/site";
 
 export default function ImpressumPage() {
   return (
-    <main className="pt-32 pb-24 px-6 md:px-10 lg:px-14">
+    <main className="pt-32 pb-24 px-5 md:px-10 lg:px-14">
       <div className="mx-auto measure-wide" style={{ maxWidth: 720 }}>
         <div className="small-caps">Impressum</div>
         <h1 className="display mt-6" style={{ fontSize: "clamp(2.4rem, 5vw, 3.6rem)" }}>

@@ -23,7 +23,7 @@ export default function AnkaufPage() {
 
   return (
     <main className="pt-28 lg:pt-36">
-      <header className="px-6 md:px-10 lg:px-14 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-10 items-end">
+      <header className="px-5 md:px-10 lg:px-14 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-10 items-end">
         <div>
           <div className="mono" style={{ color: "var(--muted)" }}>Fahrzeugankauf</div>
           <h1
@@ -74,7 +74,7 @@ export default function AnkaufPage() {
         </aside>
       </header>
 
-      <section className="mt-28 px-6 md:px-10 lg:px-14">
+      <section className="mt-28 px-5 md:px-10 lg:px-14">
         <Reveal>
           <div className="mono" style={{ color: "var(--muted)" }}>Fahrzeugdaten</div>
           <h2 className="display mt-5" style={{ fontSize: "clamp(2rem, 3.4vw, 2.8rem)", maxWidth: "20ch", letterSpacing: "-0.03em" }}>
@@ -146,7 +146,7 @@ export default function AnkaufPage() {
         )}
       </section>
 
-      <section className="mt-32 px-6 md:px-10 py-24" style={{ background: "var(--paper-sunk)" }}>
+      <section className="mt-32 px-5 md:px-10 py-24" style={{ background: "var(--paper-sunk)" }}>
         <div className="mx-auto max-w-[900px] text-center">
           <div className="mono" style={{ color: "var(--on-sunk-muted)" }}>Vor Ort</div>
           <p

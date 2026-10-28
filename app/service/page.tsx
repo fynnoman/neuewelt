@@ -60,7 +60,7 @@ const LEISTUNGEN = [
 export default function ServicePage() {
   return (
     <main className="pt-28 lg:pt-36">
-      <header className="px-6 md:px-10 lg:px-14">
+      <header className="px-5 md:px-10 lg:px-14">
         <div className="mono" style={{ color: "var(--muted)" }}>Leistungen</div>
         <h1
           className="display mt-6"
@@ -70,7 +70,7 @@ export default function ServicePage() {
         </h1>
       </header>
 
-      <section className="mt-16 lg:mt-20 px-6 md:px-10 lg:px-14">
+      <section className="mt-16 lg:mt-20 px-5 md:px-10 lg:px-14">
         <div
           className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-10 lg:gap-16 items-start"
           style={{ maxWidth: 1400, marginInline: "auto" }}
@@ -97,7 +97,7 @@ export default function ServicePage() {
         </div>
       </section>
 
-      <section className="mt-24 lg:mt-28 px-6 md:px-10 lg:px-14">
+      <section className="mt-24 lg:mt-28 px-5 md:px-10 lg:px-14">
         <div className="mx-auto" style={{ maxWidth: 1200 }}>
           <Reveal>
             <div className="mono" style={{ color: "var(--muted)" }}>Leistungen</div>
@@ -139,7 +139,7 @@ export default function ServicePage() {
         </div>
       </section>
 
-      <section className="mt-24 lg:mt-28 px-6 md:px-10 lg:px-14">
+      <section className="mt-24 lg:mt-28 px-5 md:px-10 lg:px-14">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Reveal>
             <article className="radius" style={{ background: "var(--paper-sunk)", padding: 36 }}>

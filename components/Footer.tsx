@@ -47,7 +47,7 @@ export default function Footer() {
         }}
       />
 
-      <div className="px-6 md:px-10 lg:px-14 pt-20 lg:pt-28 pb-10">
+      <div className="px-5 md:px-10 lg:px-14 pt-20 lg:pt-28 pb-10">
         {/* TOP: Brand + CTA line */}
         <div
           className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-10 lg:gap-16 items-end pb-16"

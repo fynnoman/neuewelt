@@ -71,9 +71,9 @@ export default function NewsletterModal() {
       {visible && (
         <motion.div
           key="nl-scrim"
-          className="fixed inset-0 z-[70] flex items-center justify-center"
+          className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center safe-x safe-b"
           style={{
-            padding: "20px",
+            padding: "12px",
             background: "rgba(10,11,12,0.28)",
             backdropFilter: "blur(10px) saturate(140%)",
             WebkitBackdropFilter: "blur(10px) saturate(140%)",
@@ -114,7 +114,7 @@ export default function NewsletterModal() {
             style={{
               width: "100%",
               maxWidth: 460,
-              padding: "clamp(28px, 4vw, 40px)",
+              padding: "clamp(22px, 5vw, 40px)",
               position: "relative",
             }}
           >
@@ -188,17 +188,7 @@ export default function NewsletterModal() {
                     >
                       E-Mail
                     </label>
-                    <div
-                      className="mt-3 flex items-center gap-2"
-                      style={{
-                        padding: "6px 6px 6px 14px",
-                        background: "rgba(255,255,255,0.6)",
-                        border: "1px solid rgba(10,11,12,0.1)",
-                        borderRadius: "var(--radius)",
-                        boxShadow:
-                          "inset 0 1px 0 rgba(255,255,255,0.9)",
-                      }}
-                    >
+                    <div className="mt-3 flex flex-col gap-2">
                       <input
                         type="email"
                         name="email"
@@ -208,23 +198,25 @@ export default function NewsletterModal() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         style={{
-                          flex: 1,
-                          background: "transparent",
-                          border: "none",
+                          width: "100%",
+                          background: "rgba(255,255,255,0.6)",
+                          border: "1px solid rgba(10,11,12,0.1)",
                           outline: "none",
-                          padding: "0.65rem 0",
-                          fontSize: "0.98rem",
+                          padding: "0.9rem 1rem",
+                          fontSize: "16px",
                           color: "var(--ink)",
                           fontFamily: "var(--font-sans)",
+                          borderRadius: "var(--radius)",
+                          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.9)",
                         }}
                       />
                       <button
                         type="submit"
-                        className="btn"
+                        className="btn justify-center"
                         style={{
-                          padding: "0.6rem 1rem",
-                          fontSize: "0.9rem",
-                          borderRadius: "calc(var(--radius) - 2px)",
+                          width: "100%",
+                          padding: "0.8rem 1rem",
+                          fontSize: "0.95rem",
                         }}
                       >
                         Abonnieren
