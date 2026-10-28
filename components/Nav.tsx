@@ -104,6 +104,36 @@ export default function Nav() {
 
   return (
     <>
+      {/* Rotes Signet oben links – auf allen Seiten anklickbar, führt zur Startseite */}
+      <Link
+        href="/"
+        aria-label="Zurück zur Startseite · Neue Welt Automobile"
+        className="fixed z-50 hidden lg:inline-flex items-center justify-center"
+        style={{
+          top: 18,
+          left: 18,
+          width: 56,
+          height: 56,
+          borderRadius: 999,
+          background: "rgba(251,251,249,0.9)",
+          backdropFilter: "saturate(180%) blur(16px)",
+          WebkitBackdropFilter: "saturate(180%) blur(16px)",
+          border: "1px solid rgba(10,11,12,0.08)",
+          boxShadow:
+            "inset 0 1px 0 rgba(255,255,255,0.9), 0 10px 22px -14px rgba(10,11,12,0.3)",
+          transition: "transform 240ms cubic-bezier(0.22,1,0.36,1)",
+        }}
+      >
+        <Image
+          src="/brand/signet-red.png"
+          alt="Neue Welt Automobile"
+          width={512}
+          height={512}
+          priority
+          style={{ width: 36, height: 36, objectFit: "contain" }}
+        />
+      </Link>
+
       {/* Desktop: fester Menü-Trigger rechts, nur sichtbar, Panel öffnet bei Hover */}
       <div
         className="hidden lg:block fixed top-0 right-0 bottom-0 z-50"
@@ -423,12 +453,12 @@ export default function Nav() {
         >
           <Link href="/" aria-label={SITE.name} onClick={() => setMobileOpen(false)}>
             <Image
-              src="/brand/logo.png"
+              src="/brand/signet-red.png"
               alt={SITE.name}
-              width={520}
-              height={176}
+              width={512}
+              height={512}
               priority
-              style={{ height: "32px", width: "auto" }}
+              style={{ width: 36, height: 36, objectFit: "contain" }}
             />
           </Link>
           <button
