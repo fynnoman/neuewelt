@@ -430,14 +430,75 @@ export default async function Home() {
               </SlideIn>
             </div>
           </div>
-          <div className="relative overflow-hidden rounded-[var(--radius)]" style={{ aspectRatio: "5 / 4", minHeight: "50svh" }}>
-            <Image
-              src={TEASER_IMAGE}
-              alt="Neue Welt Automobile Saarlouis"
-              fill
-              sizes="(min-width: 1024px) 48vw, 94vw"
-              className="object-cover"
-            />
+          <div className="relative" style={{ aspectRatio: "5 / 4", minHeight: "50svh" }}>
+            {/* Basis-Bild mit Inner-Highlight-Rand für mehr Material-Depth */}
+            <div
+              className="absolute inset-0 overflow-hidden rounded-[var(--radius)]"
+              style={{
+                boxShadow:
+                  "inset 0 1px 0 rgba(255,255,255,0.4), 0 24px 60px -24px rgba(10,11,12,0.4)",
+              }}
+            >
+              <Image
+                src={TEASER_IMAGE}
+                alt="Neue Welt Automobile Saarlouis"
+                fill
+                sizes="(min-width: 1024px) 48vw, 94vw"
+                className="object-cover"
+              />
+              {/* Subtiler diagonaler Verlauf für Depth hinter den Chips */}
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(10,11,12,0.0) 55%, rgba(10,11,12,0.35))",
+                }}
+              />
+            </div>
+
+            {/* Eyebrow-Chip oben links */}
+            <span
+              className="liquid-chip absolute"
+              style={{ top: 20, left: 20 }}
+            >
+              Seit 2001
+            </span>
+
+            {/* Floating Info-Card unten rechts – ragt leicht über die Bildkante */}
+            <div
+              className="liquid absolute flex flex-col"
+              style={{
+                right: -10,
+                bottom: -14,
+                maxWidth: "min(300px, 80%)",
+                padding: "clamp(18px, 2.4vw, 24px) clamp(20px, 2.6vw, 26px)",
+                color: "var(--ink)",
+              }}
+            >
+              <span className="mono" style={{ color: "var(--muted)" }}>
+                Vor Ort
+              </span>
+              <span
+                className="display"
+                style={{ fontSize: "clamp(1.1rem, 1.6vw, 1.3rem)", letterSpacing: "-0.02em", marginTop: 10 }}
+              >
+                Provinzialstraße 144
+              </span>
+              <span style={{ color: "var(--muted)", fontSize: "0.92rem", marginTop: 2 }}>
+                66740 Saarlouis-Lisdorf
+              </span>
+              <a
+                href={`https://maps.google.com/?q=${encodeURIComponent(
+                  `${SITE.address.line1} ${SITE.address.line2}`
+                )}`}
+                target="_blank"
+                rel="noopener"
+                className="mono mt-4 inline-flex items-center gap-2"
+                style={{ color: "var(--ink)", fontSize: "0.76rem" }}
+              >
+                Route planen <span style={{ color: "var(--signal)" }}>→</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>
