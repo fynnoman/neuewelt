@@ -11,9 +11,8 @@ type Props = {
 const EURO = new Intl.NumberFormat("de-DE");
 const EURO_DEC = new Intl.NumberFormat("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-// Beispielzins: Targobank Händlerfinanzierung bewegt sich für Gebrauchtwagen
-// typischerweise zwischen ~4% und ~7% eff. p.a. — 5,99% ist eine faire Mitte.
-const DEFAULT_RATE = 5.99;
+// Fester Zins für die Rate-Vorschau. Verbindliche Konditionen kommen von der Targobank.
+const DEFAULT_RATE = 4.99;
 
 function monthlyPayment(principal: number, annualRatePct: number, months: number, balloon = 0): number {
   if (months <= 0 || principal <= 0) return 0;
@@ -30,7 +29,8 @@ export default function VehicleFinanceCalculator({ price, vehicleTitle, contactE
   const [laufzeit, setLaufzeit] = useState<number>(48);
   const [withSchluss, setWithSchluss] = useState<boolean>(false);
   const [schlussrate, setSchlussrate] = useState<number>(Math.round(price * 0.25));
-  const [rate, setRate] = useState<number>(DEFAULT_RATE);
+  // Zinssatz wird nicht in der UI gezeigt. Fester Default rein für die Rate-Vorschau.
+  const rate = DEFAULT_RATE;
 
   const maxAnzahlung = Math.max(0, price - 500);
   const financedAmount = Math.max(0, price - Math.min(anzahlung, maxAnzahlung));
@@ -42,18 +42,16 @@ export default function VehicleFinanceCalculator({ price, vehicleTitle, contactE
   );
 
   const totalPaid = anzahlung + monthly * laufzeit + effectiveSchluss;
-  const totalInterest = Math.max(0, totalPaid - price);
 
   const anfrageHref =
     `${contactEmailHref}?subject=${encodeURIComponent(`Finanzierungsanfrage · ${vehicleTitle}`)}` +
     `&body=${encodeURIComponent(
       `Fahrzeug: ${vehicleTitle}\nPreis: ${EURO.format(price)} €\n\n` +
-        `Beispielrechnung:\n` +
+        `Wunschkonditionen:\n` +
         `· Anzahlung: ${EURO.format(anzahlung)} €\n` +
         `· Laufzeit: ${laufzeit} Monate\n` +
         `${withSchluss ? `· Schlussrate: ${EURO.format(Math.round(effectiveSchluss))} €\n` : ""}` +
-        `· Zinssatz: ${rate.toLocaleString("de-DE")}% eff. p.a. (Beispiel)\n` +
-        `· Monatliche Rate: ca. ${EURO_DEC.format(monthly)} €\n\n` +
+        `· Monatliche Beispielrate: ca. ${EURO_DEC.format(monthly)} €\n\n` +
         `Bitte um ein verbindliches Angebot über die Targobank. Vielen Dank.`
     )}`;
 
@@ -197,30 +195,6 @@ export default function VehicleFinanceCalculator({ price, vehicleTitle, contactE
             )}
           </div>
 
-          {/* Zinssatz */}
-          <div className="md:col-span-2">
-            <label className="mono block" style={{ color: "var(--muted)", marginBottom: 8 }}>
-              Effektiver Jahreszins (Beispiel)
-            </label>
-            <div className="flex items-center gap-3">
-              <input
-                type="range"
-                min={2}
-                max={9}
-                step={0.1}
-                value={rate}
-                onChange={(e) => setRate(Number(e.target.value))}
-                className="flex-1"
-                style={{ accentColor: "var(--signal)" }}
-              />
-              <div className="display" style={{ fontSize: "1.1rem", minWidth: 110, textAlign: "right" }}>
-                {rate.toLocaleString("de-DE")}%
-              </div>
-            </div>
-            <p style={{ fontSize: "0.78rem", color: "var(--muted)", marginTop: 4 }}>
-              Der tatsächliche Zinssatz hängt von Ihrer Bonität ab und wird von der Targobank verbindlich ermittelt.
-            </p>
-          </div>
         </div>
 
         {/* Ergebnis */}
@@ -258,12 +232,8 @@ export default function VehicleFinanceCalculator({ price, vehicleTitle, contactE
               </div>
             )}
             <div>
-              <dt className="mono" style={{ color: "var(--on-sunk-muted)" }}>Gesamt</dt>
-              <dd className="mt-1" style={{ color: "var(--on-sunk)" }}>{EURO.format(Math.round(totalPaid))} €</dd>
-            </div>
-            <div>
-              <dt className="mono" style={{ color: "var(--on-sunk-muted)" }}>Zinskosten</dt>
-              <dd className="mt-1" style={{ color: "var(--on-sunk)" }}>{EURO.format(Math.round(totalInterest))} €</dd>
+              <dt className="mono" style={{ color: "var(--on-sunk-muted)" }}>Laufzeit</dt>
+              <dd className="mt-1" style={{ color: "var(--on-sunk)" }}>{laufzeit} Monate</dd>
             </div>
           </dl>
 

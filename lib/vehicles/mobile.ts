@@ -246,8 +246,7 @@ function mapAdToVehicle(ad: XmlAd): Vehicle | null {
   const featureNodes = asArray(vehicle["ad:features"]?.["ad:feature"]);
   const highlights = featureNodes
     .map((f) => readLocalDesc(f["resource:local-description"]))
-    .filter((s): s is string => Boolean(s))
-    .slice(0, 10);
+    .filter((s): s is string => Boolean(s));
 
   const variant = String(modelDesc ?? "");
 

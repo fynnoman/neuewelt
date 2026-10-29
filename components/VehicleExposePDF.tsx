@@ -48,8 +48,8 @@ const styles = StyleSheet.create({
   },
   heroImage: {
     width: "100%",
-    height: 260,
-    objectFit: "cover",
+    height: 320,
+    objectFit: "contain",
     marginBottom: 20,
   },
   titleBlock: {
