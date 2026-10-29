@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getVehicle } from "@/lib/vehicles";
 import { SITE } from "@/lib/site";
 import VehicleGallery from "@/components/VehicleGallery";
+import VehicleFinanceCalculator from "@/components/VehicleFinanceCalculator";
 
 // ISR: Seite spätestens alle 15 Minuten neu generieren. Daten aus mobile.de
 // werden auf Fetch-Ebene identisch gecacht; neue und geänderte Inserate
@@ -122,6 +123,12 @@ export default async function VehiclePage({ params }: Props) {
               </div>
             </details>
           )}
+
+          <VehicleFinanceCalculator
+            price={v.price}
+            vehicleTitle={`${v.brand} ${v.model}${v.variant ? ` ${v.variant}` : ""}`}
+            contactEmailHref={SITE.contact.emailHref}
+          />
 
           <h2 className="display mt-14" style={{ fontSize: "1.4rem" }}>
             Ausstattung · Auszug
