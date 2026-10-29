@@ -150,14 +150,14 @@ export default function VehicleList({ vehicles }: { vehicles: Vehicle[] }) {
                 </div>
 
                 <div className="mt-5">
-                  <div className="display" style={{ fontSize: "1.3rem", letterSpacing: "-0.025em" }}>
+                  <div className="display" style={{ fontSize: "1.5rem", letterSpacing: "-0.025em" }}>
                     {v.brand} {v.model}
                   </div>
                   <div
                     className="mt-1"
                     style={{
                       color: "var(--muted)",
-                      fontSize: "0.95rem",
+                      fontSize: "1.05rem",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
                       whiteSpace: "nowrap",
@@ -166,8 +166,8 @@ export default function VehicleList({ vehicles }: { vehicles: Vehicle[] }) {
                     {v.variant}
                   </div>
                   <div
-                    className="display mt-2"
-                    style={{ fontSize: "1.25rem", color: "var(--ink)", letterSpacing: "-0.01em" }}
+                    className="display mt-3"
+                    style={{ fontSize: "1.4rem", color: "var(--ink)", letterSpacing: "-0.01em" }}
                   >
                     {v.price.toLocaleString("de-DE")} €
                   </div>
@@ -175,7 +175,7 @@ export default function VehicleList({ vehicles }: { vehicles: Vehicle[] }) {
 
                 <div
                   className="mt-4 flex items-center gap-5 mono"
-                  style={{ color: "var(--muted)", fontVariantNumeric: "tabular-nums", fontSize: "0.74rem" }}
+                  style={{ color: "var(--muted)", fontVariantNumeric: "tabular-nums", fontSize: "0.82rem" }}
                 >
                   <span>EZ {v.year}</span>
                   <span>·</span>

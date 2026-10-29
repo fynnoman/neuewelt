@@ -165,6 +165,21 @@ const styles = StyleSheet.create({
     fontSize: 8,
     color: "#6D6E72",
   },
+  watermarkWrap: {
+    position: "absolute",
+    top: 180,
+    left: 0,
+    right: 0,
+    bottom: 180,
+    alignItems: "center",
+    justifyContent: "center",
+    opacity: 0.07,
+    transform: "rotate(-25deg)",
+  },
+  watermarkImage: {
+    width: 520,
+    objectFit: "contain",
+  },
 });
 
 const EURO_FORMAT = new Intl.NumberFormat("de-DE");
@@ -184,9 +199,16 @@ export function VehicleExposePDF({ vehicle: v, siteOrigin = "https://neue-welt-a
   const hero = v.image || v.images?.[0];
   const extraImages = (v.images ?? []).filter((img) => img !== hero).slice(0, 9);
 
+  const watermarkUrl = `${siteOrigin}/brand/logo.png`;
+
   return (
     <Document title={`Exposé ${v.brand} ${v.model}`} author={SITE.name}>
       <Page size="A4" style={styles.page}>
+        {/* Wasserzeichen – erscheint auf jeder Seite im Hintergrund */}
+        <View style={styles.watermarkWrap} fixed>
+          <Image src={watermarkUrl} style={styles.watermarkImage} />
+        </View>
+
         <View style={styles.headerRow}>
           <View>
             <Text style={styles.brand}>Neue Welt Automobile</Text>
