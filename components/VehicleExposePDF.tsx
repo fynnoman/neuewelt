@@ -157,13 +157,25 @@ const styles = StyleSheet.create({
     bottom: 24,
     left: 40,
     right: 40,
-    paddingTop: 12,
+    paddingTop: 10,
     borderTopWidth: 1,
     borderTopColor: "#D4D2CC",
     flexDirection: "row",
+    alignItems: "flex-end",
     justifyContent: "space-between",
+    gap: 24,
     fontSize: 8,
     color: "#6D6E72",
+  },
+  footerLeft: {
+    flexGrow: 1,
+    flexShrink: 1,
+    maxWidth: 380,
+    lineHeight: 1.5,
+  },
+  footerRight: {
+    flexShrink: 0,
+    textAlign: "right",
   },
   watermarkWrap: {
     position: "absolute",
@@ -285,13 +297,19 @@ export function VehicleExposePDF({ vehicle: v, siteOrigin = "https://neue-welt-a
         ) : null}
 
         <View style={styles.footer} fixed>
-          <Text>
-            {SITE.name} · {SITE.address.line1} · {SITE.address.line2} ·{" "}
-            {SITE.contact.phoneLandline} · {SITE.contact.email}
-          </Text>
-          <Link src={detailUrl}>
-            <Text>{SITE.domain}</Text>
-          </Link>
+          <View style={styles.footerLeft}>
+            <Text>
+              {SITE.name} · {SITE.address.line1} · {SITE.address.line2}
+            </Text>
+            <Text>
+              {SITE.contact.phoneLandline} · {SITE.contact.email}
+            </Text>
+          </View>
+          <View style={styles.footerRight}>
+            <Link src={detailUrl}>
+              <Text>{SITE.domain}</Text>
+            </Link>
+          </View>
         </View>
       </Page>
     </Document>
