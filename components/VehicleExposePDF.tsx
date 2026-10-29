@@ -184,18 +184,23 @@ const styles = StyleSheet.create({
   },
   watermarkWrap: {
     position: "absolute",
-    top: 180,
-    left: 0,
-    right: 0,
-    bottom: 180,
+    top: -120,
+    left: -120,
+    right: -120,
+    bottom: -120,
+    flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
-    justifyContent: "center",
-    opacity: 0.07,
-    transform: "rotate(-25deg)",
+    justifyContent: "space-around",
+    opacity: 0.05,
+    transform: "rotate(-22deg)",
   },
-  watermarkImage: {
-    width: 520,
+  watermarkTile: {
+    width: 110,
+    height: 38,
     objectFit: "contain",
+    marginHorizontal: 20,
+    marginVertical: 18,
   },
 });
 
@@ -221,9 +226,11 @@ export function VehicleExposePDF({ vehicle: v, siteOrigin = "https://neue-welt-a
   return (
     <Document title={`Exposé ${v.brand} ${v.model}`} author={SITE.name}>
       <Page size="A4" style={styles.page}>
-        {/* Wasserzeichen – erscheint auf jeder Seite im Hintergrund */}
+        {/* Wasserzeichen – gekacheltes Logo-Muster auf jeder Seite im Hintergrund */}
         <View style={styles.watermarkWrap} fixed>
-          <Image src={watermarkUrl} style={styles.watermarkImage} />
+          {Array.from({ length: 60 }).map((_, i) => (
+            <Image key={`wm-${i}`} src={watermarkUrl} style={styles.watermarkTile} />
+          ))}
         </View>
 
         <View style={styles.headerRow}>
