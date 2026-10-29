@@ -130,24 +130,46 @@ export default async function VehiclePage({ params }: Props) {
             contactEmailHref={SITE.contact.emailHref}
           />
 
-          <h2 className="display mt-14" style={{ fontSize: "1.4rem" }}>
-            Ausstattung · Auszug
-          </h2>
-          <ul className="mt-6 flex flex-col">
-            {v.highlights.map((h) => (
-              <li
-                key={h}
-                className="flex items-baseline justify-between gap-6 py-3"
-                style={{ borderBottom: "1px dotted var(--fog-300)" }}
+          {v.highlights.length > 0 && (
+            <details
+              className="mt-14 group"
+              style={{
+                borderTop: "1px solid var(--fog-200)",
+                borderBottom: "1px solid var(--fog-200)",
+              }}
+            >
+              <summary
+                className="flex items-center justify-between cursor-pointer list-none"
+                style={{ padding: "18px 0" }}
               >
-                <span style={{ color: "var(--ink)" }}>{h}</span>
-                <span style={{ color: "var(--muted)", fontSize: "0.85rem" }}>· enthalten</span>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-6" style={{ fontSize: "0.9rem", color: "var(--muted)" }}>
-            Vollständige Ausstattungs- und Historienliste senden wir auf Anfrage.
-          </p>
+                <span className="display" style={{ fontSize: "1.2rem", letterSpacing: "-0.02em" }}>
+                  Ausstattung ({v.highlights.length})
+                </span>
+                <span
+                  aria-hidden
+                  className="transition-transform duration-300 ease-out group-open:rotate-45"
+                  style={{ color: "var(--signal)", fontSize: "1.4rem", lineHeight: 1 }}
+                >
+                  +
+                </span>
+              </summary>
+              <ul className="pb-4 flex flex-col">
+                {v.highlights.map((h) => (
+                  <li
+                    key={h}
+                    className="flex items-baseline justify-between gap-6 py-3"
+                    style={{ borderTop: "1px dotted var(--fog-300)" }}
+                  >
+                    <span style={{ color: "var(--ink)" }}>{h}</span>
+                    <span style={{ color: "var(--muted)", fontSize: "0.85rem" }}>· enthalten</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="pb-6" style={{ fontSize: "0.86rem", color: "var(--muted)" }}>
+                Vollständige Ausstattungs- und Historienliste senden wir auf Anfrage.
+              </p>
+            </details>
+          )}
 
           <div className="mt-16 flex flex-wrap gap-4">
             <a
