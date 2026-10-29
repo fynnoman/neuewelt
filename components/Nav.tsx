@@ -104,7 +104,7 @@ export default function Nav() {
 
   return (
     <>
-      {/* Rotes Signet oben links – auf allen Seiten anklickbar, führt zur Startseite */}
+      {/* Logo-Pille oben links – auf allen Seiten anklickbar, führt zur Startseite */}
       <Link
         href="/"
         aria-label="Zurück zur Startseite · Neue Welt Automobile"
@@ -112,8 +112,8 @@ export default function Nav() {
         style={{
           top: 18,
           left: 18,
-          width: 56,
           height: 56,
+          padding: "0 20px",
           borderRadius: 999,
           background: "rgba(251,251,249,0.9)",
           backdropFilter: "saturate(180%) blur(16px)",
@@ -125,12 +125,12 @@ export default function Nav() {
         }}
       >
         <Image
-          src="/brand/signet-black.png"
+          src="/brand/logo.png"
           alt="Neue Welt Automobile"
-          width={512}
-          height={512}
+          width={2172}
+          height={724}
           priority
-          style={{ width: 36, height: 36, objectFit: "contain" }}
+          style={{ height: 30, width: "auto", display: "block" }}
         />
       </Link>
 
@@ -453,12 +453,12 @@ export default function Nav() {
         >
           <Link href="/" aria-label={SITE.name} onClick={() => setMobileOpen(false)}>
             <Image
-              src="/brand/signet-black.png"
+              src="/brand/logo.png"
               alt={SITE.name}
-              width={512}
-              height={512}
+              width={2172}
+              height={724}
               priority
-              style={{ width: 36, height: 36, objectFit: "contain" }}
+              style={{ height: 26, width: "auto", display: "block" }}
             />
           </Link>
           <button
