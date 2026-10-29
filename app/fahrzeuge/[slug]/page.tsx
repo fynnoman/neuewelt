@@ -169,6 +169,17 @@ export default async function VehiclePage({ params }: Props) {
               Exposé
               <span style={{ color: "var(--signal)" }}>↓</span>
             </a>
+            {v.mobileAdUrl && (
+              <a
+                href={v.mobileAdUrl}
+                target="_blank"
+                rel="noopener"
+                className="btn-ghost rule-arrow"
+                style={{ alignSelf: "center" }}
+              >
+                Auf mobile.de ansehen
+              </a>
+            )}
           </div>
           <div className="mt-6 flex flex-col gap-1">
             <a href={SITE.contact.phoneLandlineHref} className="btn-ghost rule-arrow">

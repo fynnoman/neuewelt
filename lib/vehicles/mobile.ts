@@ -20,7 +20,7 @@ import type { Vehicle, VehicleListOptions, VehiclesSource } from "./types";
  */
 
 const BASE = "https://services.mobile.de/search-api/search";
-const AD_IMAGES = "https://services.mobile.de/search-api/ad";
+const AD_DETAIL = "https://services.mobile.de/search-api/ad";
 const DEFAULT_SELLER_ID = "3318917";
 const PAGE_SIZE = 100; // Max per docs
 const REVALIDATE_SECONDS = 900;
@@ -334,11 +334,11 @@ async function fetchPage(sellerId: string, page: number): Promise<XmlSearchResul
   }
 }
 
-async function fetchAdImages(adId: string): Promise<string[]> {
+async function fetchAdDetails(adId: string): Promise<{ images: string[]; description?: string }> {
   const auth = buildAuthHeader();
-  if (!auth) return [];
+  if (!auth) return { images: [] };
 
-  const url = `${AD_IMAGES}/${encodeURIComponent(adId)}/images`;
+  const url = `${AD_DETAIL}/${encodeURIComponent(adId)}`;
 
   const res = await fetch(url, {
     headers: {
@@ -351,8 +351,8 @@ async function fetchAdImages(adId: string): Promise<string[]> {
   });
 
   if (!res.ok) {
-    console.error(`[mobile.de] images HTTP ${res.status} für ad ${adId}`);
-    return [];
+    console.error(`[mobile.de] ad detail HTTP ${res.status} für ${adId}`);
+    return { images: [] };
   }
 
   const xml = await res.text();
@@ -364,17 +364,34 @@ async function fetchAdImages(adId: string): Promise<string[]> {
     parseTagValue: false,
     trimValues: true,
     processEntities: true,
+    cdataPropName: "#cdata",
   });
 
   try {
     const parsed = parser.parse(xml) as {
-      "ad:images"?: XmlImages;
+      "ad:ad"?: XmlAd;
     };
-    const { all } = pickBestImage(parsed["ad:images"]);
-    return all;
+    const ad = parsed["ad:ad"];
+    if (!ad) return { images: [] };
+
+    const { all } = pickBestImage(ad["ad:images"]);
+
+    const rawDesc = ad["ad:description"] as
+      | string
+      | { "#text"?: string; "#cdata"?: string }
+      | undefined;
+    let description: string | undefined;
+    if (typeof rawDesc === "string") {
+      description = rawDesc.trim();
+    } else if (rawDesc && typeof rawDesc === "object") {
+      description = (rawDesc["#cdata"] ?? rawDesc["#text"] ?? "").toString().trim();
+    }
+    if (!description) description = undefined;
+
+    return { images: all, description };
   } catch (err) {
-    console.error("[mobile.de] images XML parse error:", err);
-    return [];
+    console.error("[mobile.de] ad detail XML parse error:", err);
+    return { images: [] };
   }
 }
 
@@ -462,17 +479,18 @@ export const mobileSource: VehiclesSource = {
     }
     if (!match) return null;
 
-    // Für die Detailseite: komplette Galerie nachladen (die Search-API
-    // liefert in der Liste nur ein Preview-Bild pro Inserat).
+    // Für die Detailseite: Komplette Galerie und Fließtext-Beschreibung
+    // vom einzelnen Ad-Endpoint nachladen. Die Search-API gibt in der Liste
+    // nur ein Preview-Bild pro Inserat und die Beschreibung oft gekürzt.
     if (match.mobileAdId) {
-      const allImages = await fetchAdImages(match.mobileAdId);
+      const { images: allImages, description: detailDesc } = await fetchAdDetails(match.mobileAdId);
+      const enriched: Vehicle = { ...match };
       if (allImages.length > 0) {
-        return {
-          ...match,
-          image: allImages[0] || match.image,
-          images: allImages,
-        };
+        enriched.image = allImages[0] || match.image;
+        enriched.images = allImages;
       }
+      if (detailDesc) enriched.description = detailDesc;
+      return enriched;
     }
 
     return match;

@@ -125,7 +125,7 @@ export default function Nav() {
         }}
       >
         <Image
-          src="/brand/signet-red.png"
+          src="/brand/signet-black.png"
           alt="Neue Welt Automobile"
           width={512}
           height={512}
@@ -453,7 +453,7 @@ export default function Nav() {
         >
           <Link href="/" aria-label={SITE.name} onClick={() => setMobileOpen(false)}>
             <Image
-              src="/brand/signet-red.png"
+              src="/brand/signet-black.png"
               alt={SITE.name}
               width={512}
               height={512}
