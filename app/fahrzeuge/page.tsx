@@ -47,7 +47,7 @@ export default async function FahrzeugePage() {
             </h2>
             <p className="lead mt-4 measure" style={{ fontSize: "1.05rem", color: "var(--on-sunk-muted)" }}>
               Marke, Budget, Mindestanforderungen angeben. Wir melden uns,
-              sobald ein passender Wagen in den Hof kommt.
+              sobald ein passender Wagen in den Bestand kommt.
             </p>
           </div>
           <Link href={SITE.contact.emailHref} className="btn" style={{ background: "var(--paper)", color: "var(--ink)" }}>

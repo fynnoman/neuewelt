@@ -474,7 +474,7 @@ export default async function Home() {
                   style={{ color: "var(--ink-soft)", maxWidth: "48ch" }}
                 >
                   Sagen Sie uns, was Sie suchen. Marke, Budget, Mindestanforderungen.
-                  Wir melden uns, sobald ein passender Wagen in den Hof kommt.
+                  Wir melden uns, sobald ein passender Wagen in den Bestand kommt.
                 </p>
               </SlideIn>
             </div>
