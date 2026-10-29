@@ -28,10 +28,15 @@ const styles = StyleSheet.create({
     color: "#0A0B0C",
     textTransform: "uppercase",
   },
+  headerLogo: {
+    height: 36,
+    width: 108, // 3:1 Verhältnis vom Original 2172:724
+    objectFit: "contain",
+  },
   domain: {
     fontSize: 9,
     color: "#6D6E72",
-    marginTop: 2,
+    marginTop: 6,
   },
   docTitle: {
     fontSize: 10,
@@ -223,7 +228,7 @@ export function VehicleExposePDF({ vehicle: v, siteOrigin = "https://neue-welt-a
 
         <View style={styles.headerRow}>
           <View>
-            <Text style={styles.brand}>Neue Welt Automobile</Text>
+            <Image src={`${siteOrigin}/brand/logo.png`} style={styles.headerLogo} />
             <Text style={styles.domain}>{SITE.domain}</Text>
           </View>
           <View>
