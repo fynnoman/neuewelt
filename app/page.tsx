@@ -84,14 +84,14 @@ export default async function Home() {
               <a
                 href={SITE.contact.phoneLandlineHref}
                 className="mono"
-                style={{ color: "var(--paper)" }}
+                style={{ color: "var(--signal)" }}
               >
                 {SITE.contact.phoneLandline}
               </a>
               <a
                 href={SITE.contact.phoneHref}
                 className="mono"
-                style={{ color: "var(--paper)", opacity: 0.72, fontSize: "0.7rem" }}
+                style={{ color: "var(--signal)", opacity: 0.85, fontSize: "0.7rem" }}
               >
                 {SITE.contact.phone}
               </a>

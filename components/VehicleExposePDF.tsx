@@ -6,7 +6,10 @@ Font.registerHyphenationCallback((word) => [word]);
 
 const styles = StyleSheet.create({
   page: {
-    padding: 40,
+    paddingTop: 40,
+    paddingLeft: 40,
+    paddingRight: 40,
+    paddingBottom: 50,
     fontFamily: "Helvetica",
     fontSize: 10,
     color: "#0A0B0C",
@@ -29,6 +32,20 @@ const styles = StyleSheet.create({
   headerRight: {
     flexShrink: 0,
     textAlign: "right",
+  },
+  headerContact: {
+    marginTop: 14,
+    fontSize: 8,
+    color: "#26272A",
+    textAlign: "right",
+    lineHeight: 1.5,
+  },
+  headerContactMuted: {
+    marginTop: 14,
+    fontSize: 8,
+    color: "#6D6E72",
+    textAlign: "right",
+    lineHeight: 1.5,
   },
   brand: {
     fontSize: 11,
@@ -146,16 +163,27 @@ const styles = StyleSheet.create({
   featureList: {
     flexDirection: "row",
     flexWrap: "wrap",
+    marginBottom: 10,
   },
-  featureItem: {
+  featureCell: {
     width: "50%",
-    paddingRight: 10,
-    marginBottom: 5,
-    fontSize: 10,
-    color: "#0A0B0C",
+    paddingRight: 12,
+    marginBottom: 6,
+  },
+  featureRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
   },
   bullet: {
     color: "#D01A20",
+    marginRight: 4,
+    fontSize: 10,
+  },
+  featureText: {
+    flex: 1,
+    fontSize: 10,
+    color: "#0A0B0C",
+    lineHeight: 1.4,
   },
   description: {
     fontSize: 10,
@@ -174,30 +202,14 @@ const styles = StyleSheet.create({
     padding: 2,
     objectFit: "cover",
   },
-  footer: {
+  footerSlim: {
     position: "absolute",
-    bottom: 24,
+    bottom: 20,
     left: 40,
     right: 40,
-    paddingTop: 10,
-    borderTopWidth: 1,
-    borderTopColor: "#D4D2CC",
-    flexDirection: "row",
-    alignItems: "flex-end",
-    justifyContent: "space-between",
-    gap: 24,
     fontSize: 8,
     color: "#6D6E72",
-  },
-  footerLeft: {
-    flexGrow: 1,
-    flexShrink: 1,
-    maxWidth: 380,
-    lineHeight: 1.5,
-  },
-  footerRight: {
-    flexShrink: 0,
-    textAlign: "right",
+    textAlign: "center",
   },
   watermarkWrap: {
     position: "absolute",
@@ -258,6 +270,15 @@ export function VehicleExposePDF({ vehicle: v, siteOrigin = "https://neue-welt-a
           <View style={styles.headerRight}>
             <Text style={styles.docTitle}>Fahrzeug-Exposé</Text>
             <Text style={styles.docDate}>Stand {today}</Text>
+            <View style={styles.headerContact}>
+              <Text>{SITE.name}</Text>
+              <Text>{SITE.address.line1}</Text>
+              <Text>{SITE.address.line2}</Text>
+            </View>
+            <View style={styles.headerContactMuted}>
+              <Text>{SITE.contact.phoneLandline}</Text>
+              <Text>{SITE.contact.email}</Text>
+            </View>
           </View>
         </View>
 
@@ -303,12 +324,15 @@ export function VehicleExposePDF({ vehicle: v, siteOrigin = "https://neue-welt-a
 
         {v.highlights && v.highlights.length > 0 ? (
           <>
-            <Text style={styles.sectionTitle}>Ausstattung · Auszug</Text>
+            <Text style={styles.sectionTitle}>Ausstattung</Text>
             <View style={styles.featureList}>
               {v.highlights.map((h) => (
-                <Text key={h} style={styles.featureItem}>
-                  <Text style={styles.bullet}>·</Text> {h}
-                </Text>
+                <View key={h} style={styles.featureCell}>
+                  <View style={styles.featureRow}>
+                    <Text style={styles.bullet}>·</Text>
+                    <Text style={styles.featureText}>{h}</Text>
+                  </View>
+                </View>
               ))}
             </View>
           </>
@@ -325,20 +349,10 @@ export function VehicleExposePDF({ vehicle: v, siteOrigin = "https://neue-welt-a
           </>
         ) : null}
 
-        <View style={styles.footer} fixed>
-          <View style={styles.footerLeft}>
-            <Text>
-              {SITE.name} · {SITE.address.line1} · {SITE.address.line2}
-            </Text>
-            <Text>
-              {SITE.contact.phoneLandline} · {SITE.contact.email}
-            </Text>
-          </View>
-          <View style={styles.footerRight}>
-            <Link src={detailUrl}>
-              <Text>{SITE.domain}</Text>
-            </Link>
-          </View>
+        <View style={styles.footerSlim} fixed>
+          <Link src={detailUrl}>
+            <Text>{SITE.domain}</Text>
+          </Link>
         </View>
       </Page>
     </Document>
