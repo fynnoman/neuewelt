@@ -95,10 +95,15 @@ export default function ServicePage() {
       </section>
 
       <section className="mt-24 lg:mt-28 px-5 md:px-10 lg:px-14">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Reveal>
-            <article className="radius" style={{ background: "var(--paper-sunk)", padding: 36 }}>
-              <div className="mono" style={{ color: "var(--on-sunk-muted)" }}>Hol- und Bringdienst</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+          <Reveal className="h-full">
+            <article
+              className="radius h-full flex flex-col"
+              style={{ background: "var(--paper-sunk)", padding: 36, minHeight: 260 }}
+            >
+              <div className="mono" style={{ color: "var(--on-sunk-muted)" }}>
+                Hol- und Bringdienst
+              </div>
               <p
                 className="display mt-4"
                 style={{ fontSize: "1.6rem", lineHeight: 1.15, color: "var(--on-sunk)", letterSpacing: "-0.02em" }}
@@ -111,31 +116,34 @@ export default function ServicePage() {
             </article>
           </Reveal>
 
-          <Reveal delay={0.1}>
-            <article className="radius" style={{ background: "var(--ink)", color: "var(--paper)", padding: 36 }}>
-              <div className="mono" style={{ color: "var(--muted-fade)" }}>
+          <Reveal delay={0.1} className="h-full">
+            <article
+              className="radius h-full flex flex-col"
+              style={{ background: "var(--paper-sunk)", padding: 36, minHeight: 260 }}
+            >
+              <div className="mono" style={{ color: "var(--on-sunk-muted)" }}>
                 Direkt sprechen
               </div>
               <a
                 href={SITE.contact.phoneLandlineHref}
                 className="display block mt-4"
-                style={{ fontSize: "1.6rem", color: "var(--paper)" }}
+                style={{ fontSize: "1.6rem", color: "var(--on-sunk)", letterSpacing: "-0.02em" }}
               >
                 {SITE.contact.phoneLandline}
               </a>
               <a
                 href={SITE.contact.phoneHref}
                 className="block mt-1"
-                style={{ fontSize: "0.9rem", color: "rgba(251,251,249,0.72)" }}
+                style={{ fontSize: "0.9rem", color: "var(--on-sunk-muted)" }}
               >
                 {SITE.contact.phone}
               </a>
               <Link
                 href="/kontakt"
-                className="mt-6 inline-flex items-center gap-2"
-                style={{ color: "var(--paper)", fontSize: "0.95rem" }}
+                className="mt-auto inline-flex items-center gap-2 pt-6"
+                style={{ color: "var(--on-sunk)", fontSize: "0.95rem" }}
               >
-                Nachricht senden <span style={{ color: "var(--signal-deep)" }}>→</span>
+                Nachricht senden <span style={{ color: "var(--signal)" }}>→</span>
               </Link>
             </article>
           </Reveal>

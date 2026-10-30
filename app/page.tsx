@@ -77,8 +77,24 @@ export default async function Home() {
             <div className="mono" style={{ color: "var(--paper)", opacity: 0.72, fontSize: "0.72rem" }}>
               Saarlouis · DE
             </div>
-            <div className="mono hidden md:block" style={{ color: "var(--signal)" }}>
-              {SITE.hours.weekday}
+            <div className="hidden md:flex flex-col items-end gap-1">
+              <div className="mono" style={{ color: "var(--signal)" }}>
+                {SITE.hours.weekday}
+              </div>
+              <a
+                href={SITE.contact.phoneLandlineHref}
+                className="mono"
+                style={{ color: "var(--paper)" }}
+              >
+                {SITE.contact.phoneLandline}
+              </a>
+              <a
+                href={SITE.contact.phoneHref}
+                className="mono"
+                style={{ color: "var(--paper)", opacity: 0.72, fontSize: "0.7rem" }}
+              >
+                {SITE.contact.phone}
+              </a>
             </div>
           </div>
 
