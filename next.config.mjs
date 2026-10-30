@@ -2,10 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    // Vercel-Image-Optimizer deaktiviert, weil das Monatskontingent erschoepft
-    // ist und sonst alle next/image-Elemente mit HTTP 402 brechen. Bilder werden
-    // direkt aus /public/ bzw. per remote URL ausgeliefert.
-    unoptimized: true,
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
