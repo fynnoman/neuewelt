@@ -7,7 +7,7 @@ import { SITE } from "@/lib/site";
 import { getVehicles } from "@/lib/vehicles";
 
 const HERO_IMAGE = "/images/neue-welt-automobile.webp";
-const HERO_IMAGE_MOBILE = "/images/neue-welt-automobile-mobile.webp";
+const HERO_IMAGE_MOBILE = "/images/neue-welt-automobile-mobile-v2.webp";
 const ANKAUF_IMAGE = "/photos/showroom-bright.jpg";
 const TEASER_IMAGE = "/photos/showroom-amg.jpg";
 
