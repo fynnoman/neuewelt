@@ -186,14 +186,19 @@ const EURO_FORMAT = new Intl.NumberFormat("de-DE");
 export type VehicleExposePDFProps = {
   vehicle: Vehicle;
   siteOrigin?: string;
+  watermarkSrc?: string;
 };
 
-export function VehicleExposePDF({ vehicle: v, siteOrigin = "https://neue-welt-automobile.de" }: VehicleExposePDFProps) {
+export function VehicleExposePDF({
+  vehicle: v,
+  siteOrigin = "https://neue-welt-automobile.de",
+  watermarkSrc,
+}: VehicleExposePDFProps) {
   const detailUrl = `${siteOrigin}/fahrzeuge/${v.slug}`;
   const hero = v.image || v.images?.[0];
   const extraImages = (v.images ?? []).filter((img) => img !== hero).slice(0, 9);
 
-  const watermarkUrl = `${siteOrigin}/brand/logo.png`;
+  const watermarkUrl = watermarkSrc ?? `${siteOrigin}/brand/logo.png`;
 
   return (
     <Document title={`Exposé ${v.brand} ${v.model}`} author={SITE.name}>

@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { renderToBuffer } from "@react-pdf/renderer";
 import { getVehicle } from "@/lib/vehicles";
 import { VehicleExposePDF } from "@/components/VehicleExposePDF";
@@ -29,8 +31,15 @@ export async function GET(
 
     const origin = process.env.NEXT_PUBLIC_SITE_URL || "https://neue-welt-automobile.de";
 
+    // Logo direkt aus dem Dateisystem lesen. HTTP-Fetch wuerde einem 308-Redirect
+    // auf www.neue-welt-automobile.de folgen muessen, was @react-pdf/renderer
+    // im Serverless-Runtime nicht zuverlaessig macht -> Watermark wuerde fehlen.
+    const logoPath = path.join(process.cwd(), "public", "brand", "logo.png");
+    const logoBuffer = await readFile(logoPath);
+    const watermarkDataUrl = `data:image/png;base64,${logoBuffer.toString("base64")}`;
+
     const buffer = await renderToBuffer(
-      <VehicleExposePDF vehicle={v} siteOrigin={origin} />
+      <VehicleExposePDF vehicle={v} siteOrigin={origin} watermarkSrc={watermarkDataUrl} />
     );
 
     const filenameBase = `expose-${slugifyName(v.brand)}-${slugifyName(v.model)}-${v.mobileAdId ?? slug}`;
