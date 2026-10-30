@@ -7,6 +7,7 @@ import { SITE } from "@/lib/site";
 import { getVehicles } from "@/lib/vehicles";
 
 const HERO_IMAGE = "/images/neue-welt-automobile.webp";
+const HERO_IMAGE_MOBILE = "/images/neue-welt-automobile-mobile.webp";
 const ANKAUF_IMAGE = "/photos/showroom-bright.jpg";
 const TEASER_IMAGE = "/photos/showroom-amg.jpg";
 
@@ -37,7 +38,24 @@ export default async function Home() {
     <main>
       {/* HERO — full-bleed to top */}
       <section className="relative" style={{ minHeight: "100svh" }}>
-        <div className="absolute inset-0">
+        {/* Mobile: Portrait-Variante */}
+        <div className="absolute inset-0 md:hidden">
+          <Image
+            src={HERO_IMAGE_MOBILE}
+            alt="Neue Welt Automobile"
+            fill
+            priority
+            quality={95}
+            sizes="100vw"
+            style={{
+              objectFit: "cover",
+              objectPosition: "center",
+            }}
+            aria-hidden
+          />
+        </div>
+        {/* Desktop: Landscape-Variante */}
+        <div className="absolute inset-0 hidden md:block">
           <Image
             src={HERO_IMAGE}
             alt="Neue Welt Automobile"
