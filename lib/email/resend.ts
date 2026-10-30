@@ -4,18 +4,22 @@ const apiKey = process.env.RESEND_API_KEY;
 
 if (!apiKey) {
   // Nicht sofort werfen, damit Build nicht bricht. Routen werfen bei Request.
-  console.warn("[newsletter] RESEND_API_KEY ist nicht gesetzt");
+  console.warn("[ankauf] RESEND_API_KEY ist nicht gesetzt");
 }
 
 export const resend = new Resend(apiKey ?? "missing-key");
 
-export const NEWSLETTER_FROM =
-  process.env.NEWSLETTER_FROM_EMAIL ||
-  "Neue Welt Automobile <newsletter@neue-welt-automobile.de>";
+// Absender des Ankauf-Benachrichtigungs-Mails.
+// Default ist der Resend-Testabsender — funktioniert ohne verifizierte Domain,
+// solange ANKAUF_TO die auf dem Resend-Account registrierte E-Mail ist.
+// Sobald die eigene Domain in Resend verifiziert ist, einfach die env-Var auf
+// z. B. "Neue Welt Automobile <ankauf@neue-welt-automobile.de>" setzen.
+export const ANKAUF_FROM =
+  process.env.ANKAUF_FROM_EMAIL ||
+  "Neue Welt Automobile <onboarding@resend.dev>";
 
-export const RESEND_AUDIENCE_ID = process.env.RESEND_AUDIENCE_ID || "";
-
-export const NEWSLETTER_NOTIFY_TOKEN = process.env.NEWSLETTER_NOTIFY_TOKEN || "";
+export const ANKAUF_TO =
+  process.env.ANKAUF_TO_EMAIL || "info@neue-welt-automobile.de";
 
 export const SITE_ORIGIN =
   process.env.NEXT_PUBLIC_SITE_URL || "https://neue-welt-automobile.de";

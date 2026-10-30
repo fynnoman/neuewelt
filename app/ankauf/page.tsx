@@ -7,18 +7,48 @@ import Reveal from "@/components/Reveal";
 
 export default function AnkaufPage() {
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const body = Array.from(data.entries())
-      .map(([k, v]) => `${k}: ${v}`)
-      .join("\n");
-    const mail = `mailto:${SITE.contact.email.replace(/[\[\]]/g, "")}?subject=${encodeURIComponent(
-      "Fahrzeugankauf-Anfrage"
-    )}&body=${encodeURIComponent(body)}`;
-    window.location.href = mail;
-    setSent(true);
+    if (submitting) return;
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const payload: Record<string, string> = {};
+    for (const [k, v] of data.entries()) {
+      payload[k] = typeof v === "string" ? v : "";
+    }
+    setSubmitting(true);
+    setErrorMsg(null);
+    try {
+      const res = await fetch("/api/ankauf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+      };
+      if (!res.ok || !result.ok) {
+        if (result.error === "missing_fields") {
+          setErrorMsg("Bitte füllen Sie Name, E-Mail, Marke und Modell aus.");
+        } else if (result.error === "invalid_email") {
+          setErrorMsg("Bitte prüfen Sie Ihre E-Mail-Adresse.");
+        } else {
+          setErrorMsg("Das hat gerade nicht geklappt. Bitte später erneut versuchen.");
+        }
+        setSubmitting(false);
+        return;
+      }
+      form.reset();
+      setSent(true);
+      setSubmitting(false);
+    } catch {
+      setErrorMsg("Verbindung unterbrochen. Bitte später erneut versuchen.");
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -122,15 +152,31 @@ export default function AnkaufPage() {
 
           <div className="md:col-span-2 mt-6 flex flex-wrap items-center justify-between gap-6">
             <p style={{ fontSize: "0.85rem", color: "var(--muted)", maxWidth: "48ch" }}>
-              Mit dem Absenden öffnet sich Ihr Mailprogramm mit allen Angaben
-              zusammengefasst. Die Daten verlassen den Browser erst, wenn Sie die
-              Mail wirklich senden.
+              Mit dem Absenden werden Ihre Angaben direkt an uns übermittelt.
+              Wir melden uns innerhalb eines Werktages bei Ihnen zurück.
             </p>
-            <button type="submit" className="btn">
-              Anfrage senden
-              <span>→</span>
+            <button
+              type="submit"
+              className="btn"
+              disabled={submitting}
+              style={{
+                opacity: submitting ? 0.65 : 1,
+                cursor: submitting ? "wait" : "pointer",
+              }}
+            >
+              {submitting ? "Wird gesendet…" : "Anfrage senden"}
+              {!submitting && <span>→</span>}
             </button>
           </div>
+
+          {errorMsg && (
+            <p
+              className="md:col-span-2 mt-2"
+              style={{ color: "var(--signal-deep)", fontSize: "0.9rem" }}
+            >
+              {errorMsg}
+            </p>
+          )}
         </form>
 
         {sent && (
@@ -140,8 +186,9 @@ export default function AnkaufPage() {
             className="mt-8"
             style={{ color: "var(--signal-deep)" }}
           >
-            Mail-Entwurf geöffnet. Wenn nichts passiert ist, schreiben Sie uns
-            direkt an {SITE.contact.email}.
+            Vielen Dank. Wir haben Ihre Anfrage erhalten und melden uns
+            innerhalb eines Werktages. Falls es dringend ist, erreichen Sie uns
+            unter {SITE.contact.phoneLandline}.
           </motion.p>
         )}
       </section>

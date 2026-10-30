@@ -65,113 +65,87 @@ function layout(innerHtml: string, previewText: string) {
 </html>`;
 }
 
-export function welcomeEmail(opts: { to: string }) {
-  const subject = "Willkommen beim Fahrzeug-Newsletter.";
-  const preview = "Sie erfahren als Erster, wenn neue Fahrzeuge in unseren Bestand kommen.";
-  const html = layout(
-    `
-    <tr>
-      <td style="padding:0 8px;">
-        <h1 style="margin:0 0 20px 0;font-size:30px;line-height:1.1;letter-spacing:-0.02em;color:${INK};font-weight:600;">
-          Willkommen beim <span style="color:${SIGNAL};">Fahrzeug-Newsletter.</span>
-        </h1>
-        <p style="margin:0 0 16px 0;font-size:16px;line-height:1.55;color:${INK_SOFT};">
-          Vielen Dank, dass Sie unseren Newsletter abonniert haben. Sie erfahren
-          als Erster, wenn neue Fahrzeuge in unseren Bestand kommen.
-        </p>
-        <p style="margin:0 0 32px 0;font-size:16px;line-height:1.55;color:${INK_SOFT};">
-          Haben Sie konkrete Wünsche an Marke, Modell oder Budget?
-          Antworten Sie einfach auf diese E-Mail, wir melden uns bei Ihnen zurück.
-        </p>
-        <table role="presentation" cellpadding="0" cellspacing="0">
-          <tr>
-            <td style="background:${INK};border-radius:12px;">
-              <a href="${SITE_ORIGIN}/fahrzeuge" style="display:inline-block;padding:14px 22px;color:${PAPER};text-decoration:none;font-size:15px;font-weight:600;">
-                Aktuellen Bestand ansehen →
-              </a>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-    `,
-    preview
-  );
-
-  const text = `Willkommen beim Fahrzeug-Newsletter.
-
-Vielen Dank, dass Sie unseren Newsletter abonniert haben. Sie erfahren als Erster, wenn neue Fahrzeuge in unseren Bestand kommen.
-
-Haben Sie konkrete Wünsche an Marke, Modell oder Budget? Antworten Sie einfach auf diese E-Mail.
-
-Aktueller Bestand: ${SITE_ORIGIN}/fahrzeuge
-
-${SITE.name}
-${SITE.address.line1}
-${SITE.address.line2}
-${SITE.contact.phoneLandline}
-${SITE.contact.email}`;
-
-  return { subject, html, text };
-}
-
-export type VehicleEmailData = {
-  slug: string;
-  brand: string;
-  model: string;
-  variant?: string;
-  year?: number;
-  mileage?: number;
-  power?: number;
-  fuel?: string;
-  price?: number;
-  image?: string;
+export type AnkaufInquiry = {
+  name: string;
+  email: string;
+  phone?: string;
+  plz?: string;
+  marke: string;
+  modell: string;
+  ez?: string;
+  km?: string;
+  kraftstoff?: string;
+  getriebe?: string;
+  farbe?: string;
+  wunschpreis?: string;
+  notes?: string;
 };
 
-export function newVehicleEmail(opts: { vehicle: VehicleEmailData }) {
-  const v = opts.vehicle;
-  const title = `${v.brand} ${v.model}`;
-  const subject = `Neu im Bestand: ${title}`;
-  const preview = `${title}${v.variant ? ` · ${v.variant}` : ""} ist gerade bei uns eingetroffen.`;
-  const url = `${SITE_ORIGIN}/fahrzeuge/${v.slug}`;
-  const img = v.image?.startsWith("http") ? v.image : v.image ? `${SITE_ORIGIN}${v.image}` : "";
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
 
-  const specs: string[] = [];
-  if (v.year) specs.push(`EZ ${v.year}`);
-  if (v.mileage != null) specs.push(`${v.mileage.toLocaleString("de-DE")} km`);
-  if (v.power != null) specs.push(`${v.power} kW`);
-  if (v.fuel) specs.push(v.fuel);
-  const specLine = specs.join(" · ");
-  const priceLine =
-    v.price != null ? `${v.price.toLocaleString("de-DE")} €` : "Preis auf Anfrage";
+export function ankaufInquiryEmail(opts: { inquiry: AnkaufInquiry }) {
+  const i = opts.inquiry;
+  const subject = `Fahrzeugankauf-Anfrage: ${i.marke} ${i.modell}`.trim();
+  const preview = `${i.name} möchte ein Fahrzeug anbieten: ${i.marke} ${i.modell}`;
+
+  const rows: Array<[string, string | undefined]> = [
+    ["Name", i.name],
+    ["E-Mail", i.email],
+    ["Telefon", i.phone],
+    ["PLZ · Ort", i.plz],
+    ["Marke", i.marke],
+    ["Modell · Ausstattung", i.modell],
+    ["Erstzulassung", i.ez],
+    ["Kilometerstand", i.km],
+    ["Kraftstoff", i.kraftstoff],
+    ["Getriebe", i.getriebe],
+    ["Farbe", i.farbe],
+    ["Wunschpreis", i.wunschpreis],
+  ];
+
+  const rowsHtml = rows
+    .filter(([, v]) => v && v.trim().length > 0)
+    .map(
+      ([k, v]) => `
+        <tr>
+          <td style="padding:10px 0;border-bottom:1px solid ${FOG};font-size:13px;color:${MUTED};width:38%;vertical-align:top;">${k}</td>
+          <td style="padding:10px 0;border-bottom:1px solid ${FOG};font-size:15px;color:${INK};">${escapeHtml(v!)}</td>
+        </tr>`
+    )
+    .join("");
+
+  const notesHtml = i.notes && i.notes.trim().length > 0
+    ? `
+      <tr>
+        <td style="padding:24px 0 8px 0;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:${MUTED};font-weight:600;" colspan="2">
+          Besonderheiten · Schäden · Historie
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="padding:0 0 8px 0;font-size:15px;color:${INK};line-height:1.55;white-space:pre-wrap;">${escapeHtml(i.notes!)}</td>
+      </tr>`
+    : "";
 
   const html = layout(
     `
     <tr>
       <td style="padding:0 8px;">
-        <h1 style="margin:0 0 20px 0;font-size:28px;line-height:1.15;letter-spacing:-0.02em;color:${INK};font-weight:600;">
-          Neu im Bestand: <span style="color:${SIGNAL};">${title}.</span>
+        <h1 style="margin:0 0 16px 0;font-size:26px;line-height:1.15;letter-spacing:-0.02em;color:${INK};font-weight:600;">
+          Neue Ankauf-Anfrage: <span style="color:${SIGNAL};">${escapeHtml(i.marke)} ${escapeHtml(i.modell)}.</span>
         </h1>
-        ${v.variant ? `<p style="margin:0 0 24px 0;font-size:15px;color:${MUTED};">${v.variant}</p>` : ""}
-        ${
-          img
-            ? `<a href="${url}" style="display:block;margin:0 0 24px 0;"><img src="${img}" alt="${title}" width="544" style="width:100%;max-width:544px;height:auto;display:block;border-radius:12px;" /></a>`
-            : ""
-        }
-        <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px 0;">
-          <tr>
-            ${specLine ? `<td style="font-size:14px;color:${MUTED};letter-spacing:0.04em;">${specLine}</td>` : ""}
-            <td align="right" style="font-size:18px;color:${INK};font-weight:600;letter-spacing:-0.01em;">${priceLine}</td>
-          </tr>
-        </table>
-        <table role="presentation" cellpadding="0" cellspacing="0">
-          <tr>
-            <td style="background:${INK};border-radius:12px;">
-              <a href="${url}" style="display:inline-block;padding:14px 22px;color:${PAPER};text-decoration:none;font-size:15px;font-weight:600;">
-                Fahrzeug ansehen →
-              </a>
-            </td>
-          </tr>
+        <p style="margin:0 0 24px 0;font-size:14px;color:${MUTED};">
+          Antworten geht direkt an <a href="mailto:${escapeHtml(i.email)}" style="color:${INK};">${escapeHtml(i.email)}</a>.
+        </p>
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 16px 0;">
+          ${rowsHtml}
+          ${notesHtml}
         </table>
       </td>
     </tr>
@@ -179,16 +153,16 @@ export function newVehicleEmail(opts: { vehicle: VehicleEmailData }) {
     preview
   );
 
-  const text = `Neu im Bestand: ${title}
-${v.variant ?? ""}
-${specLine}
-${priceLine}
+  const textRows = rows
+    .filter(([, v]) => v && v.trim().length > 0)
+    .map(([k, v]) => `${k}: ${v}`)
+    .join("\n");
 
-Fahrzeug ansehen: ${url}
+  const text = `Neue Ankauf-Anfrage: ${i.marke} ${i.modell}
 
-${SITE.name}
-${SITE.contact.phoneLandline}
-${SITE.contact.email}`;
+${textRows}
+${i.notes && i.notes.trim().length > 0 ? `\nBesonderheiten · Schäden · Historie:\n${i.notes}\n` : ""}
+Antwort direkt an: ${i.email}`;
 
   return { subject, html, text };
 }
