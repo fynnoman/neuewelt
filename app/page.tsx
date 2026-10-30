@@ -11,12 +11,12 @@ const ANKAUF_IMAGE = "/photos/showroom-bright.jpg";
 const TEASER_IMAGE = "/photos/showroom-amg.jpg";
 
 const SERVICES = [
-  { title: "Neuwagenbeschaffung", body: "Ihr Wunschfahrzeug direkt vom Hersteller.", href: "/service" },
-  { title: "Fahrzeugaufbereitung", body: "Innen und außen, Pauschale oder Detail.", href: "/service" },
-  { title: "Fahrzeugfolierungen & Scheibentönung", body: "Vollfolierung, Teilfolierung, Scheibentönung.", href: "/service" },
-  { title: "Zulassungsservice", body: "Bundesweite Zulassung inklusive Wunschkennzeichen.", href: "/service" },
-  { title: "Fahrzeugüberführung deutschlandweit", body: "Bis vor Ihre Haustür in ganz Deutschland.", href: "/service" },
-  { title: "Fahrzeugankauf", body: "Angebot innerhalb von Minuten.", href: "/ankauf" },
+  { title: "Neuwagenbeschaffung", body: "Ihr Wunschfahrzeug direkt vom Hersteller.", href: "/leistungen/neuwagenbeschaffung" },
+  { title: "Fahrzeugaufbereitung", body: "Innen und außen, Pauschale oder Detail.", href: "/leistungen/fahrzeugaufbereitung" },
+  { title: "Fahrzeugfolierungen & Scheibentönung", body: "Vollfolierung, Teilfolierung, Scheibentönung.", href: "/leistungen/folierung-scheibentoenung" },
+  { title: "Zulassungsservice", body: "Bundesweite Zulassung inklusive Wunschkennzeichen.", href: "/leistungen/zulassungsservice" },
+  { title: "Fahrzeugüberführung deutschlandweit", body: "Bis vor Ihre Haustür in ganz Deutschland.", href: "/leistungen/fahrzeugueberfuehrung" },
+  { title: "Fahrzeugankauf", body: "Angebot innerhalb von Minuten.", href: "/leistungen/fahrzeugankauf" },
 ];
 
 const PROZESS = [

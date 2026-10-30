@@ -23,13 +23,13 @@ function InstagramIcon({ size = 18, color = "currentColor" }: { size?: number; c
 }
 
 const LEISTUNGEN = [
-  { label: "Neuwagenbeschaffung", href: "/service" },
-  { label: "Fahrzeugaufbereitung", href: "/service" },
-  { label: "Fahrzeugfolierungen & Scheibentönung", href: "/service" },
-  { label: "Zulassungsservice", href: "/service" },
-  { label: "Fahrzeugüberführung deutschlandweit", href: "/service" },
-  { label: "Finanzierung über die Targobank", href: "/service" },
-  { label: "Garantie bis zu 36 Monate", href: "/service" },
+  { label: "Neuwagenbeschaffung", href: "/leistungen/neuwagenbeschaffung" },
+  { label: "Fahrzeugaufbereitung", href: "/leistungen/fahrzeugaufbereitung" },
+  { label: "Fahrzeugfolierungen & Scheibentönung", href: "/leistungen/folierung-scheibentoenung" },
+  { label: "Zulassungsservice", href: "/leistungen/zulassungsservice" },
+  { label: "Fahrzeugüberführung deutschlandweit", href: "/leistungen/fahrzeugueberfuehrung" },
+  { label: "Finanzierung über die Targobank", href: "/leistungen/finanzierung" },
+  { label: "Garantie bis zu 36 Monate", href: "/leistungen/garantie" },
 ];
 
 export default function Footer() {

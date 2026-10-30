@@ -3,59 +3,7 @@ import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import SlideIn from "@/components/SlideIn";
 import { SITE } from "@/lib/site";
-
-const LEISTUNGEN = [
-  {
-    id: "ankauf",
-    title: "Fahrzeugankauf",
-    body: "Wir kaufen Ihr Fahrzeug zum fairen Marktpreis an oder nehmen es in Zahlung. Angebot innerhalb von Minuten.",
-  },
-  {
-    id: "neuwagen",
-    title: "Neuwagenbeschaffung",
-    body: "Beschaffung Ihres Wunschfahrzeugs direkt vom Hersteller. Konfiguration, Lieferung und Zulassung auf Wunsch.",
-  },
-  {
-    id: "finanzierung",
-    title: "Finanzierung über die Targobank",
-    body: "Laufzeiten von 6 bis 96 Monaten, mit oder ohne Schlussrate, auf Wunsch auch ohne Anzahlung. Unverbindliches Angebot innerhalb von 24 Stunden.",
-  },
-  {
-    id: "aufbereitung",
-    title: "Fahrzeugaufbereitung",
-    body: "Professionelle Innen- und Außenpflege mit hochwertigen Mitteln. Pauschale Pakete oder individuelles Angebot nach Wunsch.",
-  },
-  {
-    id: "check",
-    title: "Gebrauchtwagen-Check",
-    body: "Zertifizierter Check durch eine unabhängige Prüforganisation. Zustandsbericht und Prüfzertifikat gegen Aufpreis.",
-  },
-  {
-    id: "zulassung",
-    title: "Zulassungsservice",
-    body: "Wir übernehmen die bundesweite Anmeldung inklusive Wunschkennzeichen. Auch Kurzzeitkennzeichen für die Überführung möglich.",
-  },
-  {
-    id: "ueberfuehrung",
-    title: "Fahrzeugüberführung deutschlandweit",
-    body: "Bundesweite Lieferung bis vor Ihre Haustür. Auf Wunsch im geschlossenen Fahrzeuganhänger.",
-  },
-  {
-    id: "export",
-    title: "Kfz-Export",
-    body: "Erfahrene Abwicklung des Fahrzeugexports in Ihr Heimatland inklusive Ausstellung des Ausfuhrbegleitdokuments.",
-  },
-  {
-    id: "folierung",
-    title: "Fahrzeugfolierungen und Scheibentönung",
-    body: "Vollfolierung, Teilfolierung und Scheibentönung in Studio-Qualität. Farbe, Finish und Umfang nach Absprache.",
-  },
-  {
-    id: "garantie",
-    title: "Garantie bis zu 36 Monate",
-    body: "Erweiterte Fahrzeuggarantie mit Laufzeit bis zu 36 Monaten. Umfang und Preis auf Anfrage.",
-  },
-];
+import { LEISTUNGEN } from "@/lib/leistungen";
 
 export default function ServicePage() {
   return (
@@ -115,10 +63,11 @@ export default function ServicePage() {
             className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4"
           >
             {LEISTUNGEN.map((l) => (
-              <article
+              <Link
                 key={l.id}
                 id={l.id}
-                className="liquid liquid-hover"
+                href={`/leistungen/${l.id}`}
+                className="liquid liquid-hover block group"
                 style={{ padding: "clamp(22px, 2.6vw, 30px) clamp(22px, 2.6vw, 32px)" }}
               >
                 <h3
@@ -133,7 +82,13 @@ export default function ServicePage() {
                 >
                   {l.body}
                 </p>
-              </article>
+                <div
+                  className="mt-5 mono inline-flex items-center gap-2"
+                  style={{ color: "var(--muted)" }}
+                >
+                  Mehr erfahren <span style={{ color: "var(--signal)" }}>→</span>
+                </div>
+              </Link>
             ))}
           </SlideIn>
         </div>
