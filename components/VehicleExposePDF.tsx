@@ -15,74 +15,11 @@ const styles = StyleSheet.create({
     color: "#0A0B0C",
     backgroundColor: "#FBFBF9",
   },
-  headerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    gap: 24,
-    marginBottom: 24,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#D4D2CC",
-  },
-  headerLeft: {
-    flexShrink: 1,
-    maxWidth: 300,
-  },
-  headerRight: {
-    flexShrink: 0,
-    textAlign: "right",
-  },
-  headerContact: {
-    marginTop: 14,
-    fontSize: 8,
-    color: "#26272A",
-    textAlign: "right",
-  },
-  headerContactLine: {
-    marginBottom: 2,
-    fontSize: 8,
-    color: "#26272A",
-    textAlign: "right",
-  },
-  headerContactMuted: {
-    marginTop: 14,
-  },
-  headerContactMutedLine: {
-    marginBottom: 2,
-    fontSize: 8,
-    color: "#6D6E72",
-    textAlign: "right",
-  },
-  brand: {
-    fontSize: 11,
-    fontFamily: "Helvetica-Bold",
-    letterSpacing: 2,
-    color: "#0A0B0C",
-    textTransform: "uppercase",
-  },
-  headerLogo: {
-    height: 36,
-    width: 108, // 3:1 Verhältnis vom Original 2172:724
-    objectFit: "contain",
-  },
-  domain: {
-    fontSize: 9,
-    color: "#6D6E72",
-    marginTop: 6,
-  },
-  docTitle: {
+  topLine: {
     fontSize: 10,
-    color: "#6D6E72",
-    textAlign: "right",
-    letterSpacing: 1.5,
-    textTransform: "uppercase",
-  },
-  docDate: {
-    fontSize: 9,
-    color: "#6D6E72",
-    textAlign: "right",
-    marginTop: 2,
+    color: "#26272A",
+    marginBottom: 18,
+    letterSpacing: 0.3,
   },
   heroImage: {
     width: "100%",
@@ -200,12 +137,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#26272A",
     lineHeight: 1.4,
-  },
-  descriptionParagraph: {
-    fontSize: 10,
-    color: "#26272A",
-    lineHeight: 1.4,
-    marginBottom: 6,
+    marginBottom: 10,
   },
   galleryGrid: {
     flexDirection: "row",
@@ -258,11 +190,6 @@ export type VehicleExposePDFProps = {
 
 export function VehicleExposePDF({ vehicle: v, siteOrigin = "https://neue-welt-automobile.de" }: VehicleExposePDFProps) {
   const detailUrl = `${siteOrigin}/fahrzeuge/${v.slug}`;
-  const today = new Date().toLocaleDateString("de-DE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
   const hero = v.image || v.images?.[0];
   const extraImages = (v.images ?? []).filter((img) => img !== hero).slice(0, 9);
 
@@ -278,25 +205,9 @@ export function VehicleExposePDF({ vehicle: v, siteOrigin = "https://neue-welt-a
           ))}
         </View>
 
-        <View style={styles.headerRow}>
-          <View style={styles.headerLeft}>
-            <Image src={`${siteOrigin}/brand/logo.png`} style={styles.headerLogo} />
-            <Text style={styles.domain}>{SITE.domain}</Text>
-          </View>
-          <View style={styles.headerRight}>
-            <Text style={styles.docTitle}>Fahrzeug-Exposé</Text>
-            <Text style={styles.docDate}>Stand {today}</Text>
-            <View style={styles.headerContact}>
-              <Text style={styles.headerContactLine}>{SITE.name}</Text>
-              <Text style={styles.headerContactLine}>{SITE.address.line1}</Text>
-              <Text style={styles.headerContactLine}>{SITE.address.line2}</Text>
-            </View>
-            <View style={styles.headerContactMuted}>
-              <Text style={styles.headerContactMutedLine}>{SITE.contact.phoneLandline}</Text>
-              <Text style={styles.headerContactMutedLine}>{SITE.contact.email}</Text>
-            </View>
-          </View>
-        </View>
+        <Text style={styles.topLine}>
+          Exposé · {SITE.contact.phoneLandline} · {SITE.address.line1}, {SITE.address.line2}
+        </Text>
 
         {hero ? <Image src={hero} style={styles.heroImage} /> : null}
 
@@ -324,15 +235,7 @@ export function VehicleExposePDF({ vehicle: v, siteOrigin = "https://neue-welt-a
         {v.description ? (
           <>
             <Text style={styles.sectionTitle}>Beschreibung</Text>
-            {v.description
-              .split(/\n+/)
-              .map((p) => p.trim())
-              .filter(Boolean)
-              .map((para, i) => (
-                <Text key={`desc-${i}`} style={styles.descriptionParagraph}>
-                  {para}
-                </Text>
-              ))}
+            <Text style={styles.description}>{v.description}</Text>
           </>
         ) : null}
 
