@@ -248,7 +248,7 @@ export default function VehicleFinanceCalculator({ price, vehicleTitle, contactE
         </div>
 
         <p className="mt-5" style={{ fontSize: "0.78rem", color: "var(--muted)", lineHeight: 1.5 }}>
-          Unverbindliche Beispielrechnung ohne Berücksichtigung Ihrer persönlichen Bonität. Finanzierung über die Targobank, Laufzeiten von 6 bis 96 Monaten möglich, mit oder ohne Schlussrate, auf Wunsch auch ohne Anzahlung. Das verbindliche Angebot stellen wir Ihnen innerhalb von 24 Stunden zur Verfügung.
+          Unverbindliche Beispielrechnung ohne Berücksichtigung Ihrer persönlichen Bonität. Finanzierung über die Targobank, Laufzeiten von 6 bis 96 Monaten möglich, mit oder ohne Schlussrate, auf Wunsch auch ohne Anzahlung. Das verbindliche Angebot stellen wir Ihnen innerhalb von Minuten zur Verfügung.
         </p>
       </div>
     </details>

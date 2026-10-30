@@ -18,7 +18,7 @@ export const LEISTUNGEN: Leistung[] = [
   {
     id: "finanzierung",
     title: "Finanzierung über die Targobank",
-    body: "Laufzeiten von 6 bis 96 Monaten, mit oder ohne Schlussrate, auf Wunsch auch ohne Anzahlung. Unverbindliches Angebot innerhalb von 24 Stunden.",
+    body: "Laufzeiten von 6 bis 96 Monaten, mit oder ohne Schlussrate, auf Wunsch auch ohne Anzahlung. Unverbindliches Angebot innerhalb von Minuten.",
   },
   {
     id: "fahrzeugaufbereitung",
