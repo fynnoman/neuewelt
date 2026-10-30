@@ -38,14 +38,21 @@ const styles = StyleSheet.create({
     fontSize: 8,
     color: "#26272A",
     textAlign: "right",
-    lineHeight: 1.5,
+  },
+  headerContactLine: {
+    marginBottom: 2,
+    fontSize: 8,
+    color: "#26272A",
+    textAlign: "right",
   },
   headerContactMuted: {
     marginTop: 14,
+  },
+  headerContactMutedLine: {
+    marginBottom: 2,
     fontSize: 8,
     color: "#6D6E72",
     textAlign: "right",
-    lineHeight: 1.5,
   },
   brand: {
     fontSize: 11,
@@ -91,11 +98,13 @@ const styles = StyleSheet.create({
     fontFamily: "Helvetica-Bold",
     letterSpacing: -0.5,
     color: "#0A0B0C",
+    lineHeight: 28,
   },
   variant: {
     fontSize: 11,
     color: "#6D6E72",
-    marginTop: 4,
+    marginTop: 6,
+    lineHeight: 14,
   },
   priceRow: {
     flexDirection: "row",
@@ -128,7 +137,7 @@ const styles = StyleSheet.create({
     fontSize: 9,
     color: "#6D6E72",
     marginTop: 4,
-    lineHeight: 1.4,
+    lineHeight: 13,
   },
   sectionTitle: {
     fontSize: 10,
@@ -154,11 +163,13 @@ const styles = StyleSheet.create({
     color: "#6D6E72",
     letterSpacing: 1,
     textTransform: "uppercase",
-    marginBottom: 2,
+    marginBottom: 4,
+    lineHeight: 11,
   },
   specValue: {
     fontSize: 11,
     color: "#0A0B0C",
+    lineHeight: 14,
   },
   featureList: {
     flexDirection: "row",
@@ -183,13 +194,18 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 10,
     color: "#0A0B0C",
-    lineHeight: 1.4,
+    lineHeight: 13,
   },
   description: {
     fontSize: 10,
     color: "#26272A",
-    lineHeight: 1.5,
-    marginBottom: 16,
+    lineHeight: 14,
+  },
+  descriptionParagraph: {
+    fontSize: 10,
+    color: "#26272A",
+    lineHeight: 14,
+    marginBottom: 8,
   },
   galleryGrid: {
     flexDirection: "row",
@@ -271,13 +287,13 @@ export function VehicleExposePDF({ vehicle: v, siteOrigin = "https://neue-welt-a
             <Text style={styles.docTitle}>Fahrzeug-Exposé</Text>
             <Text style={styles.docDate}>Stand {today}</Text>
             <View style={styles.headerContact}>
-              <Text>{SITE.name}</Text>
-              <Text>{SITE.address.line1}</Text>
-              <Text>{SITE.address.line2}</Text>
+              <Text style={styles.headerContactLine}>{SITE.name}</Text>
+              <Text style={styles.headerContactLine}>{SITE.address.line1}</Text>
+              <Text style={styles.headerContactLine}>{SITE.address.line2}</Text>
             </View>
             <View style={styles.headerContactMuted}>
-              <Text>{SITE.contact.phoneLandline}</Text>
-              <Text>{SITE.contact.email}</Text>
+              <Text style={styles.headerContactMutedLine}>{SITE.contact.phoneLandline}</Text>
+              <Text style={styles.headerContactMutedLine}>{SITE.contact.email}</Text>
             </View>
           </View>
         </View>
@@ -308,7 +324,15 @@ export function VehicleExposePDF({ vehicle: v, siteOrigin = "https://neue-welt-a
         {v.description ? (
           <>
             <Text style={styles.sectionTitle}>Beschreibung</Text>
-            <Text style={styles.description}>{v.description}</Text>
+            {v.description
+              .split(/\n+/)
+              .map((p) => p.trim())
+              .filter(Boolean)
+              .map((para, i) => (
+                <Text key={`desc-${i}`} style={styles.descriptionParagraph}>
+                  {para}
+                </Text>
+              ))}
           </>
         ) : null}
 
