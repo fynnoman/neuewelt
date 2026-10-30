@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     alignItems: "center",
     justifyContent: "space-around",
-    opacity: 0.1,
+    opacity: 0.2,
     transform: "rotate(-22deg)",
   },
   watermarkTile: {

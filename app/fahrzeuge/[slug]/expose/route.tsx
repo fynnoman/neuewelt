@@ -40,7 +40,7 @@ export async function GET(
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `inline; filename="${filenameBase}.pdf"`,
-        "Cache-Control": "public, max-age=900, s-maxage=900",
+        "Cache-Control": "no-store, must-revalidate",
       },
     });
   } catch (err) {
