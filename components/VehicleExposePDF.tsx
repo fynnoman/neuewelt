@@ -98,13 +98,13 @@ const styles = StyleSheet.create({
     fontFamily: "Helvetica-Bold",
     letterSpacing: -0.5,
     color: "#0A0B0C",
-    lineHeight: 28,
+    lineHeight: 1.1,
   },
   variant: {
     fontSize: 11,
     color: "#6D6E72",
     marginTop: 6,
-    lineHeight: 14,
+    lineHeight: 1.3,
   },
   priceRow: {
     flexDirection: "row",
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     fontSize: 9,
     color: "#6D6E72",
     marginTop: 4,
-    lineHeight: 13,
+    lineHeight: 1.4,
   },
   sectionTitle: {
     fontSize: 10,
@@ -164,12 +164,12 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     textTransform: "uppercase",
     marginBottom: 4,
-    lineHeight: 11,
+    lineHeight: 1.3,
   },
   specValue: {
     fontSize: 11,
     color: "#0A0B0C",
-    lineHeight: 14,
+    lineHeight: 1.3,
   },
   featureList: {
     flexDirection: "row",
@@ -194,18 +194,18 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 10,
     color: "#0A0B0C",
-    lineHeight: 13,
+    lineHeight: 1.3,
   },
   description: {
     fontSize: 10,
     color: "#26272A",
-    lineHeight: 14,
+    lineHeight: 1.4,
   },
   descriptionParagraph: {
     fontSize: 10,
     color: "#26272A",
-    lineHeight: 14,
-    marginBottom: 8,
+    lineHeight: 1.4,
+    marginBottom: 6,
   },
   galleryGrid: {
     flexDirection: "row",
