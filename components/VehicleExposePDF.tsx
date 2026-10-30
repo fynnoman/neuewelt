@@ -16,10 +16,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
+    gap: 24,
     marginBottom: 24,
     paddingBottom: 16,
     borderBottomWidth: 1,
     borderBottomColor: "#D4D2CC",
+  },
+  headerLeft: {
+    flexShrink: 1,
+    maxWidth: 300,
+  },
+  headerRight: {
+    flexShrink: 0,
+    textAlign: "right",
   },
   brand: {
     fontSize: 11,
@@ -74,11 +83,17 @@ const styles = StyleSheet.create({
   priceRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "baseline",
+    alignItems: "flex-start",
     marginBottom: 20,
     paddingBottom: 14,
     borderBottomWidth: 1,
     borderBottomColor: "#D4D2CC",
+    gap: 20,
+  },
+  priceLeft: {
+    flexGrow: 1,
+    flexShrink: 1,
+    maxWidth: 340,
   },
   priceLabel: {
     fontSize: 9,
@@ -90,11 +105,13 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontFamily: "Helvetica-Bold",
     color: "#D01A20",
+    flexShrink: 0,
   },
   priceHint: {
     fontSize: 9,
     color: "#6D6E72",
-    marginTop: 2,
+    marginTop: 4,
+    lineHeight: 1.4,
   },
   sectionTitle: {
     fontSize: 10,
@@ -234,11 +251,11 @@ export function VehicleExposePDF({ vehicle: v, siteOrigin = "https://neue-welt-a
         </View>
 
         <View style={styles.headerRow}>
-          <View>
+          <View style={styles.headerLeft}>
             <Image src={`${siteOrigin}/brand/logo.png`} style={styles.headerLogo} />
             <Text style={styles.domain}>{SITE.domain}</Text>
           </View>
-          <View>
+          <View style={styles.headerRight}>
             <Text style={styles.docTitle}>Fahrzeug-Exposé</Text>
             <Text style={styles.docDate}>Stand {today}</Text>
           </View>
@@ -252,7 +269,7 @@ export function VehicleExposePDF({ vehicle: v, siteOrigin = "https://neue-welt-a
         </View>
 
         <View style={styles.priceRow}>
-          <View>
+          <View style={styles.priceLeft}>
             <Text style={styles.priceLabel}>Preis</Text>
             {v.vatable ? (
               <Text style={styles.priceHint}>
