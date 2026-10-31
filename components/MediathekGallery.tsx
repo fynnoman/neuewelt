@@ -1,8 +1,7 @@
 "use client";
 
-import Image from "next/image";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { animate, motion, useMotionValue } from "framer-motion";
 import type { MediaItem } from "@/lib/mediathek";
 
 type Props = {
@@ -13,8 +12,12 @@ const THUMB_RADIUS_DESKTOP = 3;
 const THUMB_RADIUS_MOBILE = 2;
 
 export default function MediathekGallery({ items }: Props) {
-  const [[index, direction], setState] = useState<[number, number]>([0, 0]);
+  const [index, setIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [slideWidth, setSlideWidth] = useState(0);
+  const dragX = useMotionValue(0);
+  const isAnimatingRef = useRef(false);
 
   const total = items.length;
 
@@ -26,17 +29,52 @@ export default function MediathekGallery({ items }: Props) {
     return () => mq.removeEventListener("change", update);
   }, []);
 
+  useLayoutEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const measure = () => setSlideWidth(el.clientWidth);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   const goTo = useCallback(
-    (next: number, dir: number) => {
-      if (total === 0) return;
+    (next: number) => {
+      if (total === 0 || isAnimatingRef.current) return;
       const wrapped = ((next % total) + total) % total;
-      setState([wrapped, dir]);
+      setIndex(wrapped);
     },
     [total]
   );
 
-  const nextSlide = useCallback(() => goTo(index + 1, 1), [goTo, index]);
-  const prevSlide = useCallback(() => goTo(index - 1, -1), [goTo, index]);
+  const nextSlide = useCallback(() => {
+    if (isAnimatingRef.current || slideWidth === 0) return;
+    isAnimatingRef.current = true;
+    animate(dragX, -slideWidth, {
+      duration: 0.28,
+      ease: [0.22, 1, 0.36, 1],
+      onComplete: () => {
+        setIndex((prev) => (prev + 1) % total);
+        dragX.set(0);
+        isAnimatingRef.current = false;
+      },
+    });
+  }, [dragX, slideWidth, total]);
+
+  const prevSlide = useCallback(() => {
+    if (isAnimatingRef.current || slideWidth === 0) return;
+    isAnimatingRef.current = true;
+    animate(dragX, slideWidth, {
+      duration: 0.28,
+      ease: [0.22, 1, 0.36, 1],
+      onComplete: () => {
+        setIndex((prev) => (prev - 1 + total) % total);
+        dragX.set(0);
+        isAnimatingRef.current = false;
+      },
+    });
+  }, [dragX, slideWidth, total]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -61,7 +99,9 @@ export default function MediathekGallery({ items }: Props) {
 
   if (total === 0) return null;
 
-  const current = items[index];
+  const prevItem = items[(index - 1 + total) % total];
+  const currItem = items[index];
+  const nextItem = items[(index + 1) % total];
 
   return (
     <section
@@ -76,61 +116,40 @@ export default function MediathekGallery({ items }: Props) {
           height: calc(100svh - 72px);
           min-height: 460px;
           overflow: hidden;
-          display: flex;
-          align-items: center;
-          justify-content: center;
           touch-action: pan-y;
           user-select: none;
           -webkit-user-select: none;
-          background: var(--paper-sunk, #efede6);
-        }
-        .nwa-bg {
-          position: absolute;
-          inset: -8%;
-          z-index: 0;
-          filter: blur(28px) saturate(140%);
-          transform: scale(1.08) translateZ(0);
-          opacity: 0.55;
-          pointer-events: none;
-          will-change: opacity;
-        }
-        .nwa-bg img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          display: block;
-        }
-        .nwa-bg-tint {
-          position: absolute;
-          inset: 0;
-          z-index: 0;
-          pointer-events: none;
           background:
-            radial-gradient(80% 60% at 50% 30%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 60%),
-            linear-gradient(180deg, rgba(251,251,249,0.35) 0%, rgba(239,237,230,0.6) 100%);
+            radial-gradient(70% 55% at 50% 20%, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 60%),
+            radial-gradient(60% 60% at 50% 100%, rgba(214,208,196,0.5) 0%, rgba(239,237,230,0) 70%),
+            linear-gradient(180deg, #f6f4ee 0%, #e9e6dc 100%);
         }
-        .nwa-slide {
+
+        .nwa-viewport {
           position: absolute;
           inset: 0;
+          padding-bottom: clamp(130px, 18vh, 180px);
+          overflow: hidden;
           z-index: 1;
+        }
+        .nwa-track {
+          display: flex;
+          width: 300%;
+          height: 100%;
+          margin-left: -100%;
+          will-change: transform;
+          cursor: grab;
+        }
+        .nwa-track:active { cursor: grabbing; }
+        .nwa-cell {
+          flex: 0 0 33.3333%;
+          height: 100%;
           display: flex;
           align-items: center;
           justify-content: center;
           padding: clamp(12px, 3vw, 36px);
-          padding-bottom: clamp(130px, 18vh, 180px);
-          will-change: transform, opacity;
-          cursor: grab;
         }
-        .nwa-slide:active { cursor: grabbing; }
-        .nwa-slide-inner {
-          position: relative;
-          width: 100%;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .nwa-slide-inner img {
+        .nwa-cell > img {
           max-width: 100%;
           max-height: 100%;
           width: auto;
@@ -139,8 +158,9 @@ export default function MediathekGallery({ items }: Props) {
           object-fit: contain;
           border-radius: 10px;
           box-shadow:
-            0 24px 64px -18px rgba(10,11,12,0.35),
-            0 6px 20px -8px rgba(10,11,12,0.18);
+            0 24px 64px -18px rgba(10,11,12,0.3),
+            0 6px 20px -8px rgba(10,11,12,0.14);
+          pointer-events: none;
         }
 
         .nwa-arrow {
@@ -150,7 +170,7 @@ export default function MediathekGallery({ items }: Props) {
           width: 48px;
           height: 48px;
           border-radius: 999px;
-          background: rgba(255,255,255,0.55);
+          background: rgba(255,255,255,0.6);
           border: 1px solid rgba(255,255,255,0.7);
           color: var(--ink, #0A0B0C);
           cursor: pointer;
@@ -158,14 +178,14 @@ export default function MediathekGallery({ items }: Props) {
           align-items: center;
           justify-content: center;
           z-index: 4;
-          backdrop-filter: saturate(180%) blur(20px);
-          -webkit-backdrop-filter: saturate(180%) blur(20px);
+          backdrop-filter: saturate(180%) blur(16px);
+          -webkit-backdrop-filter: saturate(180%) blur(16px);
           box-shadow:
             inset 0 1px 0 rgba(255,255,255,0.9),
-            0 10px 24px -10px rgba(10,11,12,0.25);
+            0 10px 24px -10px rgba(10,11,12,0.2);
           transition: background 0.2s, transform 0.2s;
         }
-        .nwa-arrow:hover { background: rgba(255,255,255,0.78); transform: translateY(-50%) scale(1.05); }
+        .nwa-arrow:hover { background: rgba(255,255,255,0.82); transform: translateY(-50%) scale(1.05); }
         .nwa-arrow.left { left: clamp(10px, 2vw, 24px); }
         .nwa-arrow.right { right: clamp(10px, 2vw, 24px); }
         @media (min-width: 1024px) {
@@ -190,12 +210,12 @@ export default function MediathekGallery({ items }: Props) {
           background:
             linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.46) 100%),
             rgba(251,251,249,0.4);
-          backdrop-filter: saturate(180%) blur(32px);
-          -webkit-backdrop-filter: saturate(180%) blur(32px);
+          backdrop-filter: saturate(180%) blur(20px);
+          -webkit-backdrop-filter: saturate(180%) blur(20px);
           border: 1px solid rgba(255,255,255,0.6);
           box-shadow:
             inset 0 1px 0 rgba(255,255,255,0.9),
-            0 20px 40px -16px rgba(10,11,12,0.28);
+            0 20px 40px -16px rgba(10,11,12,0.22);
         }
         @media (min-width: 1024px) {
           .nwa-thumbs { gap: 10px; padding: 12px 16px; border-radius: 24px; }
@@ -214,18 +234,19 @@ export default function MediathekGallery({ items }: Props) {
           border-radius: 10px;
           flex-shrink: 0;
           opacity: 0.5;
-          transition: opacity 0.25s, transform 0.25s, width 0.25s, height 0.25s;
+          transition: opacity 0.2s, box-shadow 0.2s, width 0.2s, height 0.2s;
           outline: none;
         }
         @media (min-width: 1024px) {
           .nwa-thumb { height: 68px; width: 92px; border-radius: 12px; }
         }
-        .nwa-thumb:hover { opacity: 0.85; }
+        .nwa-thumb:hover { opacity: 0.9; }
         .nwa-thumb img {
           width: 100%;
           height: 100%;
           object-fit: cover;
           display: block;
+          pointer-events: none;
         }
         .nwa-thumb-current {
           opacity: 1;
@@ -233,7 +254,7 @@ export default function MediathekGallery({ items }: Props) {
           width: 90px;
           box-shadow:
             0 0 0 2px var(--signal, #D01A20),
-            0 10px 20px -8px rgba(10,11,12,0.4);
+            0 10px 20px -8px rgba(10,11,12,0.35);
         }
         @media (min-width: 1024px) {
           .nwa-thumb-current { height: 90px; width: 120px; }
@@ -250,77 +271,72 @@ export default function MediathekGallery({ items }: Props) {
         }
       `}</style>
 
-      {/* Blurred backdrop of current image for the glass feel */}
-      <div className="nwa-bg" aria-hidden>
-        <AnimatePresence initial={false} mode="popLayout">
-          <motion.img
-            key={`bg-${index}`}
-            src={current.src}
-            alt=""
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          />
-        </AnimatePresence>
-      </div>
-      <div className="nwa-bg-tint" aria-hidden />
-
-      <div style={{ position: "absolute", inset: 0, zIndex: 1 }}>
-        <AnimatePresence initial={false} custom={direction} mode="popLayout">
-          <motion.div
-            key={index}
-            className="nwa-slide"
-            custom={direction}
-            initial={{ opacity: 0, x: direction >= 0 ? 80 : -80 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: direction >= 0 ? -80 : 80 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            drag="x"
-            dragDirectionLock
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.2}
-            dragMomentum={false}
-            onDragEnd={(_, info) => {
-              const dx = info.offset.x;
-              const vx = info.velocity.x;
-              const flickVel = 400;
-              const minDist = 60;
-              if (dx < -minDist || vx < -flickVel) nextSlide();
-              else if (dx > minDist || vx > flickVel) prevSlide();
-            }}
-          >
-            <div className="nwa-slide-inner">
-              <Image
-                src={current.src}
-                alt={current.alt}
-                width={current.width}
-                height={current.height}
-                sizes="100vw"
-                priority
-                style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto" }}
-              />
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* Preload neighbors */}
-      <div style={{ display: "none" }} aria-hidden>
-        <Image
-          src={items[(index + 1) % total].src}
-          alt=""
-          width={items[(index + 1) % total].width}
-          height={items[(index + 1) % total].height}
-          priority
-        />
-        <Image
-          src={items[(index - 1 + total) % total].src}
-          alt=""
-          width={items[(index - 1 + total) % total].width}
-          height={items[(index - 1 + total) % total].height}
-          priority
-        />
+      <div className="nwa-viewport" ref={trackRef}>
+        <motion.div
+          className="nwa-track"
+          style={{ x: dragX }}
+          drag="x"
+          dragDirectionLock
+          dragConstraints={{ left: -slideWidth, right: slideWidth }}
+          dragElastic={0.15}
+          dragMomentum={false}
+          onDragStart={() => {
+            if (isAnimatingRef.current) return;
+          }}
+          onDragEnd={(_, info) => {
+            if (isAnimatingRef.current || slideWidth === 0) return;
+            const off = info.offset.x;
+            const vel = info.velocity.x;
+            const distThresh = slideWidth * 0.18;
+            const velThresh = 450;
+            if (off < -distThresh || vel < -velThresh) {
+              isAnimatingRef.current = true;
+              animate(dragX, -slideWidth, {
+                type: "spring",
+                stiffness: 320,
+                damping: 36,
+                mass: 0.9,
+                onComplete: () => {
+                  setIndex((prev) => (prev + 1) % total);
+                  dragX.set(0);
+                  isAnimatingRef.current = false;
+                },
+              });
+            } else if (off > distThresh || vel > velThresh) {
+              isAnimatingRef.current = true;
+              animate(dragX, slideWidth, {
+                type: "spring",
+                stiffness: 320,
+                damping: 36,
+                mass: 0.9,
+                onComplete: () => {
+                  setIndex((prev) => (prev - 1 + total) % total);
+                  dragX.set(0);
+                  isAnimatingRef.current = false;
+                },
+              });
+            } else {
+              animate(dragX, 0, {
+                type: "spring",
+                stiffness: 350,
+                damping: 32,
+              });
+            }
+          }}
+        >
+          <div className="nwa-cell">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={prevItem.src} alt="" draggable={false} />
+          </div>
+          <div className="nwa-cell">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={currItem.src} alt={currItem.alt} draggable={false} />
+          </div>
+          <div className="nwa-cell">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={nextItem.src} alt="" draggable={false} />
+          </div>
+        </motion.div>
       </div>
 
       {total > 1 && (
@@ -356,7 +372,7 @@ export default function MediathekGallery({ items }: Props) {
                 key={`thumb-${offset}-${absIdx}`}
                 type="button"
                 className={`nwa-thumb${offset === 0 ? " nwa-thumb-current" : ""}`}
-                onClick={() => goTo(absIdx, offset >= 0 ? 1 : -1)}
+                onClick={() => goTo(absIdx)}
                 aria-label={`Zum Bild ${absIdx + 1} springen`}
                 aria-current={offset === 0 ? "true" : undefined}
               >
