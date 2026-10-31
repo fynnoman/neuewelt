@@ -237,15 +237,8 @@ export function VehicleExposePDF({
           <Text style={styles.price}>{EURO_FORMAT.format(v.price)} €</Text>
         </View>
 
-        {v.description ? (
-          <>
-            <Text style={styles.sectionTitle}>Beschreibung</Text>
-            <Text style={styles.description}>{v.description}</Text>
-          </>
-        ) : null}
-
         <Text style={styles.sectionTitle}>Fahrzeugdaten</Text>
-        <View style={styles.specGrid}>
+        <View style={styles.specGrid} wrap={false}>
           <SpecCell label="Erstzulassung" value={v.firstRegistration ?? String(v.year)} />
           <SpecCell label="Kilometerstand" value={`${EURO_FORMAT.format(v.mileage)} km`} />
           <SpecCell label="Kraftstoff" value={v.fuel} />
@@ -253,6 +246,13 @@ export function VehicleExposePDF({
           <SpecCell label="Getriebe" value={v.gearbox} />
           <SpecCell label="Farbe" value={v.color} />
         </View>
+
+        {v.description ? (
+          <>
+            <Text style={styles.sectionTitle}>Beschreibung</Text>
+            <Text style={styles.description}>{v.description}</Text>
+          </>
+        ) : null}
 
         {v.highlights && v.highlights.length > 0 ? (
           <>
