@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { MediaItem } from "@/lib/mediathek";
 
@@ -9,14 +9,9 @@ type Props = {
   items: MediaItem[];
 };
 
-const BENTO_COUNT = 5;
-
 export default function MediathekGallery({ items }: Props) {
   const [open, setOpen] = useState<number | null>(null);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
-
-  const bento = useMemo(() => items.slice(0, BENTO_COUNT), [items]);
-  const masonry = useMemo(() => items.slice(BENTO_COUNT), [items]);
 
   const openAt = useCallback((idx: number) => setOpen(idx), []);
   const close = useCallback(() => setOpen(null), []);
@@ -49,117 +44,58 @@ export default function MediathekGallery({ items }: Props) {
   return (
     <>
       <style>{`
-        .nwa-bento {
-          display: grid;
-          grid-template-columns: 1fr;
-          grid-auto-rows: 56vw;
-          gap: 10px;
+        .nwa-flow {
+          --row-h: 160px;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
         }
-        .nwa-bento > button { padding: 0; margin: 0; border: 0; background: transparent; cursor: zoom-in; display: block; position: relative; overflow: hidden; border-radius: 14px; }
-        @media (min-width: 640px) {
-          .nwa-bento {
-            grid-template-columns: repeat(2, 1fr);
-            grid-auto-rows: 220px;
-            gap: 12px;
-          }
-          .nwa-bento > button:nth-child(1) { grid-column: span 2; grid-row: span 2; }
-        }
-        @media (min-width: 1024px) {
-          .nwa-bento {
-            grid-template-columns: repeat(4, 1fr);
-            grid-auto-rows: 230px;
-            gap: 14px;
-          }
-          .nwa-bento > button:nth-child(1) { grid-column: span 2; grid-row: span 2; }
-          .nwa-bento > button:nth-child(2) { grid-column: span 2; grid-row: span 1; }
-          .nwa-bento > button:nth-child(3) { grid-column: span 1; grid-row: span 1; }
-          .nwa-bento > button:nth-child(4) { grid-column: span 1; grid-row: span 1; }
-          .nwa-bento > button:nth-child(5) { grid-column: span 4; grid-row: span 1; }
-        }
-
-        .nwa-masonry {
-          column-count: 1;
-          column-gap: 10px;
-          margin-top: 10px;
-        }
-        @media (min-width: 640px) {
-          .nwa-masonry { column-count: 2; column-gap: 12px; margin-top: 12px; }
-        }
-        @media (min-width: 1024px) {
-          .nwa-masonry { column-count: 3; column-gap: 14px; margin-top: 14px; }
-        }
-        .nwa-masonry > button {
-          display: block;
-          width: 100%;
+        @media (min-width: 640px) { .nwa-flow { --row-h: 220px; gap: 8px; } }
+        @media (min-width: 1024px) { .nwa-flow { --row-h: 280px; gap: 10px; } }
+        @media (min-width: 1440px) { .nwa-flow { --row-h: 320px; } }
+        .nwa-flow > button {
           padding: 0;
-          margin: 0 0 10px 0;
+          margin: 0;
           border: 0;
           background: transparent;
           cursor: zoom-in;
-          break-inside: avoid;
-          border-radius: 12px;
-          overflow: hidden;
-          position: relative;
-        }
-        @media (min-width: 640px) {
-          .nwa-masonry > button { margin-bottom: 12px; border-radius: 14px; }
-        }
-        @media (min-width: 1024px) {
-          .nwa-masonry > button { margin-bottom: 14px; }
-        }
-
-        .nwa-tile-img {
           display: block;
-          width: 100%;
+          position: relative;
+          height: var(--row-h);
+          overflow: hidden;
+          flex-grow: 1;
+        }
+        .nwa-flow > button > img {
+          display: block;
           height: 100%;
+          width: auto;
           object-fit: cover;
           transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .nwa-bento > button:hover .nwa-tile-img,
-        .nwa-masonry > button:hover .nwa-tile-img {
+        .nwa-flow > button:hover > img {
           transform: scale(1.03);
         }
       `}</style>
 
-      <div className="nwa-bento">
-        {bento.map((it, i) => (
-          <button
-            key={it.src}
-            type="button"
-            onClick={() => openAt(i)}
-            aria-label="Bild in Vollansicht oeffnen"
-          >
-            <Image
-              src={it.src}
-              alt={it.alt}
-              fill
-              sizes="(min-width: 1024px) 50vw, 100vw"
-              className="nwa-tile-img"
-              priority={i === 0}
-            />
-          </button>
-        ))}
-      </div>
-
-      <div className="nwa-masonry">
-        {masonry.map((it, i) => (
-          <button
-            key={it.src}
-            type="button"
-            onClick={() => openAt(i + BENTO_COUNT)}
-            aria-label="Bild in Vollansicht oeffnen"
-            style={{ aspectRatio: `${it.width} / ${it.height}` }}
-          >
-            <Image
-              src={it.src}
-              alt={it.alt}
-              fill
-              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-              className="nwa-tile-img"
-              loading="lazy"
-            />
-          </button>
-        ))}
+      <div className="nwa-flow">
+        {items.map((it, i) => {
+          const ratio = it.width / it.height;
+          return (
+            <button
+              key={it.src}
+              type="button"
+              onClick={() => openAt(i)}
+              aria-label="Bild in Vollansicht oeffnen"
+              style={{
+                flexBasis: `calc(var(--row-h) * ${ratio})`,
+                aspectRatio: `${it.width} / ${it.height}`,
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={it.src} alt={it.alt} loading={i < 8 ? "eager" : "lazy"} />
+            </button>
+          );
+        })}
       </div>
 
       <AnimatePresence>
