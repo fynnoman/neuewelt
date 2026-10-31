@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { animate, motion, useMotionValue } from "framer-motion";
 import type { MediaItem } from "@/lib/mediathek";
 
 type Props = {
@@ -10,16 +9,35 @@ type Props = {
 
 const THUMB_RADIUS_DESKTOP = 3;
 const THUMB_RADIUS_MOBILE = 2;
+const SNAP_MS = 320;
+const SNAP_EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
 
 export default function MediathekGallery({ items }: Props) {
   const [index, setIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
   const [slideWidth, setSlideWidth] = useState(0);
-  const dragX = useMotionValue(0);
-  const isAnimatingRef = useRef(false);
+
+  // mutable refs so pointer handlers don't trigger re-renders
+  const indexRef = useRef(0);
+  const slideWidthRef = useRef(0);
+  const dragging = useRef(false);
+  const dragStart = useRef({ x: 0, y: 0, t: 0 });
+  const dragOffset = useRef(0);
+  const lastMove = useRef({ x: 0, t: 0 });
+  const axisLocked = useRef<"x" | "y" | null>(null);
+  const snapping = useRef(false);
 
   const total = items.length;
+
+  // keep refs in sync with state
+  useEffect(() => {
+    indexRef.current = index;
+  }, [index]);
+  useEffect(() => {
+    slideWidthRef.current = slideWidth;
+  }, [slideWidth]);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 640px)");
@@ -29,8 +47,9 @@ export default function MediathekGallery({ items }: Props) {
     return () => mq.removeEventListener("change", update);
   }, []);
 
+  // measure viewport (one slide width)
   useLayoutEffect(() => {
-    const el = trackRef.current;
+    const el = viewportRef.current;
     if (!el) return;
     const measure = () => setSlideWidth(el.clientWidth);
     measure();
@@ -39,51 +58,169 @@ export default function MediathekGallery({ items }: Props) {
     return () => ro.disconnect();
   }, []);
 
-  const goTo = useCallback(
-    (next: number) => {
-      if (total === 0 || isAnimatingRef.current) return;
-      const wrapped = ((next % total) + total) % total;
-      setIndex(wrapped);
+  // write the track transform imperatively (no React state in the hot path)
+  const applyTransform = useCallback((baseIdx: number, offset: number, animate: boolean) => {
+    const el = trackRef.current;
+    if (!el || slideWidthRef.current === 0) return;
+    const base = -baseIdx * slideWidthRef.current;
+    el.style.transition = animate ? `transform ${SNAP_MS}ms ${SNAP_EASE}` : "none";
+    el.style.transform = `translate3d(${base + offset}px, 0, 0)`;
+  }, []);
+
+  // whenever index or slide width changes and we're not mid-swipe, re-pin
+  useLayoutEffect(() => {
+    if (snapping.current) return;
+    applyTransform(index, 0, false);
+  }, [index, slideWidth, applyTransform]);
+
+  const snapTo = useCallback(
+    (newIdx: number) => {
+      if (snapping.current || slideWidthRef.current === 0 || total === 0) return;
+      const wrapped = ((newIdx % total) + total) % total;
+      snapping.current = true;
+      // animate from current (indexRef at offset 0 OR wherever) to new baseline
+      // We animate the track from its current translateX to the target.
+      // Target translateX = -wrapped * slideWidth. During snap, we treat the drag
+      // offset as 0 relative to the new base.
+      applyTransform(wrapped, 0, true);
+
+      const el = trackRef.current;
+      const done = () => {
+        snapping.current = false;
+        dragOffset.current = 0;
+        if (indexRef.current !== wrapped) {
+          indexRef.current = wrapped;
+          setIndex(wrapped);
+        }
+        el?.removeEventListener("transitionend", done);
+      };
+      // Fallback timer in case transitionend is missed
+      el?.addEventListener("transitionend", done, { once: true });
+      window.setTimeout(done, SNAP_MS + 60);
     },
-    [total]
+    [applyTransform, total]
   );
 
-  const nextSlide = useCallback(() => {
-    if (isAnimatingRef.current || slideWidth === 0) return;
-    isAnimatingRef.current = true;
-    animate(dragX, -slideWidth, {
-      duration: 0.28,
-      ease: [0.22, 1, 0.36, 1],
-      onComplete: () => {
-        setIndex((prev) => (prev + 1) % total);
-        dragX.set(0);
-        isAnimatingRef.current = false;
-      },
-    });
-  }, [dragX, slideWidth, total]);
+  // Pointer handling
+  useEffect(() => {
+    const vp = viewportRef.current;
+    if (!vp) return;
 
-  const prevSlide = useCallback(() => {
-    if (isAnimatingRef.current || slideWidth === 0) return;
-    isAnimatingRef.current = true;
-    animate(dragX, slideWidth, {
-      duration: 0.28,
-      ease: [0.22, 1, 0.36, 1],
-      onComplete: () => {
-        setIndex((prev) => (prev - 1 + total) % total);
-        dragX.set(0);
-        isAnimatingRef.current = false;
-      },
-    });
-  }, [dragX, slideWidth, total]);
+    const onDown = (e: PointerEvent) => {
+      if (snapping.current) return;
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      dragging.current = true;
+      axisLocked.current = null;
+      dragStart.current = { x: e.clientX, y: e.clientY, t: performance.now() };
+      lastMove.current = { x: e.clientX, t: performance.now() };
+      dragOffset.current = 0;
+      // Don't call setPointerCapture yet — wait until axis is locked to X.
+    };
 
+    const onMove = (e: PointerEvent) => {
+      if (!dragging.current) return;
+      const dx = e.clientX - dragStart.current.x;
+      const dy = e.clientY - dragStart.current.y;
+
+      if (!axisLocked.current) {
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+        axisLocked.current = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+        if (axisLocked.current === "y") {
+          dragging.current = false;
+          return;
+        }
+        // We're swiping horizontally — capture the pointer so we keep events
+        try {
+          vp.setPointerCapture(e.pointerId);
+        } catch {}
+      }
+
+      if (axisLocked.current !== "x") return;
+
+      // Rubber-band at ends: not strictly needed with wrap-around, but applies
+      // a small resistance for visual feedback.
+      let offset = dx;
+      const sw = slideWidthRef.current;
+      if (sw > 0) {
+        const max = sw;
+        if (offset > max) offset = max + (offset - max) * 0.25;
+        else if (offset < -max) offset = -max + (offset + max) * 0.25;
+      }
+      dragOffset.current = offset;
+      applyTransform(indexRef.current, offset, false);
+
+      const now = performance.now();
+      lastMove.current = { x: e.clientX, t: now };
+      // Only call preventDefault if we have a non-passive listener. We attach
+      // via { passive: false } below, so this is OK.
+      if (e.cancelable) e.preventDefault();
+    };
+
+    const finish = (clientX: number) => {
+      if (!dragging.current) return;
+      dragging.current = false;
+
+      if (axisLocked.current !== "x") {
+        axisLocked.current = null;
+        return;
+      }
+      axisLocked.current = null;
+
+      const sw = slideWidthRef.current;
+      const offset = dragOffset.current;
+      const now = performance.now();
+      const dt = Math.max(1, now - lastMove.current.t);
+      const velocity = ((clientX - lastMove.current.x) / dt) * 1000; // px/s
+
+      const distThresh = sw * 0.18;
+      const velThresh = 450;
+
+      if (offset < -distThresh || velocity < -velThresh) {
+        snapTo(indexRef.current + 1);
+      } else if (offset > distThresh || velocity > velThresh) {
+        snapTo(indexRef.current - 1);
+      } else {
+        snapTo(indexRef.current);
+      }
+    };
+
+    const onUp = (e: PointerEvent) => {
+      try {
+        vp.releasePointerCapture(e.pointerId);
+      } catch {}
+      finish(e.clientX);
+    };
+    const onCancel = (e: PointerEvent) => {
+      try {
+        vp.releasePointerCapture(e.pointerId);
+      } catch {}
+      if (!dragging.current) return;
+      dragging.current = false;
+      axisLocked.current = null;
+      snapTo(indexRef.current);
+    };
+
+    vp.addEventListener("pointerdown", onDown);
+    vp.addEventListener("pointermove", onMove, { passive: false });
+    vp.addEventListener("pointerup", onUp);
+    vp.addEventListener("pointercancel", onCancel);
+    return () => {
+      vp.removeEventListener("pointerdown", onDown);
+      vp.removeEventListener("pointermove", onMove);
+      vp.removeEventListener("pointerup", onUp);
+      vp.removeEventListener("pointercancel", onCancel);
+    };
+  }, [applyTransform, snapTo]);
+
+  // Keyboard
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight") nextSlide();
-      else if (e.key === "ArrowLeft") prevSlide();
+      if (e.key === "ArrowRight") snapTo(indexRef.current + 1);
+      else if (e.key === "ArrowLeft") snapTo(indexRef.current - 1);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [nextSlide, prevSlide]);
+  }, [snapTo]);
 
   const thumbRadius = isMobile ? THUMB_RADIUS_MOBILE : THUMB_RADIUS_DESKTOP;
 
@@ -99,10 +236,6 @@ export default function MediathekGallery({ items }: Props) {
 
   if (total === 0) return null;
 
-  const prevItem = items[(index - 1 + total) % total];
-  const currItem = items[index];
-  const nextItem = items[(index + 1) % total];
-
   return (
     <section
       className="nwa-slideshow"
@@ -116,7 +249,6 @@ export default function MediathekGallery({ items }: Props) {
           height: calc(100svh - 72px);
           min-height: 460px;
           overflow: hidden;
-          touch-action: pan-y;
           user-select: none;
           -webkit-user-select: none;
           background:
@@ -131,23 +263,24 @@ export default function MediathekGallery({ items }: Props) {
           padding-bottom: clamp(130px, 18vh, 180px);
           overflow: hidden;
           z-index: 1;
+          touch-action: pan-y;
         }
         .nwa-track {
           display: flex;
-          width: 300%;
           height: 100%;
-          margin-left: -100%;
           will-change: transform;
+          transform: translate3d(0, 0, 0);
           cursor: grab;
         }
         .nwa-track:active { cursor: grabbing; }
         .nwa-cell {
-          flex: 0 0 33.3333%;
+          flex: 0 0 100%;
           height: 100%;
           display: flex;
           align-items: center;
           justify-content: center;
           padding: clamp(12px, 3vw, 36px);
+          contain: layout paint;
         }
         .nwa-cell > img {
           max-width: 100%;
@@ -161,6 +294,8 @@ export default function MediathekGallery({ items }: Props) {
             0 24px 64px -18px rgba(10,11,12,0.3),
             0 6px 20px -8px rgba(10,11,12,0.14);
           pointer-events: none;
+          -webkit-user-drag: none;
+          user-select: none;
         }
 
         .nwa-arrow {
@@ -271,72 +406,29 @@ export default function MediathekGallery({ items }: Props) {
         }
       `}</style>
 
-      <div className="nwa-viewport" ref={trackRef}>
-        <motion.div
-          className="nwa-track"
-          style={{ x: dragX }}
-          drag="x"
-          dragDirectionLock
-          dragConstraints={{ left: -slideWidth, right: slideWidth }}
-          dragElastic={0.15}
-          dragMomentum={false}
-          onDragStart={() => {
-            if (isAnimatingRef.current) return;
-          }}
-          onDragEnd={(_, info) => {
-            if (isAnimatingRef.current || slideWidth === 0) return;
-            const off = info.offset.x;
-            const vel = info.velocity.x;
-            const distThresh = slideWidth * 0.18;
-            const velThresh = 450;
-            if (off < -distThresh || vel < -velThresh) {
-              isAnimatingRef.current = true;
-              animate(dragX, -slideWidth, {
-                type: "spring",
-                stiffness: 320,
-                damping: 36,
-                mass: 0.9,
-                onComplete: () => {
-                  setIndex((prev) => (prev + 1) % total);
-                  dragX.set(0);
-                  isAnimatingRef.current = false;
-                },
-              });
-            } else if (off > distThresh || vel > velThresh) {
-              isAnimatingRef.current = true;
-              animate(dragX, slideWidth, {
-                type: "spring",
-                stiffness: 320,
-                damping: 36,
-                mass: 0.9,
-                onComplete: () => {
-                  setIndex((prev) => (prev - 1 + total) % total);
-                  dragX.set(0);
-                  isAnimatingRef.current = false;
-                },
-              });
-            } else {
-              animate(dragX, 0, {
-                type: "spring",
-                stiffness: 350,
-                damping: 32,
-              });
-            }
-          }}
-        >
-          <div className="nwa-cell">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={prevItem.src} alt="" draggable={false} />
-          </div>
-          <div className="nwa-cell">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={currItem.src} alt={currItem.alt} draggable={false} />
-          </div>
-          <div className="nwa-cell">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={nextItem.src} alt="" draggable={false} />
-          </div>
-        </motion.div>
+      <div className="nwa-viewport" ref={viewportRef}>
+        <div ref={trackRef} className="nwa-track">
+          {items.map((it, i) => {
+            const dist = Math.min(
+              Math.abs(i - index),
+              Math.abs(i - index - total),
+              Math.abs(i - index + total)
+            );
+            return (
+              <div key={it.src} className="nwa-cell">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={it.src}
+                  alt={i === index ? it.alt : ""}
+                  draggable={false}
+                  loading={dist <= 2 ? "eager" : "lazy"}
+                  decoding={dist <= 1 ? "sync" : "async"}
+                  fetchPriority={dist === 0 ? "high" : "low"}
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {total > 1 && (
@@ -344,7 +436,7 @@ export default function MediathekGallery({ items }: Props) {
           <button
             type="button"
             className="nwa-arrow left"
-            onClick={prevSlide}
+            onClick={() => snapTo(indexRef.current - 1)}
             aria-label="Vorheriges Bild"
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -354,7 +446,7 @@ export default function MediathekGallery({ items }: Props) {
           <button
             type="button"
             className="nwa-arrow right"
-            onClick={nextSlide}
+            onClick={() => snapTo(indexRef.current + 1)}
             aria-label="Naechstes Bild"
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -372,7 +464,7 @@ export default function MediathekGallery({ items }: Props) {
                 key={`thumb-${offset}-${absIdx}`}
                 type="button"
                 className={`nwa-thumb${offset === 0 ? " nwa-thumb-current" : ""}`}
-                onClick={() => goTo(absIdx)}
+                onClick={() => snapTo(absIdx)}
                 aria-label={`Zum Bild ${absIdx + 1} springen`}
                 aria-current={offset === 0 ? "true" : undefined}
               >
