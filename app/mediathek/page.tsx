@@ -13,13 +13,14 @@ export default async function MediathekPage() {
   const items = await getMediathek();
 
   return (
-    <main className="pt-24 lg:pt-20 pb-16" style={{ paddingLeft: "clamp(10px, 2vw, 24px)", paddingRight: "clamp(10px, 2vw, 24px)" }}>
+    <main style={{ paddingTop: 72 }}>
       {items.length === 0 ? (
         <div
           className="mx-auto"
           style={{
             maxWidth: 640,
             marginTop: "clamp(60px, 10vw, 120px)",
+            marginBottom: "clamp(60px, 10vw, 120px)",
             textAlign: "center",
             color: "var(--muted)",
           }}

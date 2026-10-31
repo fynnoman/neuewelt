@@ -10,253 +10,209 @@ type Props = {
 };
 
 export default function MediathekGallery({ items }: Props) {
-  const [open, setOpen] = useState<number | null>(null);
+  const [[index, direction], setState] = useState<[number, number]>([0, 0]);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
-  const openAt = useCallback((idx: number) => setOpen(idx), []);
-  const close = useCallback(() => setOpen(null), []);
-  const next = useCallback(() => {
-    setOpen((v) => (v === null ? v : (v + 1) % items.length));
-  }, [items.length]);
-  const prev = useCallback(() => {
-    setOpen((v) => (v === null ? v : (v - 1 + items.length) % items.length));
-  }, [items.length]);
+  const total = items.length;
+
+  const goTo = useCallback(
+    (next: number, dir: number) => {
+      if (total === 0) return;
+      const wrapped = ((next % total) + total) % total;
+      setState([wrapped, dir]);
+    },
+    [total]
+  );
+
+  const nextSlide = useCallback(() => goTo(index + 1, 1), [goTo, index]);
+  const prevSlide = useCallback(() => goTo(index - 1, -1), [goTo, index]);
 
   useEffect(() => {
-    if (open === null) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
-      else if (e.key === "ArrowRight") next();
-      else if (e.key === "ArrowLeft") prev();
+      if (e.key === "ArrowRight") nextSlide();
+      else if (e.key === "ArrowLeft") prevSlide();
     };
     window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
-    };
-  }, [open, close, next, prev]);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [nextSlide, prevSlide]);
 
-  if (items.length === 0) return null;
+  if (total === 0) return null;
 
-  const current = open !== null ? items[open] : null;
+  const current = items[index];
 
   return (
-    <>
+    <section
+      className="nwa-slideshow"
+      aria-roledescription="carousel"
+      aria-label="Fotostrecke Neue Welt Automobile"
+    >
       <style>{`
-        .nwa-flow {
-          --row-h: 160px;
-          display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-        }
-        @media (min-width: 640px) { .nwa-flow { --row-h: 220px; gap: 8px; } }
-        @media (min-width: 1024px) { .nwa-flow { --row-h: 280px; gap: 10px; } }
-        @media (min-width: 1440px) { .nwa-flow { --row-h: 320px; } }
-        .nwa-flow > button {
-          padding: 0;
-          margin: 0;
-          border: 0;
-          background: transparent;
-          cursor: zoom-in;
-          display: block;
+        .nwa-slideshow {
           position: relative;
-          height: var(--row-h);
+          width: 100%;
+          height: calc(100svh - 72px);
+          min-height: 420px;
+          background: #0A0B0C;
           overflow: hidden;
-          flex-grow: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          touch-action: pan-y;
+          user-select: none;
+          -webkit-user-select: none;
         }
-        .nwa-flow > button > img {
-          display: block;
+        .nwa-slide {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: clamp(12px, 3vw, 36px);
+        }
+        .nwa-slide-inner {
+          position: relative;
+          width: 100%;
           height: 100%;
-          width: auto;
-          object-fit: cover;
-          transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
-        .nwa-flow > button:hover > img {
-          transform: scale(1.03);
+        .nwa-slide-inner img {
+          max-width: 100%;
+          max-height: 100%;
+          width: auto;
+          height: auto;
+          display: block;
+          object-fit: contain;
+        }
+        .nwa-arrow {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 48px;
+          height: 48px;
+          border-radius: 999px;
+          background: rgba(255,255,255,0.08);
+          border: 1px solid rgba(255,255,255,0.2);
+          color: #fff;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 3;
+          backdrop-filter: blur(6px);
+          -webkit-backdrop-filter: blur(6px);
+          transition: background 0.2s;
+        }
+        .nwa-arrow:hover { background: rgba(255,255,255,0.18); }
+        .nwa-arrow.left { left: clamp(10px, 2vw, 24px); }
+        .nwa-arrow.right { right: clamp(10px, 2vw, 24px); }
+        @media (min-width: 1024px) {
+          .nwa-arrow { width: 56px; height: 56px; }
+        }
+        .nwa-counter {
+          position: absolute;
+          bottom: clamp(14px, 2.5vw, 28px);
+          left: 50%;
+          transform: translateX(-50%);
+          color: rgba(255,255,255,0.65);
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 0.82rem;
+          letter-spacing: 0.1em;
+          z-index: 3;
+          pointer-events: none;
         }
       `}</style>
 
-      <div className="nwa-flow">
-        {items.map((it, i) => {
-          const ratio = it.width / it.height;
-          return (
-            <button
-              key={it.src}
-              type="button"
-              onClick={() => openAt(i)}
-              aria-label="Bild in Vollansicht oeffnen"
-              style={{
-                flexBasis: `calc(var(--row-h) * ${ratio})`,
-                aspectRatio: `${it.width} / ${it.height}`,
-              }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={it.src} alt={it.alt} loading={i < 8 ? "eager" : "lazy"} />
-            </button>
-          );
-        })}
-      </div>
-
-      <AnimatePresence>
-        {current && open !== null && (
+      <div
+        style={{ position: "absolute", inset: 0 }}
+        onTouchStart={(e) => {
+          const t = e.touches[0];
+          touchStart.current = { x: t.clientX, y: t.clientY };
+        }}
+        onTouchEnd={(e) => {
+          const start = touchStart.current;
+          if (!start) return;
+          const t = e.changedTouches[0];
+          const dx = t.clientX - start.x;
+          const dy = t.clientY - start.y;
+          touchStart.current = null;
+          if (Math.abs(dx) < 50 || Math.abs(dy) > 80) return;
+          if (dx < 0) nextSlide();
+          else prevSlide();
+        }}
+      >
+        <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
-            key="nwa-lightbox"
-            className="fixed inset-0"
-            style={{
-              zIndex: 100,
-              background: "rgba(10,11,12,0.94)",
-              backdropFilter: "blur(14px)",
-              WebkitBackdropFilter: "blur(14px)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            onClick={close}
-            onTouchStart={(e) => {
-              const t = e.touches[0];
-              touchStart.current = { x: t.clientX, y: t.clientY };
-            }}
-            onTouchEnd={(e) => {
-              const start = touchStart.current;
-              if (!start) return;
-              const t = e.changedTouches[0];
-              const dx = t.clientX - start.x;
-              const dy = t.clientY - start.y;
-              touchStart.current = null;
-              if (Math.abs(dx) < 50 || Math.abs(dy) > 80) return;
-              if (dx < 0) next();
-              else prev();
-            }}
+            key={index}
+            className="nwa-slide"
+            custom={direction}
+            initial={{ opacity: 0, x: direction >= 0 ? 60 : -60 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: direction >= 0 ? -60 : 60 }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           >
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                close();
-              }}
-              aria-label="Schliessen"
-              style={{
-                position: "absolute",
-                top: 18,
-                right: 18,
-                width: 44,
-                height: 44,
-                borderRadius: 999,
-                background: "rgba(255,255,255,0.1)",
-                border: "1px solid rgba(255,255,255,0.2)",
-                color: "#fff",
-                cursor: "pointer",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                zIndex: 2,
-              }}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-              </svg>
-            </button>
-
-            {items.length > 1 && (
-              <>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    prev();
-                  }}
-                  aria-label="Vorheriges Bild"
-                  style={navBtnStyle("left")}
-                >
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-                    <path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    next();
-                  }}
-                  aria-label="Naechstes Bild"
-                  style={navBtnStyle("right")}
-                >
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-                    <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-              </>
-            )}
-
-            <motion.div
-              key={`lb-${open}`}
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.98 }}
-              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                position: "relative",
-                maxWidth: "min(92vw, 1600px)",
-                maxHeight: "88vh",
-                width: `min(92vw, ${current.width}px)`,
-                aspectRatio: `${current.width} / ${current.height}`,
-              }}
-            >
+            <div className="nwa-slide-inner">
               <Image
                 src={current.src}
                 alt={current.alt}
-                fill
-                sizes="92vw"
-                style={{ objectFit: "contain" }}
+                width={current.width}
+                height={current.height}
+                sizes="100vw"
                 priority
+                style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto" }}
               />
-            </motion.div>
-
-            <div
-              style={{
-                position: "absolute",
-                bottom: 20,
-                left: 0,
-                right: 0,
-                textAlign: "center",
-                color: "rgba(255,255,255,0.6)",
-                fontSize: "0.82rem",
-                fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-                letterSpacing: "0.08em",
-                pointerEvents: "none",
-              }}
-            >
-              {String(open + 1).padStart(3, "0")} / {String(items.length).padStart(3, "0")}
             </div>
           </motion.div>
-        )}
-      </AnimatePresence>
-    </>
-  );
-}
+        </AnimatePresence>
+      </div>
 
-function navBtnStyle(side: "left" | "right"): React.CSSProperties {
-  return {
-    position: "absolute",
-    top: "50%",
-    [side]: 18,
-    transform: "translateY(-50%)",
-    width: 48,
-    height: 48,
-    borderRadius: 999,
-    background: "rgba(255,255,255,0.1)",
-    border: "1px solid rgba(255,255,255,0.2)",
-    color: "#fff",
-    cursor: "pointer",
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 2,
-  } as React.CSSProperties;
+      {/* Preload the next and previous image for smooth navigation */}
+      <div style={{ display: "none" }} aria-hidden>
+        <Image
+          src={items[(index + 1) % total].src}
+          alt=""
+          width={items[(index + 1) % total].width}
+          height={items[(index + 1) % total].height}
+          priority
+        />
+        <Image
+          src={items[(index - 1 + total) % total].src}
+          alt=""
+          width={items[(index - 1 + total) % total].width}
+          height={items[(index - 1 + total) % total].height}
+          priority
+        />
+      </div>
+
+      {total > 1 && (
+        <>
+          <button
+            type="button"
+            className="nwa-arrow left"
+            onClick={prevSlide}
+            aria-label="Vorheriges Bild"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            className="nwa-arrow right"
+            onClick={nextSlide}
+            aria-label="Naechstes Bild"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        </>
+      )}
+
+      <div className="nwa-counter">
+        {String(index + 1).padStart(3, "0")} / {String(total).padStart(3, "0")}
+      </div>
+    </section>
+  );
 }
