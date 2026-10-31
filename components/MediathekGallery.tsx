@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { MediaItem } from "@/lib/mediathek";
 
@@ -14,7 +14,6 @@ const THUMB_RADIUS_MOBILE = 2;
 
 export default function MediathekGallery({ items }: Props) {
   const [[index, direction], setState] = useState<[number, number]>([0, 0]);
-  const touchStart = useRef<{ x: number; y: number } | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   const total = items.length;
@@ -89,10 +88,11 @@ export default function MediathekGallery({ items }: Props) {
           position: absolute;
           inset: -8%;
           z-index: 0;
-          filter: blur(42px) saturate(140%);
-          transform: scale(1.08);
+          filter: blur(28px) saturate(140%);
+          transform: scale(1.08) translateZ(0);
           opacity: 0.55;
           pointer-events: none;
+          will-change: opacity;
         }
         .nwa-bg img {
           width: 100%;
@@ -118,7 +118,10 @@ export default function MediathekGallery({ items }: Props) {
           justify-content: center;
           padding: clamp(12px, 3vw, 36px);
           padding-bottom: clamp(130px, 18vh, 180px);
+          will-change: transform, opacity;
+          cursor: grab;
         }
+        .nwa-slide:active { cursor: grabbing; }
         .nwa-slide-inner {
           position: relative;
           width: 100%;
@@ -257,39 +260,35 @@ export default function MediathekGallery({ items }: Props) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.55 }}
+            transition={{ duration: 0.3 }}
           />
         </AnimatePresence>
       </div>
       <div className="nwa-bg-tint" aria-hidden />
 
-      <div
-        style={{ position: "absolute", inset: 0, zIndex: 1 }}
-        onTouchStart={(e) => {
-          const t = e.touches[0];
-          touchStart.current = { x: t.clientX, y: t.clientY };
-        }}
-        onTouchEnd={(e) => {
-          const start = touchStart.current;
-          if (!start) return;
-          const t = e.changedTouches[0];
-          const dx = t.clientX - start.x;
-          const dy = t.clientY - start.y;
-          touchStart.current = null;
-          if (Math.abs(dx) < 50 || Math.abs(dy) > 80) return;
-          if (dx < 0) nextSlide();
-          else prevSlide();
-        }}
-      >
+      <div style={{ position: "absolute", inset: 0, zIndex: 1 }}>
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
             key={index}
             className="nwa-slide"
             custom={direction}
-            initial={{ opacity: 0, x: direction >= 0 ? 60 : -60 }}
+            initial={{ opacity: 0, x: direction >= 0 ? 80 : -80 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: direction >= 0 ? -60 : 60 }}
-            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            exit={{ opacity: 0, x: direction >= 0 ? -80 : 80 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            drag="x"
+            dragDirectionLock
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.2}
+            dragMomentum={false}
+            onDragEnd={(_, info) => {
+              const dx = info.offset.x;
+              const vx = info.velocity.x;
+              const flickVel = 400;
+              const minDist = 60;
+              if (dx < -minDist || vx < -flickVel) nextSlide();
+              else if (dx > minDist || vx > flickVel) prevSlide();
+            }}
           >
             <div className="nwa-slide-inner">
               <Image
