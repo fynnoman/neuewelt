@@ -87,6 +87,33 @@ export default async function Home() {
           }}
         />
 
+        {/* mobile.de 15-Jahre-Urkunde — kleiner Liquid-Glass-Badge */}
+        <div
+          className="liquid absolute z-10"
+          style={{
+            right: "clamp(14px, 2.4vw, 28px)",
+            bottom: "clamp(14px, 2.4vw, 28px)",
+            padding: "10px",
+            width: "clamp(78px, 9vw, 116px)",
+          }}
+        >
+          <div
+            className="relative overflow-hidden"
+            style={{
+              aspectRatio: "1036 / 1416",
+              borderRadius: "8px",
+            }}
+          >
+            <Image
+              src="/images/mobile-de-urkunde-15-jahre.png"
+              alt="mobile.de Urkunde — 15 Jahre Händler seit 15. Januar 2010"
+              fill
+              sizes="(min-width: 1024px) 116px, 9vw"
+              style={{ objectFit: "contain" }}
+            />
+          </div>
+        </div>
+
         <div
           className="relative h-full flex flex-col justify-between"
           style={{ minHeight: "100svh" }}
