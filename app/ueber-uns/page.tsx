@@ -1,3 +1,4 @@
+import Image from "next/image";
 import SlideIn from "@/components/SlideIn";
 
 const FACTS = [
@@ -74,6 +75,32 @@ export default function UeberUnsPage() {
             >
               Was wir machen.
             </h2>
+
+            <div className="mt-10" style={{ width: "clamp(180px, 22vw, 260px)" }}>
+              <div
+                className="relative overflow-hidden"
+                style={{
+                  aspectRatio: "1036 / 1416",
+                  borderRadius: "10px",
+                  border: "1px solid var(--fog-200)",
+                  background: "var(--paper)",
+                }}
+              >
+                <Image
+                  src="/images/mobile-de-urkunde-15-jahre.png"
+                  alt="mobile.de Urkunde — 15 Jahre Händler seit 15. Januar 2010"
+                  fill
+                  sizes="(min-width: 1024px) 260px, 22vw"
+                  style={{ objectFit: "contain" }}
+                />
+              </div>
+              <div
+                className="mono mt-4"
+                style={{ color: "var(--muted)", fontSize: "0.72rem", lineHeight: 1.5 }}
+              >
+                mobile.de — Händler seit 15. Januar 2010
+              </div>
+            </div>
           </SlideIn>
           <SlideIn direction="up" delay={0.15} stagger={0.06} className="flex flex-col">
             {LEISTUNGEN.map((t, i) => (
