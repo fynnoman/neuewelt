@@ -18,6 +18,44 @@ const LEISTUNGEN = [
   "Garantie bis zu 36 Monate",
 ];
 
+function StarRow({ rating }: { rating: number }) {
+  const percent = Math.max(0, Math.min(5, rating)) / 5 * 100;
+  return (
+    <div
+      className="mt-3 relative inline-flex"
+      aria-label={`${rating.toString().replace(".", ",")} von 5 Sternen`}
+    >
+      <StarIcons color="var(--fog-200)" />
+      <div
+        className="absolute inset-0 overflow-hidden"
+        style={{ width: `${percent}%` }}
+        aria-hidden
+      >
+        <StarIcons color="#FBBC04" />
+      </div>
+    </div>
+  );
+}
+
+function StarIcons({ color }: { color: string }) {
+  return (
+    <div className="flex gap-1">
+      {[0, 1, 2, 3, 4].map((i) => (
+        <svg
+          key={i}
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill={color}
+          aria-hidden
+        >
+          <path d="M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.7 7-6.3-3.8-6.3 3.8 1.7-7L2 9.7l7.1-.6L12 2.5z" />
+        </svg>
+      ))}
+    </div>
+  );
+}
+
 export default function UeberUnsPage() {
   return (
     <main className="pt-28 lg:pt-36">
@@ -99,6 +137,55 @@ export default function UeberUnsPage() {
                 style={{ color: "var(--muted)", fontSize: "0.72rem", lineHeight: 1.5 }}
               >
                 mobile.de — Händler seit 15. Januar 2010
+              </div>
+
+              <div
+                className="mt-10 pt-8"
+                style={{ borderTop: "1px solid var(--fog-200)" }}
+              >
+                <div
+                  className="mono"
+                  style={{
+                    color: "var(--muted)",
+                    fontSize: "0.72rem",
+                    letterSpacing: "0.14em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Google Bewertungen
+                </div>
+                <div
+                  className="display mt-4"
+                  style={{
+                    fontSize: "clamp(2.4rem, 4vw, 3.2rem)",
+                    letterSpacing: "-0.035em",
+                    color: "var(--ink)",
+                    lineHeight: 1,
+                  }}
+                >
+                  4,6
+                  <span
+                    style={{
+                      color: "var(--muted)",
+                      fontSize: "0.42em",
+                      marginLeft: "0.3em",
+                      letterSpacing: "-0.02em",
+                    }}
+                  >
+                    / 5
+                  </span>
+                </div>
+                <StarRow rating={4.6} />
+                <div
+                  className="mono mt-4"
+                  style={{
+                    color: "var(--muted)",
+                    fontSize: "0.72rem",
+                    lineHeight: 1.5,
+                  }}
+                >
+                  266 Rezensionen
+                </div>
               </div>
             </div>
           </SlideIn>
